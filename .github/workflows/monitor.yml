@@ -1,0 +1,49 @@
+name: Monitor live sources & HCD
+# Daily: (1) verify every MPO / county / city endpoint and field mapping still
+# works, and (2) watch HCD's SB 79 pages and the registry's letter links.
+# Opens (or comments on) an issue when something needs a human.
+on:
+  schedule:
+    - cron: '17 14 * * *'   # 14:17 UTC daily
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Check live sources
+        id: sources
+        continue-on-error: true
+        run: npm run check:sources -- sources-report.md
+      - name: Check HCD
+        id: hcd
+        env:
+          HCD_REPORT_FILE: hcd-report.md
+        run: npm run check:hcd
+      - name: Open or update issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCES_FAILED: ${{ steps.sources.outcome == 'failure' }}
+          HCD_ATTENTION: ${{ steps.hcd.outputs.attention }}
+        run: |
+          file_issue () {
+            title="$1"; body_file="$2"; label="$3"
+            gh label create "$label" --color BFD4F2 --force >/dev/null 2>&1 || true
+            num=$(gh issue list --state open --label "$label" --json number --jq '.[0].number')
+            if [ -n "$num" ]; then gh issue comment "$num" --body-file "$body_file";
+            else gh issue create --title "$title" --label "$label" --body-file "$body_file"; fi
+          }
+          if [ "$SOURCES_FAILED" = "true" ]; then
+            file_issue "Live data source check failing" sources-report.md source-health
+          fi
+          if [ "$HCD_ATTENTION" = "true" ]; then
+            file_issue "HCD SB 79 review needed: update data/jurisdictions.json" hcd-report.md hcd-watch
+          fi

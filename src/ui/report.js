@@ -1,0 +1,149 @@
+// Renders a parcel report object (from src/lib/lookup.js) to HTML.
+import { HCD_STATUS_LABEL, KIND_LABEL } from '../lib/policy.js';
+import { zoneCode } from '../lib/zones.js';
+
+const esc = (s) =>
+  String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const fmt = (n) => (n == null ? '—' : Number(n).toLocaleString('en-US'));
+const BAND = { adjacent: '200 ft (adjacent)', quarter: '¼ mile', half: '½ mile' };
+const link = (url, text) => (url ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(text)}</a>` : esc(text));
+
+export function renderLoading(msg = 'Querying live sources…') {
+  return `<div class="card loading"><span class="spinner"></span>${esc(msg)}</div>`;
+}
+
+export function renderError(message) {
+  return `<div class="card"><div class="err">${esc(message)}</div></div>`;
+}
+
+export function renderNotOk(r) {
+  return `<div class="card"><h2>No result</h2><p>${esc(r.message)}</p></div>`;
+}
+
+function zoneChips(zones) {
+  if (!zones.length) return '<span class="chip none">Outside all TOD zones</span>';
+  return zones
+    .map((z) => `<span class="chip ${zoneCode(z)}" title="${esc(z.label)}">Tier ${z.tier} · ${esc(BAND[z.band])}${z.flags?.includes('commuter-rail-hcd-method') ? ' · CR*' : ''}</span>`)
+    .join('');
+}
+
+function instrumentAnswer(title, a) {
+  const inst = a.instrument;
+  let hcd = '';
+  if (inst) {
+    const st = inst.hcd?.status || 'unknown';
+    const date = inst.hcd?.date ? ` (${esc(inst.hcd.date)})` : '';
+    const letter = inst.hcd?.letterUrl ? ` · ${link(inst.hcd.letterUrl, 'HCD letter')}` : '';
+    const local = inst.local?.url ? ` · ${link(inst.local.url, inst.local.reference || 'adopted text')}` : inst.local?.reference ? ` · ${esc(inst.local.reference)}` : '';
+    const verif = inst.verification === 'secondary' ? ' · <span class="fine">status from secondary reporting — confirm on HCD’s dashboard</span>' : '';
+    hcd = `<div class="hcd">
+      <div><b>${esc(inst.title)}</b></div>
+      <div>Local: ${esc(inst.local?.status || 'unknown')}${inst.local?.date ? ` ${esc(inst.local.date)}` : ''}${local}</div>
+      <div>HCD: <span class="st ${esc(st)}">${esc(HCD_STATUS_LABEL[st] || st)}</span>${date}${letter}${verif}</div>
+      ${inst.hcd?.conditions ? `<div class="fine">Condition: ${esc(inst.hcd.conditions)}</div>` : ''}
+      ${inst.hcd?.note ? `<div class="fine">${esc(inst.hcd.note)}</div>` : ''}
+      ${inst.coverageReason ? `<div class="fine">Why this parcel: ${esc(inst.coverageReason)}</div>` : ''}
+      ${inst.coverage?.publisher && inst.covered != null ? `<div class="fine">Parcel coverage checked live against: ${link(inst.coverage.url, inst.coverage.publisher)}</div>` : ''}
+    </div>`;
+  }
+  return `<div class="qa-row"><div class="qa-q">${esc(title)}</div><span class="badge ${esc(a.subject)}">${esc(a.text)}</span>${hcd}</div>`;
+}
+
+function standardsCard(r) {
+  const s = r.standards;
+  if (!s) return '';
+  const binding = ['statute', 'statute-unless-excluded'].includes(r.regime.regime);
+  const caption = binding
+    ? 'Minimums the city must allow under Gov. Code § 65912.157. Local limits may be higher, never lower.'
+    : 'For reference: the statutory standards that would apply without the local instrument above.';
+  const row = (label, key, unit) => {
+    const m = s.max[key];
+    const v = key === 'far' ? Number(m.value).toFixed(1) : fmt(m.value);
+    return `<tr><th>${label}<div class="from">from Tier ${m.from.tier} · ${esc(BAND[m.from.band])}</div></th><td class="num">${v}${unit}</td></tr>`;
+  };
+  const lot = s.lot.units != null
+    ? `<div class="lotcalc">On this ${fmt(r.parcel.lotSqFt)} sq ft lot that is about <b>${fmt(s.lot.units)} units</b> and <b>${fmt(s.lot.floorAreaSqFt)} sq ft</b> of residential floor area (before density bonus). Lot area is computed from the parcel polygon.</div>`
+    : '';
+  return `<div class="card"><h2>Height · Density · FAR</h2>
+    <p class="fine">${esc(caption)}</p>
+    <table class="std ${binding ? '' : 'reference'}">
+      ${row('Max. height', 'heightFt', ' ft')}
+      ${row('Max. density', 'densityDuAc', ' du/ac')}
+      ${row('Residential FAR', 'far', '')}
+    </table>${lot}
+    ${s.rows.length > 1 ? `<p class="fine">The parcel is in ${s.rows.length} overlapping zones; each figure is the most permissive among them.</p>` : ''}
+  </div>`;
+}
+
+export function renderReport(r, { standardsSource } = {}) {
+  const p = r.parcel;
+  const regime = r.regime;
+  const zoning = r.zoning ? `<dt>Local zoning</dt><dd>${esc(r.zoning.code)}${r.zoning.description ? ` — ${esc(r.zoning.description)}` : ''}</dd>` : '';
+  const warnings = [
+    ...(p.stale ? p.sourceNotes : []),
+    ...(r.mpo.draft ? [`${r.mpo.name} labels its SB 79 map as DRAFT.`] : []),
+    ...(regime.notes || []),
+    ...(r.zonesRemovedByPopulation?.length ? ['The ½-mile band was removed because the city has fewer than 35,000 residents.'] : []),
+    ...(r.zones.some((z) => z.flags?.includes('commuter-rail-hcd-method')) ? ['CR* = commuter-rail zone qualifying under HCD’s advisory method (all services at a station counted together). The statute’s per-service reading may differ.'] : []),
+    ...(r.zones.some((z) => z.flags?.includes('computed-adjacency')) ? ['200-ft adjacency computed from the MPO’s stop points, because this MPO does not publish a 200-ft layer.'] : []),
+  ];
+  const otherRules = r.provisions
+    .filter((pv) => pv.id !== 'unincorporated' || !r.jurisdiction.incorporated)
+    .map((pv) => `<li>${esc(pv.text)} <span class="cite">${esc(pv.cite)}</span></li>`)
+    .join('');
+
+  return `
+  <div class="card">
+    <p class="addr">${esc(p.address || r.input.geocoded?.label || 'Parcel')}</p>
+    <dl class="kv">
+      <dt>APN</dt><dd>${esc(p.apn || p.id || '—')}</dd>
+      <dt>Jurisdiction</dt><dd>${esc(r.jurisdiction.name)}</dd>
+      <dt>County</dt><dd>${esc(r.county.name)}</dd>
+      <dt>Lot area</dt><dd>${fmt(p.lotSqFt)} sq ft</dd>
+      ${p.use ? `<dt>Assessor use</dt><dd>${esc(p.use)}</dd>` : ''}
+      ${zoning}
+    </dl>
+  </div>
+
+  <div class="card verdict ${esc(regime.regime)}">
+    <h3>${esc(regime.headline)}</h3>
+    <p class="muted">${esc(regime.detail)}</p>
+    ${warnings.map((w) => `<p class="warn">${esc(w)}</p>`).join('')}
+  </div>
+
+  <div class="card"><h2>TOD zone</h2>
+    <div class="chips">${zoneChips(r.zones)}</div>
+    <p class="fine">Source: ${link(r.mpo.mapPage, r.mpo.name)} SB 79 map, queried live. Distance is measured from the nearest parcel edge to a pedestrian access point.</p>
+  </div>
+
+  <div class="card"><h2>Local instruments &amp; HCD review</h2>
+    <div class="qa">
+      ${instrumentAnswer('Subject to a delay / exclusion ordinance?', r.instrumentSummary.delayOrdinance)}
+      ${instrumentAnswer('Subject to a TOD Alternative Plan?', r.instrumentSummary.todap)}
+    </div>
+    <p class="fine">Registry last reviewed ${esc(r.registryReviewed)}. ${link('https://www.hcd.ca.gov/hau/enforcement-letters', 'HCD letters dashboard')}</p>
+  </div>
+
+  ${standardsCard(r)}
+
+  <div class="card"><h2>Setbacks &amp; other rules</h2><ul class="plain">${otherRules}</ul>
+    ${standardsSource ? `<p class="fine">Standards table: ${link(standardsSource.url, standardsSource.title)}</p>` : ''}
+  </div>
+
+  ${r.nearbyStops.length ? `<div class="card"><h2>TOD stops within ½ mile</h2><ul class="stops">${r.nearbyStops
+    .map((s) => `<li><span>${esc(s.name)}${s.line ? ` <span class="fine">${esc(s.line)}</span>` : ''}</span><span class="fine">${s.tier ? `T${s.tier} · ` : ''}${fmt(s.distanceFt)} ft</span></li>`)
+    .join('')}</ul></div>` : ''}
+
+  <div class="card"><h2>Sources queried</h2>
+    <ul class="plain fine">
+      <li>Parcel: ${link(p.sourceUrl, p.publisher)}</li>
+      <li>TOD zones &amp; stops: ${link(r.mpo.mapPage, r.mpo.name)}</li>
+      <li>City/county limits: California Department of Technology</li>
+      <li>Generated ${esc(new Date(r.generatedAt).toLocaleString())}</li>
+    </ul>
+    ${r.errors.length ? `<div class="err">${r.errors.map(esc).join('<br>')}</div>` : ''}
+    <p class="fine">Informational only — not a zoning determination or legal advice.</p>
+  </div>`;
+}
+
+export { KIND_LABEL };

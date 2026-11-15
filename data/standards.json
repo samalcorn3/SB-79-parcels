@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "statute": "Gov. Code §§ 65912.155–65912.162 (SB 79, Ch. 512, Stats. 2025)",
+  "operativeDate": "2026-07-01",
+  "source": {
+    "title": "HCD Letter of Technical Assistance to the City of Los Angeles, Table 1 'SB 79 Development Standards' (June 22, 2026)",
+    "url": "https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/HAU/los-angeles-sb-79-ta-hau-2738-062226.pdf"
+  },
+  "bands": {
+    "adjacent": { "label": "Adjacent (within 200 ft of a pedestrian access point)", "short": "200 ft", "rank": 3 },
+    "quarter": { "label": "Within ¼ mile of a TOD stop", "short": "¼ mi", "rank": 2 },
+    "half": { "label": "Between ¼ and ½ mile of a TOD stop (cities with ≥35,000 residents)", "short": "½ mi", "rank": 1 }
+  },
+  "tiers": {
+    "1": {
+      "label": "Tier 1 — heavy rail or very high frequency commuter rail",
+      "adjacent": { "heightFt": 95, "densityDuAc": 160, "far": 4.5 },
+      "quarter": { "heightFt": 75, "densityDuAc": 120, "far": 3.5 },
+      "half": { "heightFt": 65, "densityDuAc": 100, "far": 3.0 }
+    },
+    "2": {
+      "label": "Tier 2 — light rail, high frequency commuter rail, or bus with full-time dedicated lane",
+      "adjacent": { "heightFt": 85, "densityDuAc": 140, "far": 4.0 },
+      "quarter": { "heightFt": 65, "densityDuAc": 100, "far": 3.0 },
+      "half": { "heightFt": 55, "densityDuAc": 80, "far": 2.5 }
+    }
+  },
+  "halfMileMinPopulation": 35000,
+  "provisions": [
+    {
+      "id": "allowed-use",
+      "text": "A qualifying housing development is an allowed use on any site zoned for residential, mixed, or commercial development in a TOD zone. HCD reads “zoned for” to include any zone that principally or conditionally permits residential, mixed-use, or commercial uses.",
+      "cite": "Gov. Code § 65912.157(a); HCD TA letter to Los Angeles (6/22/2026), Q1"
+    },
+    {
+      "id": "floor-not-ceiling",
+      "text": "Height, density, and residential FAR figures are minimums the city must allow (the city may not impose lower limits). Local zoning that allows more still applies.",
+      "cite": "Gov. Code § 65912.157(a); HCD TA letter to Los Angeles, Table 1"
+    },
+    {
+      "id": "min-units",
+      "text": "The project must include at least 5 dwelling units.",
+      "cite": "HCD SB 79 Housing Element Sites guidance"
+    },
+    {
+      "id": "measurement",
+      "text": "Distance is measured in a straight line from the nearest edge of the parcel to a pedestrian access point of the TOD stop. A parcel only partly inside a zone qualifies in its entirety unless it is subdivided.",
+      "cite": "Gov. Code § 65912.157(b); HCD TA letter to Los Angeles, Q2"
+    },
+    {
+      "id": "adjacency",
+      "text": "Adjacency intensifier: projects within 200 ft of a pedestrian access point get +20 ft height, +40 du/ac, and +1.0 residential FAR.",
+      "cite": "Gov. Code § 65912.157(e)"
+    },
+    {
+      "id": "setbacks",
+      "text": "SB 79 does not set numeric setbacks, lot coverage, or open-space requirements. The jurisdiction’s objective development standards apply, but they may not physically preclude the SB 79 density and floor area.",
+      "cite": "HCD TA letter to Los Angeles (6/22/2026), Q13; Gov. Code § 65912.160(c)(1)"
+    },
+    {
+      "id": "density-bonus",
+      "text": "Projects remain eligible for State Density Bonus Law incentives, concessions, waivers, and parking reductions.",
+      "cite": "Gov. Code § 65589.5(f)(1); Gov. Code §§ 65915–65918"
+    },
+    {
+      "id": "demolition",
+      "text": "SB 79 projects may not be located on a site with more than two units of rent- or price-controlled housing occupied by tenants in the past 7 years, or where such housing was demolished in the 7 years before the application.",
+      "cite": "Gov. Code § 65912.157(h)"
+    },
+    {
+      "id": "affordability-labor",
+      "text": "Affordability criteria and labor standards apply.",
+      "cite": "Gov. Code § 65912.157(c), (i) (affordability); § 65912.157(k) (labor)"
+    },
+    {
+      "id": "optional",
+      "text": "SB 79 is optional for applicants: a project may instead proceed under local zoning.",
+      "cite": "HCD TA letter to Los Angeles, Q3"
+    },
+    {
+      "id": "unincorporated",
+      "text": "SB 79 does not apply in unincorporated county areas until the county’s 7th-cycle housing element is due.",
+      "cite": "Gov. Code § 65912.157(n); HCD MPO Advisory (3/20/2026)"
+    }
+  ]
+}
