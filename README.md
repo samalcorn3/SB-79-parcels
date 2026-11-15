@@ -33,21 +33,33 @@ A map and address lookup for every parcel in California's SB 79 urban transit co
 
 The other SCAG counties (Riverside, San Bernardino, Ventura, Imperial) are not urban transit counties, so SB 79 does not apply there. To add a county, add an entry to [`data/sources.json`](data/sources.json); no code changes are needed.
 
-## SB 79 standards (Gov. Code § 65912.157)
+## SB 79 standards — from the statute text
 
-These are the lowest limits a city may impose. Source: HCD's technical-assistance letter to Los Angeles (June 22, 2026), Table 1.
+All standards come from **Gov. Code § 65912.157** as it currently reads in the Legislative Counsel's leginfo database. That is SB 79 (Stats. 2025, ch. 512) as amended by **SB 722** (Stats. 2026, ch. 100, effective July 16, 2026). SB 722 added only § 65912.157(h)(3), which bars sites governed by mobilehome and RV-park laws.
 
-| | Adjacent (≤ 200 ft) | ≤ ¼ mile | ¼–½ mile (cities with 35,000+ residents) |
+leginfo.legislature.ca.gov blocks scripted access, so `scripts/statute.py` reads the same database from the Legislative Counsel's official export (`downloads.leginfo.legislature.ca.gov`). It pulls only the needed rows via HTTP range requests and writes §§ 65912.155–65912.162 to [`data/statute/`](data/statute/). [`tests/statute.test.mjs`](tests/statute.test.mjs) parses that text and fails if any number in [`data/standards.json`](data/standards.json) doesn't match. The daily monitor re-pulls the statute and opens a `statute-watch` issue if any section is amended.
+
+The table shows what a local government may not go below:
+
+| | Adjacent (≤ 200 ft) — ¼-mile standard + § 65912.157(e) intensifier | ≤ ¼ mile | ¼–½ mile, city of 35,000+ |
 |---|---|---|---|
-| **Tier 1**: heavy rail, very high frequency commuter rail | 95 ft · 160 du/ac · FAR 4.5 | 75 ft · 120 du/ac · FAR 3.5 | 65 ft · 100 du/ac · FAR 3.0 |
-| **Tier 2**: light rail, high frequency commuter rail, dedicated-lane bus | 85 ft · 140 du/ac · FAR 4.0 | 65 ft · 100 du/ac · FAR 3.0 | 55 ft · 80 du/ac · FAR 2.5 |
+| **Tier 1**: heavy rail, very high frequency commuter rail | 95 ft · 160 du/ac · FAR 4.5 | 75 ft · 120 du/ac · FAR 3.5 — (a)(3) | 65 ft · 100 du/ac · FAR 3.0 — (a)(4) |
+| **Tier 2**: light rail, high frequency commuter rail, dedicated-lane bus | 85 ft · 140 du/ac · FAR 4.0 | 65 ft · 100 du/ac · FAR 3.0 — (a)(5) | 55 ft · 80 du/ac · FAR 2.5 — (a)(6) |
+
+Project requirements, also from § 65912.157:
+- At least 5 units, and at least 30 du/ac or the local minimum density if greater — (a)(1).
+- Average unit size no more than 1,750 net habitable sq ft — (a)(2).
+- Additional density-bonus concessions at 90 / 75 / 75 / 60 du/ac, by tier and band — (a)(3)–(6)(D), (d).
+- Projects over 10 units must set aside 7% extremely low, 10% very low, or 13% lower income units, for 55 years (rental) or 45 years (ownership) — (i).
+- Labor standards apply to any building over 85 ft — (k).
+- Setbacks and other local standards apply only if they do not, alone or in concert, prevent achieving these standards — (a)(3)–(6)(C), (c).
 
 ## Which rules govern a parcel
 
 From [HCD's SB 79 page](https://www.hcd.ca.gov/planning-and-research/sb79-tod), "TOD Project Compliance":
 
 1. **TOD Alternative Plan**: governs only if **HCD has approved it** (Gov. Code § 65912.161(d)).
-2. **Implementing, exemption, or temporary-exclusion ordinance**: governs **unless HCD has found it out of compliance**.
+2. **Implementing, exemption, or temporary-exclusion ordinance**: governs **unless HCD has found it out of compliance**. This is HCD's position. Under § 65912.160(d)(5)–(6) the city may instead amend the ordinance or re-enact it with findings, and HCD may then notify the Attorney General. If HCD issues no findings within 90 days (120 with an extension), the ordinance is deemed compliant for penalty purposes (§ 65912.160(d)(3)).
 3. **Otherwise**: § 65912.157 governs.
 4. **Unincorporated areas**: SB 79 does not apply until the county's 7th-cycle housing element is due.
 
@@ -62,9 +74,10 @@ HCD publishes its SB 79 review letters only as PDFs on a [Power BI dashboard](ht
 - coverage: `jurisdiction-wide`, `unknown`, or `arcgis` (a live city layer showing which parcels are covered, and why)
 - `verification`: `primary` means the HCD letter or the ordinance itself was read; `secondary` means the status comes from news or law-firm reporting and still needs confirming against the dashboard
 
-**Daily monitoring** ([`.github/workflows/monitor.yml`](.github/workflows/monitor.yml)) does two things:
+**Daily monitoring** ([`.github/workflows/monitor.yml`](.github/workflows/monitor.yml)) does three things:
 
 - `npm run check:sources` verifies every endpoint and every mapped field. If one breaks, it opens a `source-health` issue.
+- `python3 scripts/statute.py` re-reads §§ 65912.155–65912.162 from the leginfo export. If any section was amended, it opens a `statute-watch` issue.
 - `npm run check:hcd` fingerprints HCD's SB 79 and letters pages, checks every registry link, and flags the registry once it is 30+ days old. Any of these opens an `hcd-watch` issue.
 
 To update the registry: edit `data/jurisdictions.json` and set `lastReviewed`. Run `npm test`, which validates the schema. Then run `npm run check:hcd -- --update` and commit both files.
@@ -93,16 +106,16 @@ The site is static: `index.html`, `assets/`, `src/`, and `data/`. [`.github/work
 - **SCAG commuter-rail zones** follow HCD's advisory method, which counts all services at a station. They are flagged in the report.
 - **Setbacks and lot coverage.** SB 79 sets no numeric values for these. Local objective standards apply as long as they don't physically preclude the SB 79 density and FAR. The report shows local zoning where a county or city publishes it (San Francisco, Sacramento County, City of San Diego, and unincorporated LA County).
 - **Partial registry.** Many entries are still `secondary`, and most cities have not published parcel-level exclusion layers. See [docs/METHODOLOGY.md](docs/METHODOLOGY.md).
-- **Statute text.** The text on leginfo.legislature.ca.gov sits behind a bot challenge, so the standards are taken from HCD's official letters and advisory, which quote the statute.
 
 ## Layout
 
 ```
 data/sources.json        endpoints and field mappings (MPOs, counties, boundaries, geocoder)
-data/standards.json      § 65912.157 standards and provisions, with citations
+data/standards.json      § 65912.157 standards and provisions, transcribed from the statute and tested against it
+data/statute/            current text of §§ 65912.155–65912.162 from the leginfo export, plus manifest
 data/jurisdictions.json  local ordinances / TODAPs and HCD findings
 src/lib/                 browser + Node library (ArcGIS/Socrata clients, zones, standards, policy, lookup)
 src/ui/                  Leaflet map and report rendering
-scripts/                 CLI lookup, source checker, HCD watcher, browser smoke test
+scripts/                 CLI lookup, source checker, HCD watcher, statute puller, browser smoke test
 tests/                   node:test unit tests
 ```

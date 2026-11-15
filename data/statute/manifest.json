@@ -1,0 +1,57 @@
+{
+  "source": "Legislative Counsel of California \u2014 leginfo database export",
+  "archive": "https://downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip",
+  "archiveLastModified": "Mon, 09 Nov 2026 05:26:05 GMT",
+  "retrieved": "2026-11-15T21:56:37+00:00",
+  "web": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=GOV&division=1.&title=7.&part=&chapter=4.1.5.&article=",
+  "sections": {
+    "65912.156": {
+      "section": "65912.156",
+      "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
+      "effective": "2026-01-01",
+      "sha256": "b660f847b52775952deec57dbdce768901921ae9417e6c1d1e508413b33519a8"
+    },
+    "65912.157": {
+      "section": "65912.157",
+      "history": "Amended (as added by Stats. 2025, Ch. 512, Sec. 1) by Stats. 2026, Ch. 100, Sec. 2.   (SB 722)   Effective July 16, 2026.",
+      "effective": "2026-07-16",
+      "sha256": "135406b2d0beb27cb868f99cbf1e2b09252feeeb2637a7d2fc01da962b66ea2b"
+    },
+    "65912.158": {
+      "section": "65912.158",
+      "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
+      "effective": "2026-01-01",
+      "sha256": "85e7c0a871978acc231da7c95e00026e134ffd67f6b659cf5721b924a2c39aa1"
+    },
+    "65912.160": {
+      "section": "65912.160",
+      "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
+      "effective": "2026-01-01",
+      "sha256": "fd91d58edc6302740da97e0049ccbf78eaffde919f4bef0c6923cfe25ceb181d"
+    },
+    "65912.161": {
+      "section": "65912.161",
+      "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
+      "effective": "2026-01-01",
+      "sha256": "b6247e2dcdfc4f2d5a0def810ff2c3af7d5bc799230eeba1d1bc4522255889a2"
+    },
+    "65912.162": {
+      "section": "65912.162",
+      "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
+      "effective": "2026-01-01",
+      "sha256": "5d48500385f51d05887f2c25fa8478edb95b48af819b5c3cd213727ffa6f9fd8"
+    },
+    "65912.155": {
+      "section": "65912.155",
+      "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
+      "effective": "2026-01-01",
+      "sha256": "e078bf2ef17de5c1ae49de26a20d0d0d7c4927ec7554c8b0a036376787ebde6d"
+    },
+    "65912.159": {
+      "section": "65912.159",
+      "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
+      "effective": "2026-01-01",
+      "sha256": "5fa131bce2acc4a2c421b1f61d33fa979ae4442330a37eaaa4e20b17294e1b0c"
+    }
+  }
+}

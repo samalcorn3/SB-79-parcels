@@ -43,8 +43,8 @@ export function instrumentInForce(inst) {
       : { inForce: false, why: 'A TOD alternative plan governs only once HCD approves it (Gov. Code § 65912.161(d)).' };
   }
   return hcd === 'noncompliant'
-    ? { inForce: false, why: 'HCD found this ordinance out of compliance, so § 65912.157 governs instead.' }
-    : { inForce: true, why: hcd === 'compliant' ? 'Ordinance found compliant by HCD.' : 'Ordinance governs unless and until HCD finds it out of compliance.' };
+    ? { inForce: false, why: 'HCD found this ordinance out of compliance; HCD’s position is that § 65912.157 then governs. Under § 65912.160(d)(5) the city may instead amend the ordinance or re-enact it with findings, after which HCD may notify the Attorney General (§ 65912.160(d)(6)).' }
+    : { inForce: true, why: hcd === 'compliant' ? 'Ordinance found compliant by HCD.' : 'Ordinance governs unless and until HCD finds it out of compliance. If HCD issues no findings within 90 days of submittal (120 with an extension), the ordinance is deemed compliant for penalty purposes (§ 65912.160(d)(3)).' };
 }
 
 /**

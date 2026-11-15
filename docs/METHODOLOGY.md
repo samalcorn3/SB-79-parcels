@@ -43,11 +43,22 @@ Precedence: an in-force ordinance that covers the parcel → **excluded**. Other
 
 ## 4. Sources for the legal rules
 
-- HCD, *SB 79 Advisory Clarifications on Definitions for MPOs* (Mar. 20, 2026). Covers definitions, rail typologies, urban transit counties, and unincorporated areas.
-- HCD, Letter of Technical Assistance to the City of Los Angeles (June 22, 2026). Covers the standards table, exclusion criteria, TODAP rules, and the Q&A on zoning, partial parcels, and setbacks.
+**Development standards and project requirements** come from the statute: Gov. Code §§ 65912.155–65912.162, current text, read from the Legislative Counsel's leginfo database export (`downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip`, `LAW_SECTION_TBL`). The copy in `data/statute/` records each section's history line. § 65912.157 reads "Amended … by Stats. 2026, Ch. 100, Sec. 2 (SB 722), effective July 16, 2026". A diff against SB 79's chaptered text (`BILL_VERSION_TBL`, version `20250SB7984CHP`) shows the only substantive change is new paragraph (h)(3).
+
+How the statute is applied:
+- **Adjacency.** "Adjacent" means within 200 ft of a pedestrian access point (§ 65912.156(a)). Subdivision (e) adds +20 ft, +40 du/ac, and +1 FAR "prior to the application of Section 65915." Every adjacent parcel is within ¼ mile, so the intensifier is added to the tier's ¼-mile standards, (a)(3) or (a)(5).
+- **FAR.** The statute bars local standards that "would physically preclude achieving a residential floor area ratio of up to" the figure. FAR is net habitable residential square footage divided by lot area (§ 65912.156(i), (l)).
+- **Lot figures.** Minimum units = max(5, ⌈30 du/ac × acres⌉). Maximum units = ⌊density × acres⌋. Lot area is computed from the parcel polygon.
+
+**Which instrument governs**:
+- **TOD Alternative Plans**: the statute requires HCD approval, § 65912.161(d).
+- **Ordinances**: HCD's SB 79 page holds that an ordinance it finds out of compliance stops governing. The statutory process is § 65912.160(d)(3)–(6): a 90-day review, deemed compliant for penalty purposes if HCD is silent, and amend, re-enact with findings, or Attorney General referral.
+
+**HCD guidance** (advisory) is used for definitions the statute leaves open, such as "pedestrian access point" and how to count commuter-rail frequency. These are the definitions the MPOs used to build their maps:
+- HCD, *SB 79 Advisory Clarifications on Definitions for MPOs* (Mar. 20, 2026).
+- HCD, Letter of Technical Assistance to the City of Los Angeles (June 22, 2026).
 - HCD, City of San Francisco Enacted SB 79 Ordinance Review Letter (July 1, 2026).
-- HCD SB 79 page, "TOD Project Compliance."
-- SCAG, SB 79 TOD Map FAQs (Aug. 2026). Covers pedestrian access points, the population rule, and Orange County status.
+- SCAG, SB 79 TOD Map FAQs (Aug. 2026).
 
 ## 5. Freshness
 

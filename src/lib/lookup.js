@@ -5,7 +5,7 @@ import * as turf from '@turf/turf';
 import { getJSON, queryIntersecting, toEsriGeometry } from './arcgis.js';
 import { readSpec, getField } from './spec.js';
 import { normalizeZone, dedupeZones, applyPopulationRule } from './zones.js';
-import { computeStandards, unitsForLot, floorAreaForLot } from './standards.js';
+import { computeStandards, projectRequirements } from './standards.js';
 import { findJurisdiction, determineRegime, summarizeInstruments } from './policy.js';
 import { parcelsAtPoint } from './parcels.js';
 
@@ -209,13 +209,7 @@ export async function reportForPoint(data, [lon, lat], { geocoded } = {}) {
     nearbyStops: stops.slice(0, 12),
     regime,
     instrumentSummary: summarizeInstruments(regime),
-    standards: std && {
-      ...std,
-      lot: {
-        units: unitsForLot(std.max.densityDuAc.value, lotSqFt),
-        floorAreaSqFt: floorAreaForLot(std.max.far.value, lotSqFt),
-      },
-    },
+    standards: std && { ...std, lot: projectRequirements(standards, std, lotSqFt) },
     zoning,
     provisions: standards.provisions,
     registryReviewed: registry.lastReviewed,

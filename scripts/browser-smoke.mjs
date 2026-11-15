@@ -62,6 +62,7 @@ async function check(name, url, waitFor, shot) {
   if (shot) await page.screenshot({ path: join(outDir, shot) });
 }
 
+await page.setViewportSize({ width: 1400, height: 2600 });
 await check('address lookup (Oakland)', '?q=1221%20Broadway%2C%20Oakland%2C%20CA', () => document.querySelector('.verdict h3'), 'lookup-oakland.png');
 const verdict = await page.textContent('.verdict h3').catch(() => null);
 const chips = await page.$$eval('.chip', (els) => els.map((e) => e.textContent)).catch(() => []);

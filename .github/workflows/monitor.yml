@@ -1,6 +1,7 @@
 name: Monitor live sources & HCD
 # Daily: (1) verify every MPO / county / city endpoint and field mapping still
-# works, and (2) watch HCD's SB 79 pages and the registry's letter links.
+# works, (2) detect amendments to Gov. Code §§ 65912.155–.162 in the Legislative
+# Counsel's leginfo database, and (3) watch HCD's SB 79 pages and registry links.
 # Opens (or comments on) an issue when something needs a human.
 on:
   schedule:
@@ -28,11 +29,18 @@ jobs:
         env:
           HCD_REPORT_FILE: hcd-report.md
         run: npm run check:hcd
+      - name: Check statute (Gov. Code §§ 65912.155–65912.162 via leginfo export)
+        id: statute
+        continue-on-error: true
+        env:
+          STATUTE_REPORT_FILE: statute-report.md
+        run: python3 scripts/statute.py
       - name: Open or update issues
         env:
           GH_TOKEN: ${{ github.token }}
           SOURCES_FAILED: ${{ steps.sources.outcome == 'failure' }}
           HCD_ATTENTION: ${{ steps.hcd.outputs.attention }}
+          STATUTE_CHANGED: ${{ steps.statute.outcome == 'failure' }}
         run: |
           file_issue () {
             title="$1"; body_file="$2"; label="$3"
@@ -43,6 +51,10 @@ jobs:
           }
           if [ "$SOURCES_FAILED" = "true" ]; then
             file_issue "Live data source check failing" sources-report.md source-health
+          fi
+          if [ "$STATUTE_CHANGED" = "true" ]; then
+            [ -s statute-report.md ] || echo "Statute check failed to run; see the workflow log." > statute-report.md
+            file_issue "SB 79 statute amended or check failing: review data/standards.json" statute-report.md statute-watch
           fi
           if [ "$HCD_ATTENTION" = "true" ]; then
             file_issue "HCD SB 79 review needed: update data/jurisdictions.json" hcd-report.md hcd-watch

@@ -165,7 +165,7 @@ async function run(promise, label) {
       reportEl.innerHTML = renderNotOk(r);
       return;
     }
-    reportEl.innerHTML = renderReport(r, { standardsSource: data.standards.source });
+    reportEl.innerHTML = renderReport(r, { standardsDoc: data.standards });
     showParcel(r.parcel.geometry);
   } catch (e) {
     reportEl.innerHTML = renderError(`A live source did not respond: ${e.message}${e.url ? ` (${new URL(e.url).host})` : ''}. Try again in a moment.`);

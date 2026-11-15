@@ -49,33 +49,51 @@ function instrumentAnswer(title, a) {
   return `<div class="qa-row"><div class="qa-q">${esc(title)}</div><span class="badge ${esc(a.subject)}">${esc(a.text)}</span>${hcd}</div>`;
 }
 
-function standardsCard(r) {
+function standardsCard(r, doc) {
   const s = r.standards;
-  if (!s) return '';
+  if (!s || !doc) return '';
   const binding = ['statute', 'statute-unless-excluded'].includes(r.regime.regime);
   const caption = binding
-    ? 'Minimums the city must allow under Gov. Code § 65912.157. Local limits may be higher, never lower.'
-    : 'For reference: the statutory standards that would apply without the local instrument above.';
+    ? 'What the city must allow under Gov. Code § 65912.157. Local limits may be higher, never lower.'
+    : 'For reference: the § 65912.157 standards that would apply without the local instrument above.';
   const row = (label, key, unit) => {
     const m = s.max[key];
     const v = key === 'far' ? Number(m.value).toFixed(1) : fmt(m.value);
-    return `<tr><th>${label}<div class="from">from Tier ${m.from.tier} · ${esc(BAND[m.from.band])}</div></th><td class="num">${v}${unit}</td></tr>`;
+    return `<tr><th>${label}<div class="from">“${esc(doc.standardText[key])} …” — ${esc(m.cite)} · Tier ${m.from.tier}, ${esc(BAND[m.from.band])}</div></th><td class="num">${v}${unit}</td></tr>`;
   };
-  const lot = s.lot.units != null
-    ? `<div class="lotcalc">On this ${fmt(r.parcel.lotSqFt)} sq ft lot that is about <b>${fmt(s.lot.units)} units</b> and <b>${fmt(s.lot.floorAreaSqFt)} sq ft</b> of residential floor area (before density bonus). Lot area is computed from the parcel polygon.</div>`
+  const lot = s.lot;
+  const g = doc.general;
+  const aff = doc.affordability;
+  const conc = doc.additionalConcessions;
+  const lotLine = lot.maxUnits != null
+    ? `<div class="lotcalc">On this ${fmt(r.parcel.lotSqFt)} sq ft lot (area computed from the parcel polygon): a qualifying project needs <b>at least ${fmt(lot.minUnits)} units</b> and may have <b>up to ${fmt(lot.maxUnits)} units</b> and <b>${fmt(lot.floorAreaSqFt)} net habitable sq ft</b> of residential floor area, before any density bonus.</div>`
+    : '';
+  const reqs = [
+    `At least ${g.minUnits.value} dwelling units <span class="cite">${esc(g.minUnits.cite)}</span>`,
+    `Minimum density of ${g.minDensityDuAc.value} du/ac, or the local zoning minimum if greater <span class="cite">${esc(g.minDensityDuAc.cite)}</span>`,
+    `Average unit size no more than ${fmt(g.maxAvgUnitNetSqFt.value)} net habitable sq ft <span class="cite">${esc(g.maxAvgUnitNetSqFt.cite)}</span>`,
+    lot.affordabilityApplies === false
+      ? `Affordable set-aside not required for 10 or fewer units; above 10 units: ${aff.options.map((o) => `${o.pct}% ${esc(o.income.split(' (')[0])}`).join(', or ')} <span class="cite">${esc(aff.cite)}</span>`
+      : `Affordable set-aside (projects over ${aff.appliesAboveUnits} units): ${aff.options.map((o) => `${o.pct}% ${esc(o.income.split(' (')[0])}`).join(', or ')}, for ${aff.termYears.rental} years (rental) / ${aff.termYears.ownership} years (ownership). ${esc(aff.localOverride)} <span class="cite">${esc(aff.cite)}</span>`,
+    `Additional density-bonus concessions at ≥ ${fmt(s.concessionDensity.value)} du/ac${lot.concessionUnits != null ? ` (${fmt(lot.concessionUnits)} units here)` : ''}: ${conc.byIncome.map((c) => `${c.concessions} for ${esc(c.income)}`).join(', ')} <span class="cite">${esc(s.concessionDensity.cite)}(D); § 65912.157(d)</span>`,
+    lot.laborStandardsPossible ? `Any building over ${doc.labor.heightFtOver} ft must meet the labor standards of § 65913.4(a)(8) <span class="cite">${esc(doc.labor.cite)}</span>` : null,
+  ].filter(Boolean);
+  const adj = s.rows.some((x) => x.intensifier)
+    ? `<p class="fine">200-ft figures are the tier’s ¼-mile standards plus the adjacency intensifier: +${doc.adjacencyIntensifier.heightFt} ft, +${doc.adjacencyIntensifier.densityDuAc} du/ac, +${doc.adjacencyIntensifier.far.toFixed(1)} FAR, “prior to the application of Section 65915” (${esc(doc.adjacencyIntensifier.cite)}).</p>`
     : '';
   return `<div class="card"><h2>Height · Density · FAR</h2>
     <p class="fine">${esc(caption)}</p>
     <table class="std ${binding ? '' : 'reference'}">
-      ${row('Max. height', 'heightFt', ' ft')}
-      ${row('Max. density', 'densityDuAc', ' du/ac')}
+      ${row('Height', 'heightFt', ' ft')}
+      ${row('Density', 'densityDuAc', ' du/ac')}
       ${row('Residential FAR', 'far', '')}
-    </table>${lot}
+    </table>${lotLine}${adj}
     ${s.rows.length > 1 ? `<p class="fine">The parcel is in ${s.rows.length} overlapping zones; each figure is the most permissive among them.</p>` : ''}
-  </div>`;
+  </div>
+  <div class="card"><h2>Project requirements</h2><ul class="plain">${reqs.map((x) => `<li>${x}</li>`).join('')}</ul></div>`;
 }
 
-export function renderReport(r, { standardsSource } = {}) {
+export function renderReport(r, { standardsDoc } = {}) {
   const p = r.parcel;
   const regime = r.regime;
   const zoning = r.zoning ? `<dt>Local zoning</dt><dd>${esc(r.zoning.code)}${r.zoning.description ? ` — ${esc(r.zoning.description)}` : ''}</dd>` : '';
@@ -124,10 +142,10 @@ export function renderReport(r, { standardsSource } = {}) {
     <p class="fine">Registry last reviewed ${esc(r.registryReviewed)}. ${link('https://www.hcd.ca.gov/hau/enforcement-letters', 'HCD letters dashboard')}</p>
   </div>
 
-  ${standardsCard(r)}
+  ${standardsCard(r, standardsDoc)}
 
-  <div class="card"><h2>Setbacks &amp; other rules</h2><ul class="plain">${otherRules}</ul>
-    ${standardsSource ? `<p class="fine">Standards table: ${link(standardsSource.url, standardsSource.title)}</p>` : ''}
+  <div class="card"><h2>Setbacks &amp; other statutory rules</h2><ul class="plain">${otherRules}</ul>
+    ${standardsDoc ? `<p class="fine">Statute text: ${link(standardsDoc.source.url, 'Gov. Code § 65912.157 on leginfo')} — ${esc(standardsDoc.statute)}.</p>` : ''}
   </div>
 
   ${r.nearbyStops.length ? `<div class="card"><h2>TOD stops within ½ mile</h2><ul class="stops">${r.nearbyStops

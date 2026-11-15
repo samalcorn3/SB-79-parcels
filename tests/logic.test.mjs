@@ -64,13 +64,13 @@ test('½-mile band dropped for cities under 35,000 only when population is known
   assert.equal(applyPopulationRule(zones, null).zones.length, 2);
 });
 
-test('standards match HCD Table 1 and take the most permissive applicable zone', () => {
+test('standards take the most permissive applicable zone', () => {
   const s = computeStandards(standards, [{ tier: 1, band: 'quarter' }, { tier: 2, band: 'adjacent' }]);
-  assert.equal(s.max.heightFt.value, 85); // Tier 2 adjacent (85) beats Tier 1 quarter (75)
+  assert.equal(s.max.heightFt.value, 85); // Tier 2 adjacent (65+20) beats Tier 1 quarter (75)
   assert.equal(s.max.densityDuAc.value, 140);
   assert.equal(s.max.far.value, 4.0);
-  const t1 = computeStandards(standards, [{ tier: 1, band: 'adjacent' }]);
-  assert.deepEqual([t1.max.heightFt.value, t1.max.densityDuAc.value, t1.max.far.value], [95, 160, 4.5]);
+  assert.equal(s.max.heightFt.cite, '§ 65912.157(a)(5) + § 65912.157(e)');
+  assert.equal(s.concessionDensity.value, 75);
   const t2h = computeStandards(standards, [{ tier: 2, band: 'half' }]);
   assert.deepEqual([t2h.max.heightFt.value, t2h.max.densityDuAc.value, t2h.max.far.value], [55, 80, 2.5]);
   assert.equal(computeStandards(standards, []), null);
