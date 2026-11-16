@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 2,
+  "statute": "Gov. Code §§ 65912.155–65912.162 (SB 79, Stats. 2025, ch. 512; § 65912.157 as amended by SB 722, Stats. 2026, ch. 100, eff. July 16, 2026)",
+  "operativeDate": "2026-07-01",
+  "source": {
+    "title": "Gov. Code § 65912.157, current text from the Legislative Counsel’s leginfo database (see data/statute/65912.157.txt)",
+    "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=65912.157",
+    "localCopy": "data/statute/65912.157.txt",
+    "check": "python3 scripts/statute.py flags any amendment to §§ 65912.155–65912.162"
+  },
+  "bands": {
+    "adjacent": { "label": "Adjacent — within 200 ft of a pedestrian access point (§ 65912.156(a))", "short": "200 ft", "rank": 3 },
+    "quarter": { "label": "Within ¼ mile of a TOD stop", "short": "¼ mi", "rank": 2 },
+    "half": { "label": "Further than ¼ mile but within ½ mile, in a city of at least 35,000", "short": "½ mi", "rank": 1 }
+  },
+  "general": {
+    "minUnits": { "value": 5, "cite": "§ 65912.157(a)(1)", "text": "shall include at least five dwelling units" },
+    "minDensityDuAc": { "value": 30, "cite": "§ 65912.157(a)(1)(A)–(B)", "text": "meet the greater of … a minimum density of at least 30 dwelling units per acre [or] the minimum density required under local zoning, if applicable" },
+    "maxAvgUnitNetSqFt": { "value": 1750, "cite": "§ 65912.157(a)(2)", "text": "The average total area of floor space for the proposed units … shall not exceed 1,750 net habitable square feet." }
+  },
+  "tiers": {
+    "1": {
+      "label": "Tier 1 — heavy rail transit or very high frequency commuter rail (§ 65912.156(n))",
+      "quarter": { "heightFt": 75, "densityDuAc": 120, "far": 3.5, "concessionDensityDuAc": 90, "cite": "§ 65912.157(a)(3)" },
+      "half": { "heightFt": 65, "densityDuAc": 100, "far": 3.0, "concessionDensityDuAc": 75, "minCityPopulation": 35000, "cite": "§ 65912.157(a)(4)" }
+    },
+    "2": {
+      "label": "Tier 2 — light rail, high frequency commuter rail, or bus meeting Pub. Resources Code § 21060.2(a)(1) (§ 65912.156(o))",
+      "quarter": { "heightFt": 65, "densityDuAc": 100, "far": 3.0, "concessionDensityDuAc": 75, "cite": "§ 65912.157(a)(5)" },
+      "half": { "heightFt": 55, "densityDuAc": 80, "far": 2.5, "concessionDensityDuAc": 60, "minCityPopulation": 35000, "cite": "§ 65912.157(a)(6)" }
+    }
+  },
+  "adjacencyIntensifier": {
+    "heightFt": 20,
+    "densityDuAc": 40,
+    "far": 1.0,
+    "base": "quarter",
+    "cite": "§ 65912.157(e)",
+    "text": "a transit-oriented housing development project that meets any of the eligibility criteria under subdivision (a) and is immediately adjacent to a transit-oriented development stop shall be eligible for an adjacency intensifier to increase the height limit by an additional 20 feet, the maximum density standard by an additional 40 dwelling units per acre, and the residential floor area ratio by 1 prior to the application of Section 65915.",
+    "note": "“Adjacent” means within 200 feet of any pedestrian access point (§ 65912.156(a)). Every adjacent parcel is also within ¼ mile, so the intensifier is added to the ¼-mile standards of the stop’s tier."
+  },
+  "standardText": {
+    "heightFt": "A local government shall not impose any height limit less than",
+    "densityDuAc": "A local government shall not impose any maximum density [standard] of less than",
+    "far": "A local government shall not enforce any other local development standard or combination of standards that would physically preclude achieving a residential floor area ratio of up to"
+  },
+  "additionalConcessions": {
+    "cite": "§ 65912.157(a)(3)(D)–(a)(6)(D), (d)(1)–(3)",
+    "text": "A development that achieves the tier/distance minimum density and otherwise meets Section 65915 eligibility (including affordability) gets additional density-bonus concessions:",
+    "byIncome": [
+      { "income": "extremely low income", "concessions": 3 },
+      { "income": "very low income", "concessions": 2 },
+      { "income": "low income", "concessions": 1 }
+    ]
+  },
+  "affordability": {
+    "cite": "§ 65912.157(i)",
+    "appliesAboveUnits": 10,
+    "options": [
+      { "pct": 7, "income": "extremely low income (Health & Saf. Code § 50106)" },
+      { "pct": 10, "income": "very low income (Health & Saf. Code § 50105)" },
+      { "pct": 13, "income": "lower income (Health & Saf. Code § 50079.5)" }
+    ],
+    "termYears": { "rental": 55, "ownership": 45 },
+    "localOverride": "If a local inclusionary requirement mandates a higher percentage or deeper affordability, the local requirement applies instead (§ 65912.157(i)(2))."
+  },
+  "labor": { "heightFtOver": 85, "cite": "§ 65912.157(k)", "text": "Any building over 85 feet in height must meet the labor standards of § 65913.4(a)(8)(A), (B), (C), (D), (F), and (G)." },
+  "halfMileMinPopulation": 35000,
+  "provisions": [
+    {
+      "id": "allowed-use",
+      "text": "A housing development project “shall be an allowed use as a transit-oriented housing development on any site zoned for residential, mixed, or commercial development within one-half or one-quarter mile of a transit-oriented development stop” if it meets the applicable requirements.",
+      "cite": "Gov. Code § 65912.157(a)"
+    },
+    {
+      "id": "measurement",
+      "text": "Distance is “measured in a straight line from the nearest edge of the parcel containing the proposed project to a pedestrian access point for the transit-oriented development stop.”",
+      "cite": "Gov. Code § 65912.157(b)"
+    },
+    {
+      "id": "setbacks",
+      "text": "Setbacks, lot coverage, open space, and other local standards: SB 79 sets no numeric values. A local government “may still enact and enforce standards, including an inclusionary zoning requirement that do not, alone or in concert, prevent achieving the applicable development standards,” but “shall not enforce any other local development standard or combination of standards that would physically preclude achieving” the FAR above. It may not impose fees or requirements on a project because it seeks approval under SB 79.",
+      "cite": "Gov. Code § 65912.157(a)(3)(C)–(a)(6)(C), (c)"
+    },
+    {
+      "id": "density-bonus",
+      "text": "Eligible for a density bonus, incentives or concessions, waivers or reductions of development standards, and parking ratios under § 65915 (or a local density bonus program), “using the density allowed under this section as the base density.” Height beyond the SB 79 height need not be granted as a waiver, incentive, or concession except as provided in § 65915(d)(2)(D).",
+      "cite": "Gov. Code § 65912.157(d)"
+    },
+    {
+      "id": "site-exclusions",
+      "text": "Not allowed on: (1) a site with more than two units where the project would demolish rent- or price-controlled housing occupied by tenants in the past seven years; (2) a site where more than two such units were demolished within seven years before the application; (3) a site governed by the Mobilehome Residency Law, the Recreational Vehicle Park Occupancy Law, the Mobilehome Parks Act, or the Special Occupancy Parks Act.",
+      "cite": "Gov. Code § 65912.157(h) (para. (3) added by SB 722)"
+    },
+    {
+      "id": "replacement",
+      "text": "Must comply with § 66300.6 (replacement and relocation protections) and any applicable local demolition and anti-displacement standards.",
+      "cite": "Gov. Code § 65912.157(f), (g)"
+    },
+    {
+      "id": "airport-fire",
+      "text": "Must be consistent with the height, noise, and safety standards of an adopted airport land use compatibility plan (or DoD AICUZ) and with applicable objective fire-safety standards.",
+      "cite": "Gov. Code § 65912.157(j)"
+    },
+    {
+      "id": "ministerial",
+      "text": "Eligible for streamlined ministerial approval under § 65913.4 (with listed exemptions and affordability requirements); that path is not available on a site within a very high fire hazard severity zone. Projects not seeking streamlining are reviewed under the local process and the Housing Accountability Act, and conflicting local zoning standards do not apply.",
+      "cite": "Gov. Code § 65912.159"
+    },
+    {
+      "id": "haa",
+      "text": "Beginning January 1, 2027, denial of a qualifying project in a high-resource area is presumed to violate the Housing Accountability Act unless the local government shows a health, life, or safety reason.",
+      "cite": "Gov. Code § 65912.157(m)"
+    },
+    {
+      "id": "unincorporated",
+      "text": "§ 65912.157 “shall not apply within an unincorporated area of a county until the 7th regional housing needs allocation cycle.”",
+      "cite": "Gov. Code § 65912.157(n)"
+    }
+  ]
+}
