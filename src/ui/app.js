@@ -45,11 +45,31 @@ $('build-info').textContent = `Registry reviewed ${data.registry.lastReviewed}`;
 const initial = parseHash() || { z: 9, lat: 34.05, lon: -118.25 };
 const map = L.map('map', { preferCanvas: true, zoomControl: true }).setView([initial.lat, initial.lon], initial.z);
 const dark = matchMedia('(prefers-color-scheme: dark)').matches;
-L.tileLayer(`https://{s}.basemaps.cartocdn.com/${dark ? 'dark_all' : 'light_all'}/{z}/{x}/{y}{r}.png`, {
-  maxZoom: 20,
-  subdomains: 'abcd',
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-}).addTo(map);
+// Basemaps: Esri's public tile services (no API key). The gray canvases have
+// no detail past zoom 16, so Leaflet upscales those tiles at parcel zoom.
+const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services';
+const ESRI_ATTR = 'Powered by <a href="https://www.esri.com">Esri</a> | Esri, HERE, Garmin, USGS, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+const esri = (path, opts = {}) => L.tileLayer(`${ESRI}/${path}/MapServer/tile/{z}/{y}/{x}`, { maxZoom: 20, attribution: ESRI_ATTR, ...opts });
+const withLabels = (base, labels) => L.layerGroup([esri(base, { maxNativeZoom: 16 }), esri(labels, { maxNativeZoom: 16, pane: 'labels' })]);
+map.createPane('labels');
+map.getPane('labels').style.zIndex = 450;
+map.getPane('labels').style.pointerEvents = 'none';
+const BASEMAPS = {
+  'Light gray': withLabels('Canvas/World_Light_Gray_Base', 'Canvas/World_Light_Gray_Reference'),
+  'Dark gray': withLabels('Canvas/World_Dark_Gray_Base', 'Canvas/World_Dark_Gray_Reference'),
+  Streets: esri('World_Street_Map', { maxNativeZoom: 19 }),
+  Imagery: esri('World_Imagery', { maxNativeZoom: 19, attribution: `${ESRI_ATTR} | Imagery: Esri, Maxar, Earthstar Geographics` }),
+};
+let basemapName = dark ? 'Dark gray' : 'Light gray';
+try {
+  const saved = localStorage.getItem('sb79-basemap');
+  if (saved && BASEMAPS[saved]) basemapName = saved;
+} catch { /* storage unavailable */ }
+BASEMAPS[basemapName].addTo(map);
+L.control.layers(BASEMAPS, null, { position: 'topright', collapsed: true }).addTo(map);
+map.on('baselayerchange', (e) => {
+  try { localStorage.setItem('sb79-basemap', e.name); } catch { /* ignore */ }
+});
 
 const store = new ZoneStore(data.sources);
 const zoneGroups = new Map(); // mpoId -> layer

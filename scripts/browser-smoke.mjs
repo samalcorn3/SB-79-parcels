@@ -46,7 +46,12 @@ await page.route('https://cdn.jsdelivr.net/**', async (route) => {
   if (u.endsWith('leaflet.css')) return route.fulfill({ contentType: 'text/css', body: await readFile(join(leafletDir, 'leaflet.css')) });
   return route.fulfill({ status: 404 });
 });
-await page.route('https://*.basemaps.cartocdn.com/**', (r) => r.fulfill({ status: 204 }));
+const tileStats = { ok: 0, bad: [] };
+page.on('response', (r) => {
+  if (!r.url().includes('/MapServer/tile/')) return;
+  if (r.status() === 200 && /image/.test(r.headers()['content-type'] || '')) tileStats.ok++;
+  else tileStats.bad.push(`${r.status()} ${r.url()}`);
+});
 
 const results = [];
 async function check(name, url, waitFor, shot) {
@@ -75,7 +80,7 @@ const parcelStatus = await page.textContent('#map-status').catch(() => null);
 await check('parcel layer (SF Civic Center, z17)', '?sf=1#17/37.77950/-122.41500', () => /(\d parcels|Parcels:|parcels: )/.test(document.getElementById('map-status')?.textContent || ''), 'parcels-sf.png');
 const parcelStatusSF = await page.textContent('#map-status').catch(() => null);
 
-console.log(JSON.stringify({ results, verdict, chips, parcelStatus, parcelStatusSF, consoleErrors: consoleErrors.slice(0, 10) }, null, 2));
+console.log(JSON.stringify({ tiles: { ok: tileStats.ok, bad: tileStats.bad.slice(0, 5) }, results, verdict, chips, parcelStatus, parcelStatusSF, consoleErrors: consoleErrors.slice(0, 10) }, null, 2));
 await browser.close();
 server.close();
-process.exit(results.every((r) => r.ok) ? 0 : 1);
+process.exit(results.every((r) => r.ok) && tileStats.ok > 0 && !tileStats.bad.length ? 0 : 1);
