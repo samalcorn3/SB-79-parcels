@@ -281,7 +281,7 @@ function showSuggestions(items) {
   listEl.hidden = !items.length;
   qEl.setAttribute('aria-expanded', String(!!items.length));
 }
-function highlight(i) {
+function highlightSuggestion(i) {
   active = (i + suggestions.length) % suggestions.length;
   [...listEl.children].forEach((li, k) => li.setAttribute('aria-selected', String(k === active)));
   qEl.setAttribute('aria-activedescendant', `sug-${active}`);
@@ -305,8 +305,8 @@ qEl.addEventListener('input', () => {
 });
 qEl.addEventListener('keydown', (e) => {
   if (listEl.hidden || !suggestions.length) return;
-  if (e.key === 'ArrowDown') { e.preventDefault(); highlight(active + 1); }
-  else if (e.key === 'ArrowUp') { e.preventDefault(); highlight(active - 1); }
+  if (e.key === 'ArrowDown') { e.preventDefault(); highlightSuggestion(active + 1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); highlightSuggestion(active - 1); }
   else if (e.key === 'Escape') showSuggestions([]);
   else if (e.key === 'Enter' && active >= 0) {
     e.preventDefault();
