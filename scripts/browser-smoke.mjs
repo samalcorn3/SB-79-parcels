@@ -55,9 +55,9 @@ page.on('response', (r) => {
 
 const results = [];
 async function check(name, url, waitFor, shot) {
-  console.error('->', name);
+  console.error('->', name, new Date().toISOString().slice(11, 19));
   const t0 = Date.now();
-  await page.goto(base + url);
+  await page.goto(base + url, { waitUntil: 'domcontentloaded', timeout: 60000 }).catch((e) => console.error('goto', e.message.split('\n')[0]));
   try {
     await page.waitForFunction(waitFor, null, { timeout: 120000, polling: 500 });
     results.push({ name, ok: true, ms: Date.now() - t0 });
@@ -84,7 +84,7 @@ await page.goto(base);
 await page.fill('#q', '9922 S Figueroa');
 await page.waitForSelector('#suggestions li', { timeout: 20000 }).catch(() => null);
 const sugg = await page.$$eval('#suggestions li', (els) => els.map((e) => e.textContent)).catch(() => []);
-if (sugg.length) await page.click('#suggestions li');
+if (sugg.length) await page.click('#suggestions li', { timeout: 10000 }).catch(() => null);
 await page.waitForSelector('.matched', { timeout: 60000 }).catch(() => null);
 const matched = await page.textContent('.matched').catch(() => '');
 results.push({ name: 'suggestion list → 9922 S Figueroa St, Los Angeles', ok: /9922 S Figueroa St, Los Angeles/.test(matched || ''), sugg: sugg.slice(0, 3), matched });
@@ -104,7 +104,7 @@ let parcelRequests = 0;
 const countParcels = (r) => { if (/Parcels|ZNET|acdm-wktn/i.test(r.url()) && r.url().includes('query')) parcelRequests++; };
 page.on('request', countParcels);
 const tZoom = Date.now();
-await page.click('.leaflet-control-zoom-in');
+await page.click('.leaflet-control-zoom-in', { timeout: 10000 }).catch((e) => results.push({ name: 'zoom click', ok: false, error: e.message.split('\n')[0] }));
 await page.waitForTimeout(2500);
 page.off('request', countParcels);
 results.push({ name: 'zoom in reuses loaded parcels (no county re-query)', ok: parcelRequests === 0, ms: Date.now() - tZoom, parcelRequests });
