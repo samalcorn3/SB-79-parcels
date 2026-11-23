@@ -1,12 +1,12 @@
 // App wiring: map, search, click-to-lookup, live layers.
 /* global L */
-import { reportForAddress, reportForPoint, cityAtPoint } from '../lib/lookup.js';
-import { findJurisdiction, instrumentInForce } from '../lib/policy.js';
+import { reportForAddress, reportForPoint } from '../lib/lookup.js';
+import { instrumentInForce } from '../lib/policy.js';
 import { renderReport, renderLoading, renderError, renderNotOk } from './report.js';
 import {
   ZoneStore, classifyParcels, zoneLayer, stopsLayer, parcelLayer,
-  loadParcelsInView, loadExclusionsInView, exclusionLayer, parcelsToCSV,
-  fireInView, fireLayer, applyFire,
+  loadParcelsInView, loadExclusionsInView, parcelsToCSV,
+  fireInView, fireLayer, annotateParcels, fireRuleJurisdictions, cityNamesInView, cityShapesInView,
 } from './maplayers.js';
 
 const REPO_URL = 'https://github.com/samalcorn3/sb-79-parcels';
@@ -78,10 +78,11 @@ const store = new ZoneStore(data.sources);
 const zoneGroups = new Map(); // mpoId -> layer
 const stopGroups = new Map();
 let parcelGroup = null;
-let exclusionGroup = null;
 let highlight = null;
 let currentParcels = [];
 let viewToken = 0;
+
+const contains = (a, b) => a[0] <= b[0] && a[1] <= b[1] && a[2] >= b[2] && a[3] >= b[3];
 
 function bboxOf(m) {
   const b = m.getBounds();
@@ -129,70 +130,94 @@ async function refreshZones() {
 let fireGroup = null;
 let fireToken = 0;
 /** Fire hazard overlay (State Fire Marshal), generalised to roughly one screen pixel. */
-async function refreshFire() {
+let fireArea = null;
+async function refreshFire({ force = false } = {}) {
   const token = ++fireToken;
-  if (fireGroup) map.removeLayer(fireGroup);
-  fireGroup = null;
-  if (!$('tog-fire').checked || map.getZoom() < FIRE_MIN_ZOOM) return;
-  const bbox = bboxOf(map);
-  const pxDeg = (bbox[2] - bbox[0]) / map.getSize().x;
+  const zoom = map.getZoom();
+  if (!$('tog-fire').checked || zoom < FIRE_MIN_ZOOM) {
+    if (fireGroup) map.removeLayer(fireGroup);
+    fireGroup = fireArea = null;
+    return;
+  }
+  const view = bboxOf(map);
+  if (!force && fireArea && fireArea.zoom === zoom && contains(fireArea.bbox, view)) return;
+  const mx = (view[2] - view[0]) * 0.25;
+  const my = (view[3] - view[1]) * 0.25;
+  const bbox = [view[0] - mx, view[1] - my, view[2] + mx, view[3] + my];
+  const pxDeg = (view[2] - view[0]) / map.getSize().x;
   try {
-    const fire = await fireInView(data.sources, bbox, map.getZoom() >= PARCEL_MIN_ZOOM ? undefined : pxDeg);
+    const fire = await fireInView(data.sources, bbox, zoom >= PARCEL_MIN_ZOOM ? undefined : pxDeg);
     if (token !== fireToken) return;
+    if (fireGroup) map.removeLayer(fireGroup);
+    fireArea = { bbox, zoom };
     fireGroup = fireLayer(L, fire).addTo(map);
   } catch (e) {
     setStatus(`Fire hazard zones: ${e.message}`, 'zones');
   }
 }
 
-async function refreshParcels() {
-  const token = ++viewToken;
-  const zoom = map.getZoom();
+const fireRules = fireRuleJurisdictions(data.registry, instrumentInForce);
+
+// The last loaded parcel area. Zooming or panning inside it reuses the parcels
+// instead of re-querying the county and re-classifying.
+let loadedArea = null;
+function clearParcels() {
   if (parcelGroup) map.removeLayer(parcelGroup);
-  if (exclusionGroup) map.removeLayer(exclusionGroup);
-  parcelGroup = exclusionGroup = null;
+  parcelGroup = null;
   currentParcels = [];
+  loadedArea = null;
   $('dl-parcels').disabled = true;
-  setStatus('');
-  if (zoom < PARCEL_MIN_ZOOM) {
-    if (zoom >= 14) setStatus(`Zoom in to level ${PARCEL_MIN_ZOOM} to load parcels`);
+}
+
+async function refreshParcels({ force = false } = {}) {
+  const token = ++viewToken;
+  const isStale = () => token !== viewToken;
+  const zoom = map.getZoom();
+  if (zoom < PARCEL_MIN_ZOOM || !$('tog-parcels').checked) {
+    clearParcels();
+    setStatus(zoom >= 14 && zoom < PARCEL_MIN_ZOOM ? `Zoom in to level ${PARCEL_MIN_ZOOM} to load parcels` : '');
     return;
   }
-  const bbox = bboxOf(map);
-  if ($('tog-excl').checked) {
-    loadExclusionsInView(data.registry, bbox).then((feats) => {
-      if (token !== viewToken || !feats.length) return;
-      exclusionGroup = exclusionLayer(L, feats).addTo(map);
-    });
-  }
-  if (!$('tog-parcels').checked) return;
+  const view = bboxOf(map);
+  if (!force && loadedArea && !loadedArea.truncated && contains(loadedArea.bbox, view)) return; // already have these parcels
+  // Load a margin around the view so small pans don't trigger a reload.
+  const mx = (view[2] - view[0]) * 0.2;
+  const my = (view[3] - view[1]) * 0.2;
+  const bbox = [view[0] - mx, view[1] - my, view[2] + mx, view[3] + my];
   setStatus('Loading parcels from the county assessor…');
   try {
-    const [{ parcels, errors, truncated }, zoneLists, fire] = await Promise.all([
+    const errors = [];
+    const soft = (label, p, fallback) => p.catch((e) => {
+      errors.push(`${label}: ${e.message}`);
+      return fallback;
+    });
+    // Everything for this view is fetched in parallel, once.
+    const [loaded, zoneLists, fire, exclusions, cityNames] = await Promise.all([
       loadParcelsInView(data.sources, bbox),
       Promise.all(store.mposInView(bbox).map((m) => store.loadZones(m).catch(() => []))),
-      fireInView(data.sources, bbox).catch((e) => {
-        errors.push(`Fire hazard zones: ${e.message}`);
-        return null;
-      }),
+      soft('Fire hazard zones', fireInView(data.sources, bbox), null),
+      $('tog-excl').checked ? loadExclusionsInView(data.registry, bbox) : [],
+      fireRules.size ? soft('City limits', cityNamesInView(data.sources, bbox), []) : [],
     ]);
-    if (token !== viewToken) return;
-    const { errors: geomErrors } = classifyParcels(parcels, zoneLists.flat());
-    let excluded = 0;
-    if (fire) {
-      excluded = await applyFire(parcels, fire, { sources: data.sources, registry: data.registry, cityAt: cityAtPoint, instrumentInForce, findJurisdiction });
-      if (token !== viewToken) return;
-    }
-    currentParcels = parcels;
-    parcelGroup = parcelLayer(L, parcels, (e) => lookupPoint([e.latlng.lng, e.latlng.lat])).addTo(map);
-    $('dl-parcels').disabled = !parcels.length;
-    const inZone = parcels.filter((p) => p.properties._code !== 'none').length;
-    const parts = [`${parcels.length.toLocaleString()} parcels${truncated ? ' (truncated — zoom in)' : ''}`, `${inZone.toLocaleString()} in a TOD zone`];
-    if (excluded) parts.push(`${excluded.toLocaleString()} excluded by a local fire-zone ordinance`);
-    if (geomErrors) parts.push(`${geomErrors} geometry errors`);
+    if (isStale()) return;
+    errors.push(...loaded.errors);
+    const relevant = cityNames.filter((n) => fireRules.has(n));
+    const fireCities = relevant.length ? await soft('City limits', cityShapesInView(data.sources, bbox, relevant), []) : [];
+    if (isStale()) return;
+    setStatus(`Classifying ${loaded.parcels.length.toLocaleString()} parcels…`);
+    const stats = await annotateParcels(loaded.parcels, { zones: zoneLists.flat(), fire, exclusions, fireCities, fireRules, bbox, isStale });
+    if (!stats || isStale()) return;
+    if (parcelGroup) map.removeLayer(parcelGroup); // swap only when the new layer is ready
+    currentParcels = loaded.parcels;
+    loadedArea = { bbox, truncated: loaded.truncated };
+    parcelGroup = parcelLayer(L, currentParcels, (e) => lookupPoint([e.latlng.lng, e.latlng.lat])).addTo(map);
+    $('dl-parcels').disabled = !currentParcels.length;
+    const parts = [`${currentParcels.length.toLocaleString()} parcels${loaded.truncated ? ' (truncated — zoom in)' : ''}`, `${stats.inZone.toLocaleString()} in a TOD zone`];
+    if (stats.excluded) parts.push(`${stats.excluded.toLocaleString()} excluded locally`);
+    if (stats.errors) parts.push(`${stats.errors} geometry errors`);
     setStatus(errors.length ? errors.join(' · ') : parts.join(' · '));
   } catch (e) {
-    if (token === viewToken) setStatus(`Parcels: ${e.message}`);
+    if (!isStale()) setStatus(`Parcels: ${e.message}`);
   }
 }
 
@@ -207,9 +232,9 @@ map.on('moveend', () => {
   }, 350);
 });
 map.on('click', (e) => lookupPoint([e.latlng.lng, e.latlng.lat]));
-['tog-parcels', 'tog-excl'].forEach((id) => $(id).addEventListener('change', refreshParcels));
+['tog-parcels', 'tog-excl'].forEach((id) => $(id).addEventListener('change', () => refreshParcels({ force: true })));
 $('tog-stops').addEventListener('change', refreshZones);
-$('tog-fire').addEventListener('change', refreshFire);
+$('tog-fire').addEventListener('change', () => refreshFire({ force: true }));
 $('dl-parcels').addEventListener('click', downloadParcels);
 
 // ---------- lookup ----------
