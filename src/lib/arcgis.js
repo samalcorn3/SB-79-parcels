@@ -112,31 +112,43 @@ export async function queryIntersecting(layerUrl, geo, { outFields = ['*'], wher
 /** All features in a bbox as GeoJSON, following pagination up to maxFeatures. */
 export async function queryGeoJSONInBBox(layerUrl, bbox, { outFields = ['*'], where = '1=1', pageSize = 1000, maxFeatures = 4000, precision = 6, maxAllowableOffset } = {}) {
   const env = envelope(bbox);
-  const out = [];
-  let offset = 0;
-  while (out.length < maxFeatures) {
-    const json = await getJSON(`${layerUrl}/query`, {
-      where,
-      geometry: env.geometry,
-      geometryType: env.geometryType,
-      inSR: 4326,
-      spatialRel: 'esriSpatialRelIntersects',
-      outFields: outFields.join(','),
-      returnGeometry: true,
-      outSR: 4326,
-      geometryPrecision: precision,
-      maxAllowableOffset,
-      resultOffset: offset,
-      resultRecordCount: pageSize,
-      f: 'geojson',
-    });
-    const feats = json.features || [];
-    out.push(...feats);
-    const more = json.exceededTransferLimit || json.properties?.exceededTransferLimit;
-    if (!more || feats.length === 0) break;
-    offset += feats.length;
+  const base = {
+    where,
+    geometry: env.geometry,
+    geometryType: env.geometryType,
+    inSR: 4326,
+    spatialRel: 'esriSpatialRelIntersects',
+  };
+  const page = (offset) => getJSON(`${layerUrl}/query`, {
+    ...base,
+    outFields: outFields.join(','),
+    returnGeometry: true,
+    outSR: 4326,
+    geometryPrecision: precision,
+    maxAllowableOffset,
+    resultOffset: offset,
+    resultRecordCount: pageSize,
+    f: 'geojson',
+  });
+  // First page and total count in parallel; then the remaining pages in parallel.
+  const [first, count] = await Promise.all([
+    page(0),
+    getJSON(`${layerUrl}/query`, { ...base, returnCountOnly: true, f: 'json' }).then((r) => r.count).catch(() => null),
+  ]);
+  const out = [...(first.features || [])];
+  const more = first.exceededTransferLimit || first.properties?.exceededTransferLimit;
+  if (more && out.length) {
+    const step = out.length;
+    const total = Math.min(count ?? maxFeatures, maxFeatures);
+    const offsets = [];
+    for (let o = step; o < total; o += step) offsets.push(o);
+    for (let k = 0; k < offsets.length; k += 4) {
+      const pages = await Promise.all(offsets.slice(k, k + 4).map(page));
+      for (const pg of pages) out.push(...(pg.features || []));
+    }
   }
-  return { features: out.slice(0, maxFeatures), truncated: out.length >= maxFeatures };
+  const truncated = count != null ? count > maxFeatures : out.length >= maxFeatures;
+  return { features: out.slice(0, maxFeatures), truncated };
 }
 
 /** Every feature of a (small) layer as GeoJSON, e.g. MPO TOD zones. */

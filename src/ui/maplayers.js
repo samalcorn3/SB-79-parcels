@@ -123,40 +123,103 @@ export function fireLayer(L, fire) {
   ]);
 }
 
+const yieldToUI = () => new Promise((r) => setTimeout(r, 0));
+
+/** Split polygons into single parts, clip them to the bbox, and drop empty parts. */
+export function clipToBBox(features, bbox) {
+  const out = [];
+  for (const f of features) {
+    turf.flattenEach(f, (part) => {
+      if (!bboxesOverlap(turf.bbox(part), bbox)) return;
+      let c;
+      try {
+        c = turf.bboxClip(part, bbox);
+      } catch {
+        return;
+      }
+      const rings = (c.geometry?.coordinates || []).filter((r) => r.length >= 4);
+      if (!rings.length) return;
+      const poly = turf.polygon(rings, f.properties);
+      out.push({ ...poly, bbox: turf.bbox(poly) });
+    });
+  }
+  return out;
+}
+
+const firstContaining = (pt, polys) => polys.find((z) => pt[0] >= z.bbox[0] && pt[0] <= z.bbox[2] && pt[1] >= z.bbox[1] && pt[1] <= z.bbox[3] && turf.booleanPointInPolygon(pt, z));
+
+/** Jurisdictions whose ordinance in force excludes fire-zone sites (§ 65912.161(b)(1)(D)). */
+export function fireRuleJurisdictions(registry, instrumentInForce) {
+  const out = new Map();
+  for (const [name, j] of Object.entries(registry.jurisdictions)) {
+    const inst = j.instruments.find((x) => x.coverage?.type === 'criteria' && x.coverage.criteria.includes('fire-hazard') && instrumentInForce(x).inForce);
+    if (inst) out.set(name, inst);
+  }
+  return out;
+}
+
+/** City polygons in view, but only for the named cities, clipped to the view. */
+export async function cityShapesInView(sources, bbox, names) {
+  if (!names.length) return [];
+  const b = sources.boundaries.cities;
+  const where = `${b.fields.name} IN (${names.map((n) => `'${n.replace(/'/g, "''")}'`).join(',')})`;
+  const r = await queryGeoJSONInBBox(b.url, bbox, { where, outFields: [b.fields.name], maxAllowableOffset: 0.00001, maxFeatures: 50 });
+  return clipToBBox(r.features.map((f) => ({ ...f, properties: { name: f.properties[b.fields.name] } })), bbox);
+}
+
+export async function cityNamesInView(sources, bbox) {
+  const b = sources.boundaries.cities;
+  const rows = await queryIntersecting(b.url, envelope(bbox), { outFields: [b.fields.name] });
+  return rows.map((r) => r[b.fields.name]);
+}
+
 /**
- * Mark parcels that qualify under § 65912.161(b)(1)(D) and, where the city has
- * an ordinance in force that excludes such sites, mark them excluded.
+ * Annotate parcels for the map in small batches so the page stays responsive:
+ *   _zones/_code  TOD zones (§ 65912.157(b) nearest-edge test)
+ *   _fire         share of parcel in a VHFHSZ / the SRA (State Fire Marshal)
+ *   _excluded     covered by a published local exclusion layer, or by a city
+ *                 fire-zone ordinance (§ 65912.161(b)(1)(D))
+ * `isStale()` lets a newer map view cancel the work.
  */
-export async function applyFire(parcels, fire, { sources, registry, cityAt, instrumentInForce, findJurisdiction }) {
-  const candidates = [];
-  for (const p of parcels) {
-    if (p.properties._code === 'none') continue;
-    const st = fireStatus(p, fire);
-    if (!st.qualifies) continue;
-    p.properties._fire = st;
-    candidates.push(p);
-  }
-  if (!candidates.length) return 0;
-  const cache = new Map();
-  let excluded = 0;
-  for (let i = 0; i < candidates.length; i += 8) {
-    await Promise.all(candidates.slice(i, i + 8).map(async (p) => {
-      const pt = turf.pointOnFeature(p).geometry.coordinates;
-      const key = pt.map((v) => v.toFixed(4)).join(',');
-      let city = cache.get(key);
-      if (city === undefined) {
-        city = await cityAt(sources, pt).catch(() => null);
-        cache.set(key, city);
+export async function annotateParcels(parcels, { zones, fire, exclusions = [], fireCities = [], fireRules = new Map(), bbox, isStale = () => false, batch = 250 }) {
+  // Clip to the extent of the parcels themselves (they can run past the view edge).
+  const pb = parcels.length ? turf.bbox(turf.featureCollection(parcels)) : bbox;
+  const work = [Math.min(pb[0], bbox[0]), Math.min(pb[1], bbox[1]), Math.max(pb[2], bbox[2]), Math.max(pb[3], bbox[3])];
+  const fireParts = fire ? { vhfhsz: clipToBBox(fire.vhfhsz, work), sra: clipToBBox(fire.sra, work) } : null;
+  // Zone parts can be large (½-mile rings at full precision); clip them to this view once.
+  const zoneParts = clipToBBox(zones, work);
+  const exclParts = exclusions.map((f) => ({ ...f, bbox: f.bbox || turf.bbox(f) }));
+  const stats = { inZone: 0, excluded: 0, fire: 0, errors: 0 };
+  for (let i = 0; i < parcels.length; i += batch) {
+    if (isStale()) return null;
+    const chunk = parcels.slice(i, i + batch);
+    stats.errors += classifyParcels(chunk, zoneParts).errors;
+    for (const p of chunk) {
+      if (p.properties._code === 'none') continue;
+      stats.inZone++;
+      const c = turf.centroid(p).geometry.coordinates;
+      const pt = turf.booleanPointInPolygon(c, p) ? c : turf.pointOnFeature(p).geometry.coordinates;
+      const ex = exclParts.length && firstContaining(pt, exclParts);
+      if (ex) {
+        p.properties._excluded = { jurisdiction: ex.properties.jurisdiction, title: ex.properties.title };
+        stats.excluded++;
       }
-      const j = city && findJurisdiction(registry, city.name);
-      const inst = j?.instruments.find((x) => x.coverage?.type === 'criteria' && x.coverage.criteria.includes('fire-hazard') && instrumentInForce(x).inForce);
+      if (!fireParts) continue;
+      const st = fireStatus(p, fireParts);
+      if (!st.qualifies) continue;
+      p.properties._fire = st;
+      stats.fire++;
+      if (p.properties._excluded || !fireCities.length) continue;
+      const city = firstContaining(pt, fireCities);
+      const inst = city && fireRules.get(city.properties.name);
       if (inst) {
-        p.properties._excluded = { jurisdiction: j.name, title: inst.title };
-        excluded++;
+        p.properties._excluded = { jurisdiction: city.properties.name, title: inst.title };
+        stats.excluded++;
       }
-    }));
+    }
+    await yieldToUI();
   }
-  return excluded;
+  return stats;
 }
 
 export function zoneLayer(L, features) {
@@ -189,7 +252,7 @@ export function parcelLayer(L, parcels, onClick) {
   return L.geoJSON(parcels, {
     style: (f) => {
       const c = colors[f.properties._code];
-      if (f.properties._excluded) return { color: css('--excl') || '#d97706', weight: 1.4, dashArray: '3 3', opacity: 1, fillColor: '#7a7a7a', fillOpacity: 0.35 };
+      if (f.properties._excluded) return { color: css('--excl') || '#d97706', weight: 1.3, opacity: 1, fillColor: '#7a7a7a', fillOpacity: 0.35 };
       return c
         ? { color: c, weight: 0.8, opacity: 0.9, fillColor: c, fillOpacity: 0.45 }
         : { color: '#888', weight: 0.5, opacity: 0.6, fillOpacity: 0.02 };
@@ -222,7 +285,7 @@ export async function countiesInView(sources, bbox) {
 
 export async function loadParcelsInView(sources, bbox) {
   const counties = await countiesInView(sources, bbox);
-  const results = await Promise.allSettled(counties.map((c) => parcelsInBBox(c, bbox, { maxFeatures: 5000 })));
+  const results = await Promise.allSettled(counties.map((c) => parcelsInBBox(c, bbox, { maxFeatures: 6000 })));
   const parcels = [];
   const errors = [];
   let truncated = false;

@@ -19,11 +19,18 @@ export function overlapShare(parcel, polygons) {
   const area = turf.area(parcel);
   if (!area || !polygons.length) return 0;
   const pb = turf.bbox(parcel);
+  const verts = turf.coordAll(parcel);
   let covered = 0;
   for (const f of polygons) {
     const fb = f.bbox || turf.bbox(f);
     if (fb[0] > pb[2] || fb[2] < pb[0] || fb[1] > pb[3] || fb[3] < pb[1]) continue;
     try {
+      // Fast paths: most parcels sit wholly inside or wholly outside a fire zone.
+      const inside = verts.filter((v) => turf.booleanPointInPolygon(v, f, { ignoreBoundary: false })).length;
+      if (inside === verts.length && !turf.booleanIntersects(turf.polygonToLine(f), turf.polygonToLine(parcel.geometry ? parcel : turf.feature(parcel)))) {
+        return 1;
+      }
+      if (inside === 0 && !turf.booleanIntersects(parcel, f)) continue;
       const inter = turf.intersect(turf.featureCollection([turf.feature(parcel.geometry || parcel), f]));
       if (inter) covered += turf.area(inter);
     } catch {
