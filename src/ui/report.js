@@ -17,7 +17,10 @@ export function renderError(message) {
 }
 
 export function renderNotOk(r) {
-  return `<div class="card"><h2>No result</h2><p>${esc(r.message)}</p></div>`;
+  const options = (r.suggestions || [])
+    .map((x) => `<button type="button" data-text="${esc(x.text)}" data-magic="${esc(x.magicKey)}">${esc(x.text.replace(/, USA$/, ''))}</button>`)
+    .join('');
+  return `<div class="card"><h2>No result</h2><p>${esc(r.message)}</p>${options ? `<div class="didyoumean">${options}</div>` : ''}</div>`;
 }
 
 function zoneChips(zones) {
@@ -134,6 +137,7 @@ export function renderReport(r, { standardsDoc } = {}) {
   return `
   <div class="card">
     <p class="addr">${esc(p.address || r.input.geocoded?.label || 'Parcel')}</p>
+    ${r.input.geocoded ? `<p class="matched">Your search “${esc(r.input.geocoded.query || '')}” matched <b>${esc(r.input.geocoded.label)}</b> (${esc(r.input.geocoded.type || 'match')}, score ${Math.round(r.input.geocoded.score)}).</p>` : ''}
     <dl class="kv">
       <dt>APN</dt><dd>${esc(p.apn || p.id || '—')}</dd>
       <dt>Jurisdiction</dt><dd>${esc(r.jurisdiction.name)}</dd>

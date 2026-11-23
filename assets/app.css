@@ -140,3 +140,13 @@ ul.plain li { margin: 4px 0; }
   .panel { grid-row: 2; border-right: 0; border-top: 1px solid var(--line); padding: 16px; }
   .legend { right: 8px; bottom: 8px; padding: 8px; }
 }
+
+.combo { position: relative; flex: 1; min-width: 0; display: flex; }
+.combo input { flex: 1; }
+.suggestions { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 1000; margin: 0; padding: 4px 0; list-style: none; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); max-height: 280px; overflow-y: auto; }
+.suggestions li { padding: 8px 12px; cursor: pointer; }
+.suggestions li[aria-selected="true"], .suggestions li:hover { background: var(--info-bg); }
+.didyoumean { display: grid; gap: 6px; margin-top: 8px; }
+.didyoumean button { text-align: left; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font: inherit; cursor: pointer; }
+.didyoumean button:hover { border-color: var(--accent); }
+.matched { margin: 4px 0 0; font-size: 12.5px; color: var(--ink-3); }

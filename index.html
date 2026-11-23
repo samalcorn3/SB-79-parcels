@@ -23,7 +23,11 @@
 
       <form id="search" class="search" autocomplete="off">
         <label for="q" class="sr-only">Address</label>
-        <input id="q" name="q" type="search" placeholder="Street address, e.g. 1221 Broadway, Oakland" required />
+        <div class="combo">
+          <input id="q" name="q" type="search" placeholder="Street address, e.g. 1221 Broadway, Oakland" required
+            role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggestions" />
+          <ul id="suggestions" class="suggestions" role="listbox" hidden></ul>
+        </div>
         <button type="submit">Look up</button>
       </form>
       <p class="hint">…or click any lot on the map. Zoom in to see every parcel colored by TOD zone.</p>
