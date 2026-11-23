@@ -13,18 +13,49 @@ import { fireForParcel } from './fire.js';
 const SQFT_PER_SQM = 10.7639;
 const FEET_PER_MILE = 5280;
 
-export async function geocode(sources, text) {
+const CA_EXTENT = '-124.5,32.4,-114.0,42.1';
+// Geocoder match types that identify an actual address (not a place name or a whole street).
+const ADDRESS_TYPES = new Set(['PointAddress', 'StreetAddress', 'StreetAddressExt', 'Subaddress']);
+
+export async function geocode(sources, text, { magicKey, location } = {}) {
   const json = await getJSON(`${sources.geocoder.url}/findAddressCandidates`, {
     SingleLine: text,
+    magicKey,
+    location: location ? location.join(',') : undefined,
     outFields: 'Match_addr,Addr_type,City,Subregion,Region',
     maxLocations: 5,
     countryCode: 'USA',
-    searchExtent: '-124.5,32.4,-114.0,42.1',
+    searchExtent: CA_EXTENT,
     f: 'json',
   });
   return (json.candidates || [])
     .filter((c) => c.attributes?.Region === 'California' || /, California|, CA\b/.test(c.address))
     .map((c) => ({ label: c.address, lon: c.location.x, lat: c.location.y, score: c.score, type: c.attributes?.Addr_type, county: c.attributes?.Subregion, city: c.attributes?.City }));
+}
+
+/** Address suggestions while typing (Esri /suggest), biased toward `location`. */
+export async function suggest(sources, text, { location, max = 6 } = {}) {
+  if (!text || text.trim().length < 3) return [];
+  const json = await getJSON(`${sources.geocoder.url}/suggest`, {
+    text,
+    category: 'Address,Postal',
+    countryCode: 'USA',
+    searchExtent: CA_EXTENT,
+    location: location ? location.join(',') : undefined,
+    maxSuggestions: max,
+    f: 'json',
+  }, { retries: 0, timeoutMs: 8000 });
+  return (json.suggestions || []).filter((x) => !x.isCollection && /, CA\b/.test(x.text)).map((x) => ({ text: x.text, magicKey: x.magicKey }));
+}
+
+/**
+ * Is a geocoder candidate a confident match for what the user typed? If the
+ * input starts with a house number, only a real address match counts (a
+ * place name or a whole street does not), and the score must be at least 90.
+ */
+export function acceptableCandidate(c, text) {
+  if (!c || c.score < 90) return false;
+  return /^\s*\d+/.test(text) ? ADDRESS_TYPES.has(c.type) : true;
 }
 
 export async function countyAtPoint(sources, [lon, lat]) {
@@ -243,10 +274,22 @@ export async function reportForPoint(data, [lon, lat], { geocoded } = {}) {
   };
 }
 
-export async function reportForAddress(data, text) {
-  const candidates = await geocode(data.sources, text);
-  if (!candidates.length) return { ok: false, reason: 'not-found', message: `No California address match for “${text}”.` };
-  const best = candidates[0];
-  const report = await reportForPoint(data, [best.lon, best.lat], { geocoded: best });
+export async function reportForAddress(data, text, { magicKey, location } = {}) {
+  const candidates = await geocode(data.sources, text, { magicKey, location });
+  // A suggestion the user picked (magicKey) is trusted; free text must match confidently.
+  const best = magicKey ? candidates[0] : candidates.find((c) => acceptableCandidate(c, text));
+  if (!best) {
+    const suggestions = await suggest(data.sources, text, { location }).catch(() => []);
+    return {
+      ok: false,
+      reason: 'ambiguous',
+      message: suggestions.length
+        ? `No exact address match for “${text}”. Did you mean:`
+        : `No California street address matched “${text}”. Try including the street type and city (e.g. “St, Los Angeles”).`,
+      suggestions,
+      candidates,
+    };
+  }
+  const report = await reportForPoint(data, [best.lon, best.lat], { geocoded: { ...best, query: text } });
   return { ...report, candidates };
 }

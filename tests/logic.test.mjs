@@ -146,3 +146,13 @@ test('registry entries are well-formed', () => {
     }
   }
 });
+
+test('geocoder: a place-name or low-score match is never accepted for a street address', async () => {
+  const { acceptableCandidate } = await import('../src/lib/lookup.js');
+  // The real failure: "9922 S Figueroa" → Esri's best guess was a POI named "Figueroa" (score 76.9) in Paramount.
+  assert.equal(acceptableCandidate({ score: 76.92, type: 'POI' }, '9922 S Figueroa'), false);
+  assert.equal(acceptableCandidate({ score: 95, type: 'StreetName' }, '9922 S Figueroa'), false);
+  assert.equal(acceptableCandidate({ score: 100, type: 'PointAddress' }, '9922 S Figueroa St, Los Angeles'), true);
+  assert.equal(acceptableCandidate({ score: 92, type: 'StreetAddress' }, '9922 S Figueroa St'), true);
+  assert.equal(acceptableCandidate({ score: 95, type: 'POI' }, 'Union Station, Los Angeles'), true); // no house number: places are fine
+});

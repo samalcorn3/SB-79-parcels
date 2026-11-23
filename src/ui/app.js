@@ -1,6 +1,6 @@
 // App wiring: map, search, click-to-lookup, live layers.
 /* global L */
-import { reportForAddress, reportForPoint } from '../lib/lookup.js';
+import { reportForAddress, reportForPoint, suggest } from '../lib/lookup.js';
 import { instrumentInForce } from '../lib/policy.js';
 import { renderReport, renderLoading, renderError, renderNotOk } from './report.js';
 import {
@@ -265,12 +265,76 @@ function lookupPoint([lon, lat]) {
   run(reportForPoint(data, [lon, lat]), 'Querying parcel, TOD zones, and local instruments…');
 }
 
+// ---------- search: suggestions while typing, confident matches only ----------
+const qEl = $('q');
+const listEl = $('suggestions');
+let suggestions = [];
+let active = -1;
+let suggestTimer;
+let suggestToken = 0;
+const center = () => [map.getCenter().lng, map.getCenter().lat];
+
+function showSuggestions(items) {
+  suggestions = items;
+  active = -1;
+  listEl.innerHTML = items.map((x, i) => `<li role="option" id="sug-${i}" data-i="${i}">${x.text.replace(/, USA$/, '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c])}</li>`).join('');
+  listEl.hidden = !items.length;
+  qEl.setAttribute('aria-expanded', String(!!items.length));
+}
+function highlight(i) {
+  active = (i + suggestions.length) % suggestions.length;
+  [...listEl.children].forEach((li, k) => li.setAttribute('aria-selected', String(k === active)));
+  qEl.setAttribute('aria-activedescendant', `sug-${active}`);
+}
+function lookupAddress(text, magicKey) {
+  showSuggestions([]);
+  qEl.value = text.replace(/, USA$/, '');
+  setQuery({ q: qEl.value });
+  run(reportForAddress(data, text, { magicKey, location: center() }), `Geocoding “${qEl.value}” and querying live sources…`);
+}
+
+qEl.addEventListener('input', () => {
+  clearTimeout(suggestTimer);
+  const text = qEl.value.trim();
+  if (text.length < 3) return showSuggestions([]);
+  suggestTimer = setTimeout(async () => {
+    const token = ++suggestToken;
+    const items = await suggest(data.sources, text, { location: center() }).catch(() => []);
+    if (token === suggestToken && qEl.value.trim() === text) showSuggestions(items);
+  }, 220);
+});
+qEl.addEventListener('keydown', (e) => {
+  if (listEl.hidden || !suggestions.length) return;
+  if (e.key === 'ArrowDown') { e.preventDefault(); highlight(active + 1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); highlight(active - 1); }
+  else if (e.key === 'Escape') showSuggestions([]);
+  else if (e.key === 'Enter' && active >= 0) {
+    e.preventDefault();
+    lookupAddress(suggestions[active].text, suggestions[active].magicKey);
+  }
+});
+listEl.addEventListener('mousedown', (e) => {
+  const li = e.target.closest('li[data-i]');
+  if (!li) return;
+  e.preventDefault();
+  const x = suggestions[Number(li.dataset.i)];
+  lookupAddress(x.text, x.magicKey);
+});
+qEl.addEventListener('blur', () => setTimeout(() => showSuggestions([]), 150));
+
 $('search').addEventListener('submit', (e) => {
   e.preventDefault();
-  const q = $('q').value.trim();
+  const q = qEl.value.trim();
   if (!q) return;
+  showSuggestions([]);
   setQuery({ q });
-  run(reportForAddress(data, q), `Geocoding “${q}” and querying live sources…`);
+  run(reportForAddress(data, q, { location: center() }), `Geocoding “${q}” and querying live sources…`);
+});
+
+// "Did you mean" choices in a no-match result
+reportEl.addEventListener('click', (e) => {
+  const b = e.target.closest('.didyoumean button');
+  if (b) lookupAddress(b.dataset.text, b.dataset.magic);
 });
 
 // ---------- downloads ----------

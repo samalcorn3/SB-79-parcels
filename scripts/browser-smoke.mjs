@@ -67,6 +67,28 @@ async function check(name, url, waitFor, shot) {
   if (shot) await page.screenshot({ path: join(outDir, shot) });
 }
 
+// Partial address "9922 S Figueroa" once resolved to a place named "Figueroa" in Paramount.
+// Free-text submit must land on the right address or offer it; never a wrong match.
+await page.goto(base);
+await page.fill('#q', '9922 S Figueroa');
+await page.press('#q', 'Enter');
+await page.waitForSelector('.didyoumean button, .matched', { timeout: 60000 }).catch(() => null);
+const enterOutcome = (await page.textContent('#report').catch(() => '')) || '';
+results.push({
+  name: 'free-text "9922 S Figueroa" → right address or "did you mean", never a wrong match',
+  ok: /9922 S Figueroa St, Los Angeles/.test(enterOutcome) && !/PARAMOUNT/i.test(enterOutcome),
+  outcome: enterOutcome.slice(0, 160).replace(/\s+/g, ' '),
+});
+// Picking from the suggestion list.
+await page.goto(base);
+await page.fill('#q', '9922 S Figueroa');
+await page.waitForSelector('#suggestions li', { timeout: 20000 }).catch(() => null);
+const sugg = await page.$$eval('#suggestions li', (els) => els.map((e) => e.textContent)).catch(() => []);
+if (sugg.length) await page.click('#suggestions li');
+await page.waitForSelector('.matched', { timeout: 60000 }).catch(() => null);
+const matched = await page.textContent('.matched').catch(() => '');
+results.push({ name: 'suggestion list → 9922 S Figueroa St, Los Angeles', ok: /9922 S Figueroa St, Los Angeles/.test(matched || ''), sugg: sugg.slice(0, 3), matched });
+
 await page.setViewportSize({ width: 1400, height: 2600 });
 await check('address lookup (Oakland)', '?q=1221%20Broadway%2C%20Oakland%2C%20CA', () => document.querySelector('.verdict h3'), 'lookup-oakland.png');
 const verdict = await page.textContent('.verdict h3').catch(() => null);
