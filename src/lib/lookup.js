@@ -8,6 +8,7 @@ import { normalizeZone, dedupeZones, applyPopulationRule } from './zones.js';
 import { computeStandards, projectRequirements } from './standards.js';
 import { findJurisdiction, determineRegime, summarizeInstruments } from './policy.js';
 import { parcelsAtPoint } from './parcels.js';
+import { fireForParcel } from './fire.js';
 
 const SQFT_PER_SQM = 10.7639;
 const FEET_PER_MILE = 5280;
@@ -96,9 +97,29 @@ function pickParcel(parcels) {
   return pool.reduce((best, p) => (turf.area(p) > turf.area(best) ? p : best), pool[0]);
 }
 
-async function coverageFor(jurisdiction, interiorPoint) {
+function pct(x) {
+  return `${Math.round(x * 100)}%`;
+}
+
+/** Coverage for instruments defined by statutory criteria we can compute (fire hazard). */
+export function criteriaCoverage(inst, fire) {
+  const c = inst.coverage;
+  if (c.criteria.includes('fire-hazard') && fire?.qualifies) {
+    const parts = [];
+    if (fire.vhfhsz.hit) parts.push(`${pct(fire.vhfhsz.share)} of parcel in a Very High Fire Hazard Severity Zone`);
+    if (fire.sra.hit) parts.push(`${pct(fire.sra.share)} of parcel in the State Responsibility Area`);
+    return { covered: true, reason: `${parts.join('; ')} (State Fire Marshal maps)` };
+  }
+  if (c.criteria.includes('fire-hazard') && fire == null) return { covered: null, reason: 'Fire-hazard check unavailable' };
+  return { covered: c.complete ? false : null };
+}
+
+async function coverageFor(jurisdiction, interiorPoint, fire) {
   const out = {};
   if (!jurisdiction) return out;
+  for (const inst of jurisdiction.instruments) {
+    if (inst.coverage?.type === 'criteria') out[inst.id] = criteriaCoverage(inst, fire);
+  }
   await Promise.all(
     jurisdiction.instruments
       .filter((i) => i.coverage?.type === 'arcgis')
@@ -165,7 +186,7 @@ export async function reportForPoint(data, [lon, lat], { geocoded } = {}) {
   }
 
   const interior = turf.pointOnFeature(parcel).geometry;
-  const [city, zonesRaw, stops] = await Promise.all([
+  const [city, zonesRaw, stops, fire] = await Promise.all([
     cityAtPoint(sources, interior.coordinates),
     zonesForParcel(mpo, parcel.geometry).catch((e) => {
       errors.push(`TOD zones (${mpo.name}): ${e.message}`);
@@ -175,11 +196,15 @@ export async function reportForPoint(data, [lon, lat], { geocoded } = {}) {
       errors.push(`Nearby stops: ${e.message}`);
       return [];
     }),
+    fireForParcel(sources, parcel).catch((e) => {
+      errors.push(`Fire hazard zones (State Fire Marshal): ${e.message}`);
+      return null;
+    }),
   ]);
 
   const { zones, removed } = applyPopulationRule(zonesRaw || [], city?.population, standards.halfMileMinPopulation);
   const jurisdiction = city ? findJurisdiction(registry, city.name) : null;
-  const coverage = await coverageFor(jurisdiction, interior);
+  const coverage = await coverageFor(jurisdiction, interior, fire);
   const regime = zonesRaw == null
     ? { regime: 'error', headline: 'Could not reach the MPO’s TOD-zone service', detail: errors.join(' '), instruments: [], notes: [] }
     : determineRegime({ zones, county: county.config, jurisdiction, cityName: city?.name || null, coverage });
@@ -207,6 +232,7 @@ export async function reportForPoint(data, [lon, lat], { geocoded } = {}) {
     zones,
     zonesRemovedByPopulation: removed,
     nearbyStops: stops.slice(0, 12),
+    fire,
     regime,
     instrumentSummary: summarizeInstruments(regime),
     standards: std && { ...std, lot: projectRequirements(standards, std, lotSqFt) },

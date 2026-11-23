@@ -6,6 +6,7 @@ import { queryAllGeoJSON, queryGeoJSONInBBox, queryIntersecting, envelope } from
 import { normalizeZone, dedupeZones, zoneCode } from '../lib/zones.js';
 import { readSpec } from '../lib/spec.js';
 import { parcelsInBBox } from '../lib/parcels.js';
+import { fireStatus } from '../lib/fire.js';
 import { matchCounty } from '../lib/lookup.js';
 
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -49,8 +50,15 @@ export class ZoneStore {
             out.push({ ...buf, properties: { _z: z, _code: zoneCode(z) } });
           }
         }
-        for (const f of out) f.bbox = turf.bbox(f);
-        return out;
+        // MPOs publish dissolved multipolygons (SCAG's Tier 2 · 200 ft layer has
+        // 200+ parts). Split them so each part can be bbox-filtered on its own.
+        const parts = [];
+        for (const f of out) {
+          turf.flattenEach(f, (part) => {
+            if (part.geometry?.coordinates?.[0]?.length >= 4) parts.push({ ...part, properties: f.properties, bbox: turf.bbox(part) });
+          });
+        }
+        return parts;
       })().catch((e) => {
         this.zones.delete(mpo.id);
         throw e;
@@ -70,37 +78,85 @@ export class ZoneStore {
   }
 }
 
-/** Classify parcels against zone features clipped to the working bbox. */
-export function classifyParcels(parcels, zoneFeatures, bbox) {
-  const pad = 0.002;
-  const work = [bbox[0] - pad, bbox[1] - pad, bbox[2] + pad, bbox[3] + pad];
-  const clipped = zoneFeatures
-    .filter((z) => bboxesOverlap(z.bbox, work))
-    .map((z) => {
-      try {
-        const c = turf.bboxClip(z, work);
-        return { ...c, properties: z.properties, bbox: turf.bbox(c) };
-      } catch {
-        return null;
-      }
-    })
-    .filter((z) => z && z.geometry && z.geometry.coordinates.length);
+/**
+ * Classify parcels against single-part zone polygons. A parcel is in a zone
+ * when its polygon intersects the zone (§ 65912.157(b): distance from the
+ * nearest parcel edge). Returns the number of geometry errors encountered so
+ * the UI can report them instead of silently calling a parcel "not in a zone".
+ */
+export function classifyParcels(parcels, zoneFeatures) {
+  let errors = 0;
   for (const p of parcels) {
     const pb = turf.bbox(p);
     const hits = [];
-    for (const z of clipped) {
-      if (!bboxesOverlap(pb, z.bbox)) continue;
+    for (const z of zoneFeatures) {
+      if (!bboxesOverlap(pb, z.bbox || (z.bbox = turf.bbox(z)))) continue;
       try {
         if (turf.booleanIntersects(p, z)) hits.push(z.properties._z);
       } catch {
-        /* malformed geometry from source; skip */
+        errors++;
       }
     }
     const zones = dedupeZones(hits);
     p.properties._zones = zones;
     p.properties._code = zoneCode(zones[0]);
   }
-  return parcels;
+  return { parcels, errors };
+}
+
+// ---------- fire hazard (CAL FIRE / State Fire Marshal) ----------
+
+/** VHFHSZ (LRA) and SRA polygons in view. `offsetDeg` generalises geometry for display. */
+export async function fireInView(sources, bbox, offsetDeg) {
+  const cfg = sources.fireHazard;
+  const get = (l) => queryGeoJSONInBBox(l.url, bbox, { where: l.where, outFields: ['OBJECTID'], maxFeatures: 2000, precision: 6, maxAllowableOffset: offsetDeg ?? 0.000005 })
+    .then((r) => r.features.filter((f) => f.geometry).map((f) => ({ ...f, bbox: turf.bbox(f) })));
+  const [vhfhsz, sra] = await Promise.all([get(cfg.vhfhsz), get(cfg.sra)]);
+  return { vhfhsz, sra };
+}
+
+export function fireLayer(L, fire) {
+  const style = { color: '#d7301f', weight: 1, opacity: 0.8, fillColor: '#d7301f', fillOpacity: 0.12, dashArray: null };
+  return L.layerGroup([
+    L.geoJSON(fire.vhfhsz, { interactive: false, style }),
+    L.geoJSON(fire.sra, { interactive: false, style: { ...style, dashArray: '6 4', fillOpacity: 0.06 } }),
+  ]);
+}
+
+/**
+ * Mark parcels that qualify under § 65912.161(b)(1)(D) and, where the city has
+ * an ordinance in force that excludes such sites, mark them excluded.
+ */
+export async function applyFire(parcels, fire, { sources, registry, cityAt, instrumentInForce, findJurisdiction }) {
+  const candidates = [];
+  for (const p of parcels) {
+    if (p.properties._code === 'none') continue;
+    const st = fireStatus(p, fire);
+    if (!st.qualifies) continue;
+    p.properties._fire = st;
+    candidates.push(p);
+  }
+  if (!candidates.length) return 0;
+  const cache = new Map();
+  let excluded = 0;
+  for (let i = 0; i < candidates.length; i += 8) {
+    await Promise.all(candidates.slice(i, i + 8).map(async (p) => {
+      const pt = turf.pointOnFeature(p).geometry.coordinates;
+      const key = pt.map((v) => v.toFixed(4)).join(',');
+      let city = cache.get(key);
+      if (city === undefined) {
+        city = await cityAt(sources, pt).catch(() => null);
+        cache.set(key, city);
+      }
+      const j = city && findJurisdiction(registry, city.name);
+      const inst = j?.instruments.find((x) => x.coverage?.type === 'criteria' && x.coverage.criteria.includes('fire-hazard') && instrumentInForce(x).inForce);
+      if (inst) {
+        p.properties._excluded = { jurisdiction: j.name, title: inst.title };
+        excluded++;
+      }
+    }));
+  }
+  return excluded;
 }
 
 export function zoneLayer(L, features) {
@@ -133,13 +189,23 @@ export function parcelLayer(L, parcels, onClick) {
   return L.geoJSON(parcels, {
     style: (f) => {
       const c = colors[f.properties._code];
+      if (f.properties._excluded) return { color: css('--excl') || '#d97706', weight: 1.4, dashArray: '3 3', opacity: 1, fillColor: '#7a7a7a', fillOpacity: 0.35 };
       return c
         ? { color: c, weight: 0.8, opacity: 0.9, fillColor: c, fillOpacity: 0.45 }
         : { color: '#888', weight: 0.5, opacity: 0.6, fillOpacity: 0.02 };
     },
     onEachFeature: (f, layer) => {
       const z = f.properties._zones?.[0];
-      layer.bindTooltip(`${f.properties.apn || f.properties.id}${f.properties.address ? ` · ${f.properties.address}` : ''}<br>${z ? `Tier ${z.tier} · ${z.band}` : 'Not in a TOD zone'}`, { sticky: true });
+      const band = { adjacent: '200 ft', quarter: '¼ mi', half: '½ mi' };
+      const lines = [
+        `${f.properties.apn || f.properties.id}${f.properties.address ? ` · ${f.properties.address}` : ''}`,
+        z ? `Tier ${z.tier} · ${band[z.band]}` : 'Not in a TOD zone',
+      ];
+      const fire = f.properties._fire;
+      if (fire?.vhfhsz.hit) lines.push(`Very high fire hazard zone (${Math.round(fire.vhfhsz.share * 100)}% of parcel)`);
+      if (fire?.sra.hit) lines.push(`State Responsibility Area (${Math.round(fire.sra.share * 100)}% of parcel)`);
+      if (f.properties._excluded) lines.push(`<b>Excluded</b> by ${f.properties._excluded.jurisdiction}: ${f.properties._excluded.title}`);
+      layer.bindTooltip(lines.join('<br>'), { sticky: true });
       layer.on('click', (e) => {
         L.DomEvent.stopPropagation(e);
         onClick(e, f);

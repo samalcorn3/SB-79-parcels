@@ -41,6 +41,12 @@ Coverage is then checked:
 
 Precedence: an in-force ordinance that covers the parcel → **excluded**. Otherwise, an in-force TODAP that covers it → **TODAP**. Otherwise, an in-force ordinance with unknown coverage → **statute unless excluded**. Otherwise → **statute**.
 
+## 3a. Fire hazard severity zones
+
+Sources: CAL FIRE — Office of the State Fire Marshal, `FHSZLRA25_v1_All` (Local Responsibility Area, map of March 24, 2025, all phases; `FHSZ = 3` is Very High) and `FHSZSRA_23_3` (State Responsibility Area; every polygon is SRA land). The statute's criterion (§ 65912.161(b)(1)(D)) is "very high fire hazard severity zone … or within the state responsibility area", so either qualifies.
+
+For each parcel, the overlapping fire polygons are fetched and the intersected area is computed in the browser. Overlaps under 1 m² are ignored, so lot lines that coincide with zone boundaries don't count. A registry instrument with `coverage.type = "criteria"` and `criteria: ["fire-hazard"]` covers any qualifying parcel. If the ordinance also has criteria that can't be computed (historic resources, low-resource areas), a non-fire parcel is reported as "unconfirmed" rather than "not covered".
+
 ## 4. Sources for the legal rules
 
 **Development standards and project requirements** come from the statute: Gov. Code §§ 65912.155–65912.162, current text, read from the Legislative Counsel's leginfo database export (`downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip`, `LAW_SECTION_TBL`). The copy in `data/statute/` records each section's history line. § 65912.157 reads "Amended … by Stats. 2026, Ch. 100, Sec. 2 (SB 722), effective July 16, 2026". A diff against SB 79's chaptered text (`BILL_VERSION_TBL`, version `20250SB7984CHP`) shows the only substantive change is new paragraph (h)(3).

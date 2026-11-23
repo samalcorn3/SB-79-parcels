@@ -141,7 +141,7 @@ test('registry entries are well-formed', () => {
       assert.ok(kinds.has(i.kind), `${i.id}: kind`);
       assert.ok(hcd.has(i.hcd?.status), `${i.id}: hcd.status`);
       assert.ok(['primary', 'secondary'].includes(i.verification), `${i.id}: verification`);
-      assert.ok(['jurisdiction-wide', 'arcgis', 'unknown'].includes(i.coverage?.type), `${i.id}: coverage`);
+      assert.ok(['jurisdiction-wide', 'arcgis', 'criteria', 'unknown'].includes(i.coverage?.type), `${i.id}: coverage`);
       if (i.verification === 'secondary') assert.ok(i.sources?.length, `${i.id}: secondary entries must cite sources`);
     }
   }

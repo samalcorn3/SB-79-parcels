@@ -43,6 +43,7 @@ function instrumentAnswer(title, a) {
       ${inst.hcd?.conditions ? `<div class="fine">Condition: ${esc(inst.hcd.conditions)}</div>` : ''}
       ${inst.hcd?.note ? `<div class="fine">${esc(inst.hcd.note)}</div>` : ''}
       ${inst.coverageReason ? `<div class="fine">Why this parcel: ${esc(inst.coverageReason)}</div>` : ''}
+      ${inst.covered !== true && inst.coverage?.note ? `<div class="fine">${esc(inst.coverage.note)}</div>` : ''}
       ${inst.coverage?.publisher && inst.covered != null ? `<div class="fine">Parcel coverage checked live against: ${link(inst.coverage.url, inst.coverage.publisher)}</div>` : ''}
     </div>`;
   }
@@ -91,6 +92,26 @@ function standardsCard(r, doc) {
     ${s.rows.length > 1 ? `<p class="fine">The parcel is in ${s.rows.length} overlapping zones; each figure is the most permissive among them.</p>` : ''}
   </div>
   <div class="card"><h2>Project requirements</h2><ul class="plain">${reqs.map((x) => `<li>${x}</li>`).join('')}</ul></div>`;
+}
+
+function fireCard(r) {
+  const f = r.fire;
+  if (!f) return '';
+  const pctTxt = (x) => `${Math.round(x * 100)}%`;
+  const rows = [
+    `<li>Very High Fire Hazard Severity Zone: <b>${f.vhfhsz.hit ? `yes — ${pctTxt(f.vhfhsz.share)} of parcel` : 'no'}</b></li>`,
+    `<li>State Responsibility Area: <b>${f.sra.hit ? `yes — ${pctTxt(f.sra.share)} of parcel` : 'no'}</b></li>`,
+  ];
+  const effects = f.qualifies
+    ? `<ul class="plain">
+        <li>SB 79 still applies unless the city has adopted an ordinance excluding fire-zone sites. A city <i>may</i> temporarily exclude “sites within a very high fire hazard severity zone … or within the state responsibility area” until one year after its 7th-cycle housing element. <span class="cite">§ 65912.161(b)(1)(D)</span></li>
+        <li>A TOD Alternative Plan may reduce density on this site by more than 50%. <span class="cite">§ 65912.161(a)(2)(A)</span></li>
+        ${f.vhfhsz.hit ? '<li>Streamlined ministerial approval under § 65913.4 is <b>not available</b> on a site in a very high fire hazard severity zone; the project goes through the local review process. <span class="cite">§ 65912.159(a)(3), (b)</span></li>' : ''}
+        <li>Objective fire-safety standards (Building, Fire, and Wildland-Urban Interface Codes) apply. <span class="cite">§ 65912.157(j)</span></li>
+      </ul>`
+    : '<p class="fine">Not in a very high fire hazard severity zone or the State Responsibility Area, so the fire-zone exclusion in § 65912.161(b)(1)(D) cannot apply.</p>';
+  return `<div class="card"><h2>Fire hazard</h2><ul class="plain">${rows.join('')}</ul>${effects}
+    <p class="fine">Source: ${esc(f.publisher)} — Fire Hazard Severity Zone maps (LRA 2025, SRA v23.3), queried live.</p></div>`;
 }
 
 export function renderReport(r, { standardsDoc } = {}) {
@@ -142,6 +163,8 @@ export function renderReport(r, { standardsDoc } = {}) {
     <p class="fine">Registry last reviewed ${esc(r.registryReviewed)}. ${link('https://www.hcd.ca.gov/hau/enforcement-letters', 'HCD letters dashboard')}</p>
   </div>
 
+  ${fireCard(r)}
+
   ${standardsCard(r, standardsDoc)}
 
   <div class="card"><h2>Setbacks &amp; other statutory rules</h2><ul class="plain">${otherRules}</ul>
@@ -157,6 +180,7 @@ export function renderReport(r, { standardsDoc } = {}) {
       <li>Parcel: ${link(p.sourceUrl, p.publisher)}</li>
       <li>TOD zones &amp; stops: ${link(r.mpo.mapPage, r.mpo.name)}</li>
       <li>City/county limits: California Department of Technology</li>
+      <li>Fire hazard zones: CAL FIRE — Office of the State Fire Marshal</li>
       <li>Generated ${esc(new Date(r.generatedAt).toLocaleString())}</li>
     </ul>
     ${r.errors.length ? `<div class="err">${r.errors.map(esc).join('<br>')}</div>` : ''}
