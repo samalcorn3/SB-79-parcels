@@ -16,21 +16,34 @@
           "id": "sf-todap-2026",
           "kind": "todap",
           "title": "Citywide TOD Alternative Plan (Ordinance 082-26, Planning Code § 207.11)",
-          "local": { "status": "enacted", "date": "2026-05-19", "reference": "Ordinance 082-26", "url": "https://media.api.sf.gov/documents/o0082-26.pdf" },
+          "local": {
+            "status": "enacted",
+            "date": "2026-05-19",
+            "reference": "Ordinance 082-26",
+            "url": "https://media.api.sf.gov/documents/o0082-26.pdf"
+          },
           "hcd": {
             "status": "compliant",
             "date": "2026-07-01",
             "letterUrl": "https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/HAU/san-francisco-sb79-in-070126.pdf",
             "conditions": "Compliance is contingent on the City not enforcing Planning Code § 207.11(b)(5), which barred State Density Bonus Law on alternative-plan sites."
           },
-          "coverage": { "type": "jurisdiction-wide", "note": "The plan redistributes SB 79 capacity across the City's TOD zones; § 65912.157 does not apply to sites covered by the plan until the next housing element." },
+          "coverage": {
+            "type": "jurisdiction-wide",
+            "note": "The plan redistributes SB 79 capacity across the City's TOD zones; § 65912.157 does not apply to sites covered by the plan until the next housing element."
+          },
           "verification": "primary"
         },
         {
           "id": "sf-exclusions-2026",
           "kind": "exclusion-ordinance",
           "title": "Industrial employment hub exemptions and low-resource temporary exclusions (Ordinance 082-26)",
-          "local": { "status": "enacted", "date": "2026-05-19", "reference": "Ordinance 082-26", "url": "https://media.api.sf.gov/documents/o0082-26.pdf" },
+          "local": {
+            "status": "enacted",
+            "date": "2026-05-19",
+            "reference": "Ordinance 082-26",
+            "url": "https://media.api.sf.gov/documents/o0082-26.pdf"
+          },
           "hcd": {
             "status": "compliant",
             "date": "2026-07-01",
@@ -54,7 +67,12 @@
           "id": "la-delayed-effectuation-2026",
           "kind": "exclusion-ordinance",
           "title": "SB 79 Delayed Effectuation Ordinance (exemptions + temporary exclusions; CF 25-1083)",
-          "local": { "status": "enacted", "date": "2026-06-30", "reference": "Council File 25-1083", "url": "https://cityclerk.lacity.org/lacityclerkconnect/index.cfm?fa=ccfi.viewrecord&cfnumber=25-1083" },
+          "local": {
+            "status": "enacted",
+            "date": "2026-06-30",
+            "reference": "Council File 25-1083",
+            "url": "https://cityclerk.lacity.org/lacityclerkconnect/index.cfm?fa=ccfi.viewrecord&cfnumber=25-1083"
+          },
           "hcd": {
             "status": "unknown",
             "date": "2026-06-22",
@@ -96,10 +114,20 @@
           "id": "sj-exemption-2026",
           "kind": "exclusion-ordinance",
           "title": "SB 79 implementing ordinance — industrial employment hub exemption",
-          "local": { "status": "enacted" },
-          "hcd": { "status": "compliant", "date": "2026-06-04", "note": "HCD found the industrial-employment-hub exclusion in substantial compliance (reported June 2026). Letter PDF not yet linked here." },
-          "coverage": { "type": "unknown" },
-          "sources": ["https://www.hklaw.com/en/insights/publications/2026/06/tracking-sb-79-implementation-before-the-train-leaves-the-station"],
+          "local": {
+            "status": "enacted"
+          },
+          "hcd": {
+            "status": "compliant",
+            "date": "2026-06-04",
+            "note": "HCD found the industrial-employment-hub exclusion in substantial compliance (reported June 2026). Letter PDF not yet linked here."
+          },
+          "coverage": {
+            "type": "unknown"
+          },
+          "sources": [
+            "https://www.hklaw.com/en/insights/publications/2026/06/tracking-sb-79-implementation-before-the-train-leaves-the-station"
+          ],
           "verification": "secondary"
         }
       ]
@@ -111,10 +139,22 @@
           "id": "bh-todap-2026",
           "kind": "todap",
           "title": "TOD Alternative Plan",
-          "local": { "status": "enacted" },
-          "hcd": { "status": "noncompliant", "date": "2026-05-08", "letterUrl": "https://beverlyhills.org/DocumentCenter/View/15917/HCD---SB-79-Comment-Letter?bidId=", "note": "HCD found the plan does not substantially comply (density capacity and rent-stabilized sites). The City was reported to be rescinding the plan." },
-          "coverage": { "type": "jurisdiction-wide" },
-          "sources": ["https://www.hklaw.com/en/insights/publications/2026/06/tracking-sb-79-implementation-before-the-train-leaves-the-station", "https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation"],
+          "local": {
+            "status": "enacted"
+          },
+          "hcd": {
+            "status": "noncompliant",
+            "date": "2026-05-08",
+            "letterUrl": "https://beverlyhills.org/DocumentCenter/View/15917/HCD---SB-79-Comment-Letter?bidId=",
+            "note": "HCD found the plan does not substantially comply (density capacity and rent-stabilized sites). The City was reported to be rescinding the plan."
+          },
+          "coverage": {
+            "type": "jurisdiction-wide"
+          },
+          "sources": [
+            "https://www.hklaw.com/en/insights/publications/2026/06/tracking-sb-79-implementation-before-the-train-leaves-the-station",
+            "https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation"
+          ],
           "verification": "secondary"
         }
       ]
@@ -126,10 +166,20 @@
           "id": "pas-ordinance-2026",
           "kind": "exclusion-ordinance",
           "title": "SB 79 implementing / exclusion ordinance",
-          "local": { "status": "enacted" },
-          "hcd": { "status": "noncompliant", "date": "2026-09-25", "note": "HCD non-compliance letter reported Sept. 25, 2026; the City's response deadline was late November 2026." },
-          "coverage": { "type": "unknown" },
-          "sources": ["https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation"],
+          "local": {
+            "status": "enacted"
+          },
+          "hcd": {
+            "status": "noncompliant",
+            "date": "2026-09-25",
+            "note": "HCD non-compliance letter reported Sept. 25, 2026; the City's response deadline was late November 2026."
+          },
+          "coverage": {
+            "type": "unknown"
+          },
+          "sources": [
+            "https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation"
+          ],
           "verification": "secondary"
         }
       ]
@@ -141,10 +191,19 @@
           "id": "bur-ordinance-2026",
           "kind": "exclusion-ordinance",
           "title": "SB 79 ordinance",
-          "local": { "status": "enacted" },
-          "hcd": { "status": "noncompliant", "note": "HCD non-compliance letter reported in 2026 (date not confirmed)." },
-          "coverage": { "type": "unknown" },
-          "sources": ["https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation"],
+          "local": {
+            "status": "enacted"
+          },
+          "hcd": {
+            "status": "noncompliant",
+            "note": "HCD non-compliance letter reported in 2026 (date not confirmed)."
+          },
+          "coverage": {
+            "type": "unknown"
+          },
+          "sources": [
+            "https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation"
+          ],
           "verification": "secondary"
         }
       ]
@@ -156,10 +215,20 @@
           "id": "ocn-ordinance-2026",
           "kind": "exclusion-ordinance",
           "title": "SB 79 ordinance",
-          "local": { "status": "enacted" },
-          "hcd": { "status": "noncompliant", "note": "HCD non-compliance letter reported in 2026; City response deadline reported as mid-December 2026." },
-          "coverage": { "type": "unknown" },
-          "sources": ["https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation", "https://www.coxcastle.com/publication-how-are-the-cities-of-san-diego-oceanside-and-solana-beach-implementing-sb-79s-transit-oriented-development-strategy-its-complicated"],
+          "local": {
+            "status": "enacted"
+          },
+          "hcd": {
+            "status": "noncompliant",
+            "note": "HCD non-compliance letter reported in 2026; City response deadline reported as mid-December 2026."
+          },
+          "coverage": {
+            "type": "unknown"
+          },
+          "sources": [
+            "https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation",
+            "https://www.coxcastle.com/publication-how-are-the-cities-of-san-diego-oceanside-and-solana-beach-implementing-sb-79s-transit-oriented-development-strategy-its-complicated"
+          ],
           "verification": "secondary"
         }
       ]
@@ -171,10 +240,24 @@
           "id": "gle-urgency-2026",
           "kind": "exclusion-ordinance",
           "title": "Urgency ordinance — temporary exclusion of VHFHSZ and locally designated historic sites",
-          "local": { "status": "enacted", "date": "2026-06-23" },
-          "hcd": { "status": "unknown" },
-          "coverage": { "type": "unknown", "note": "Applies to sites in a very high fire hazard severity zone and/or containing a locally designated historic resource." },
-          "sources": ["https://www.glendaleca.gov/government/departments/office-of-the-city-manager/fact-page/understanding-sb-79-in-glendale-california"],
+          "local": {
+            "status": "enacted",
+            "date": "2026-06-23"
+          },
+          "hcd": {
+            "status": "unknown"
+          },
+          "coverage": {
+            "type": "criteria",
+            "criteria": [
+              "fire-hazard"
+            ],
+            "complete": false,
+            "note": "Applies to sites in a very high fire hazard severity zone (computed live from the State Fire Marshal's maps) and to sites containing a locally designated historic resource (no public parcel list; not computed)."
+          },
+          "sources": [
+            "https://www.glendaleca.gov/government/departments/office-of-the-city-manager/fact-page/understanding-sb-79-in-glendale-california"
+          ],
           "verification": "secondary"
         }
       ]
@@ -186,11 +269,19 @@
           "id": "oak-exclusions-2026",
           "kind": "exclusion-ordinance",
           "title": "Temporary exclusion ordinance",
-          "local": { "status": "enacted" },
-          "hcd": { "status": "unknown" },
+          "local": {
+            "status": "enacted"
+          },
+          "hcd": {
+            "status": "unknown"
+          },
           "effectiveUntil": "Until an alternative plan is adopted or the next housing element update (2031).",
-          "coverage": { "type": "unknown" },
-          "sources": ["https://www.oaklandca.gov/Planning-Building/Your-Commercial-Projects-Permits/SB-79-Transit-Oriented-Housing-in-Oakland"],
+          "coverage": {
+            "type": "unknown"
+          },
+          "sources": [
+            "https://www.oaklandca.gov/Planning-Building/Your-Commercial-Projects-Permits/SB-79-Transit-Oriented-Housing-in-Oakland"
+          ],
           "verification": "secondary"
         }
       ]
@@ -202,20 +293,47 @@
           "id": "sd-phasing-o22099",
           "kind": "exclusion-ordinance",
           "title": "SB 79 phasing ordinance (O-22099): exemptions (>1 mile walk) and temporary exclusions (fire, low-resource, historic, sea-level rise)",
-          "local": { "status": "enacted", "date": "2026-05-21", "reference": "O-22099", "url": "https://docs.sandiego.gov/council_reso_ordinance/rao2026/O-22099.pdf" },
-          "hcd": { "status": "unknown", "note": "HCD has up to 120 days after submittal to review. No finding recorded here yet." },
-          "coverage": { "type": "unknown" },
-          "sources": ["https://www.sandiego.gov/planning/work/senate-bill-79", "https://www.coxcastle.com/publication-how-are-the-cities-of-san-diego-oceanside-and-solana-beach-implementing-sb-79s-transit-oriented-development-strategy-its-complicated"],
+          "local": {
+            "status": "enacted",
+            "date": "2026-05-21",
+            "reference": "O-22099",
+            "url": "https://docs.sandiego.gov/council_reso_ordinance/rao2026/O-22099.pdf"
+          },
+          "hcd": {
+            "status": "unknown",
+            "note": "HCD has up to 120 days after submittal to review. No finding recorded here yet."
+          },
+          "coverage": {
+            "type": "criteria",
+            "criteria": [
+              "fire-hazard"
+            ],
+            "complete": false,
+            "note": "Fire-hazard exclusion computed live from the State Fire Marshal's maps. The ordinance's other criteria (>1 mile walk, low-resource, historic, sea-level rise) have no public parcel list and are not computed."
+          },
+          "sources": [
+            "https://www.sandiego.gov/planning/work/senate-bill-79",
+            "https://www.coxcastle.com/publication-how-are-the-cities-of-san-diego-oceanside-and-solana-beach-implementing-sb-79s-transit-oriented-development-strategy-its-complicated"
+          ],
           "verification": "secondary"
         },
         {
           "id": "sd-transit-village-plan",
           "kind": "todap",
           "title": "Transit Village Plan (TOD alternative plan) — in preparation",
-          "local": { "status": "draft", "note": "Expected before City Council in early/spring 2027." },
-          "hcd": { "status": "not-submitted" },
-          "coverage": { "type": "jurisdiction-wide" },
-          "sources": ["https://www.sandiego.gov/planning/work/senate-bill-79"],
+          "local": {
+            "status": "draft",
+            "note": "Expected before City Council in early/spring 2027."
+          },
+          "hcd": {
+            "status": "not-submitted"
+          },
+          "coverage": {
+            "type": "jurisdiction-wide"
+          },
+          "sources": [
+            "https://www.sandiego.gov/planning/work/senate-bill-79"
+          ],
           "verification": "secondary"
         }
       ]
@@ -227,10 +345,20 @@
           "id": "smo-ordinance-2026",
           "kind": "exclusion-ordinance",
           "title": "SB 79 implementing / temporary exclusion approach",
-          "local": { "status": "enacted" },
-          "hcd": { "status": "unknown", "note": "A further HCD findings letter dated Nov. 4, 2026 has been reported but is not yet confirmed here." },
-          "coverage": { "type": "unknown" },
-          "sources": ["https://santamonicanext.org/2026/04/council-adopts-approaches-to-implement-new-state-housing-law/", "https://s3da-design.com/sb-79-compliance-hcd-cities/"],
+          "local": {
+            "status": "enacted"
+          },
+          "hcd": {
+            "status": "unknown",
+            "note": "A further HCD findings letter dated Nov. 4, 2026 has been reported but is not yet confirmed here."
+          },
+          "coverage": {
+            "type": "unknown"
+          },
+          "sources": [
+            "https://santamonicanext.org/2026/04/council-adopts-approaches-to-implement-new-state-housing-law/",
+            "https://s3da-design.com/sb-79-compliance-hcd-cities/"
+          ],
           "verification": "secondary"
         }
       ]
@@ -242,10 +370,20 @@
           "id": "spas-ordinance-2026",
           "kind": "exclusion-ordinance",
           "title": "SB 79 exclusion ordinance and TOD alternative plan",
-          "local": { "status": "enacted" },
-          "hcd": { "status": "unknown", "note": "A further HCD findings letter dated Nov. 4, 2026 has been reported but is not yet confirmed here." },
-          "coverage": { "type": "unknown" },
-          "sources": ["https://www.hklaw.com/en/insights/publications/2026/06/tracking-sb-79-implementation-before-the-train-leaves-the-station", "https://s3da-design.com/sb-79-compliance-hcd-cities/"],
+          "local": {
+            "status": "enacted"
+          },
+          "hcd": {
+            "status": "unknown",
+            "note": "A further HCD findings letter dated Nov. 4, 2026 has been reported but is not yet confirmed here."
+          },
+          "coverage": {
+            "type": "unknown"
+          },
+          "sources": [
+            "https://www.hklaw.com/en/insights/publications/2026/06/tracking-sb-79-implementation-before-the-train-leaves-the-station",
+            "https://s3da-design.com/sb-79-compliance-hcd-cities/"
+          ],
           "verification": "secondary"
         }
       ]

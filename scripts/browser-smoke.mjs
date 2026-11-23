@@ -79,8 +79,13 @@ await check('parcel layer (downtown LA, z17)', '#17/34.04870/-118.25860', () => 
 const parcelStatus = await page.textContent('#map-status').catch(() => null);
 await check('parcel layer (SF Civic Center, z17)', '?sf=1#17/37.77950/-122.41500', () => /(\d parcels|Parcels:|parcels: )/.test(document.getElementById('map-status')?.textContent || ''), 'parcels-sf.png');
 const parcelStatusSF = await page.textContent('#map-status').catch(() => null);
+await check('fire exclusion (San Diego canyon, z17)', '?sd=1#17/32.76731/-117.14333', () => /(\d parcels|Parcels:|parcels: )/.test(document.getElementById('map-status')?.textContent || ''), 'fire-sd.png');
+const fireStatusSD = await page.textContent('#map-status').catch(() => null);
+await check('fire overlay (Glendale, z15)', '?gl=1#15/34.14855/-118.22631', () => /level 17/.test(document.getElementById('map-status')?.textContent || ''), null);
+await page.waitForTimeout(5000);
+await page.screenshot({ path: join(outDir, 'fire-glendale.png') });
 
-console.log(JSON.stringify({ tiles: { ok: tileStats.ok, bad: tileStats.bad.slice(0, 5) }, results, verdict, chips, parcelStatus, parcelStatusSF, consoleErrors: consoleErrors.slice(0, 10) }, null, 2));
+console.log(JSON.stringify({ fireStatusSD, tiles: { ok: tileStats.ok, bad: tileStats.bad.slice(0, 5) }, results, verdict, chips, parcelStatus, parcelStatusSF, consoleErrors: consoleErrors.slice(0, 10) }, null, 2));
 await browser.close();
 server.close();
 process.exit(results.every((r) => r.ok) && tileStats.ok > 0 && !tileStats.bad.length ? 0 : 1);

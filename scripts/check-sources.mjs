@@ -56,6 +56,7 @@ async function checkSocrata(name, cfg, fields = []) {
 
 const tasks = [];
 for (const [k, b] of Object.entries(sources.boundaries)) tasks.push(checkArcgis(`CDT ${k}`, b.url, Object.values(b.fields)));
+for (const k of ['vhfhsz', 'sra']) tasks.push(checkArcgis(`State Fire Marshal ${k}`, sources.fireHazard[k].url, sources.fireHazard[k].fields, sources.fireHazard[k].where));
 for (const m of sources.mpos) {
   m.zoneLayers.forEach((l, i) => tasks.push(checkArcgis(`${m.id} zones[${i}]`, l.url, [...(l.outFields || []), ...specFields(l.tier), ...specFields(l.band)])));
   tasks.push(checkArcgis(`${m.id} stops`, m.stops.url, [...specFields(m.stops.name), ...specFields(m.stops.tier)]));

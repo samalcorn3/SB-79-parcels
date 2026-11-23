@@ -5,12 +5,40 @@
     "cities": {
       "publisher": "California Department of Technology (CDT)",
       "url": "https://services3.arcgis.com/uknczv4rpevve42E/arcgis/rest/services/California_Cities_and_Identifiers_Blue_Version_view/FeatureServer/2",
-      "fields": { "name": "CDTFA_CITY", "county": "CDTFA_COUNTY", "population": "CENSUS_POPULATION" }
+      "fields": {
+        "name": "CDTFA_CITY",
+        "county": "CDTFA_COUNTY",
+        "population": "CENSUS_POPULATION"
+      }
     },
     "counties": {
       "publisher": "California Department of Technology (CDT)",
       "url": "https://services3.arcgis.com/uknczv4rpevve42E/arcgis/rest/services/California_County_Boundaries_and_Identifiers_Blue_Version_view/FeatureServer/1",
-      "fields": { "name": "CDTFA_COUNTY" }
+      "fields": {
+        "name": "CDTFA_COUNTY"
+      }
+    }
+  },
+  "fireHazard": {
+    "publisher": "CAL FIRE — Office of the State Fire Marshal",
+    "statute": "Gov. Code § 65912.161(b)(1)(D): “Sites within a very high fire hazard severity zone, as determined by the Department of Forestry and Fire Protection pursuant to Section 51178, or within the state responsibility area, as defined in Section 4102 of the Public Resources Code.”",
+    "vhfhsz": {
+      "label": "Very High Fire Hazard Severity Zone (Local Responsibility Area, State Fire Marshal map of March 24, 2025, all phases)",
+      "url": "https://services1.arcgis.com/jUJYIo9tSA7EHvfZ/arcgis/rest/services/FHSALRA25_v1_All/FeatureServer/0",
+      "where": "FHSZ = 3",
+      "fields": [
+        "FHSZ",
+        "FHSZ_Description"
+      ]
+    },
+    "sra": {
+      "label": "State Responsibility Area (State Fire Marshal FHSZ in SRA, v23.3)",
+      "url": "https://services1.arcgis.com/jUJYIo9tSA7EHvfZ/arcgis/rest/services/FHSZSRA_23_3/FeatureServer/0",
+      "where": "1=1",
+      "fields": [
+        "SRA",
+        "FHSZ_Description"
+      ]
     }
   },
   "geocoder": {
@@ -22,8 +50,16 @@
       "id": "scag",
       "name": "Southern California Association of Governments (SCAG)",
       "mapPage": "https://scag.ca.gov/sb79",
-      "bbox": [-119.5, 32.6, -114.1, 35.85],
-      "counties": ["los-angeles", "orange"],
+      "bbox": [
+        -119.5,
+        32.6,
+        -114.1,
+        35.85
+      ],
+      "counties": [
+        "los-angeles",
+        "orange"
+      ],
       "notes": [
         "SCAG zones are measured from pedestrian access points and already omit the 1/4-1/2 mile band in cities under 35,000 people.",
         "Zones labelled '(Commuter Rail)' reflect HCD's advisory reading that commuter-rail frequency counts all services at a station (SCAG SB79TODPolicyNote layer)."
@@ -31,56 +67,134 @@
       "zoneLayers": [
         {
           "url": "https://maps.scag.ca.gov/scaggis/rest/services/SB79/SB79/MapServer/1",
-          "outFields": ["TIER", "BUFFER", "NAME"],
-          "tier": { "field": "TIER", "regex": "(\\d)" },
-          "band": { "field": "BUFFER", "map": { "200 Feet": "adjacent", "0.25 Miles": "quarter", "0.5 Miles": "half" } },
-          "label": { "field": "NAME" },
-          "flags": [{ "field": "NAME", "contains": "Commuter Rail", "flag": "commuter-rail-hcd-method" }]
+          "outFields": [
+            "TIER",
+            "BUFFER",
+            "NAME"
+          ],
+          "tier": {
+            "field": "TIER",
+            "regex": "(\\d)"
+          },
+          "band": {
+            "field": "BUFFER",
+            "map": {
+              "200 Feet": "adjacent",
+              "0.25 Miles": "quarter",
+              "0.5 Miles": "half"
+            }
+          },
+          "label": {
+            "field": "NAME"
+          },
+          "flags": [
+            {
+              "field": "NAME",
+              "contains": "Commuter Rail",
+              "flag": "commuter-rail-hcd-method"
+            }
+          ]
         }
       ],
       "stops": {
         "url": "https://maps.scag.ca.gov/scaggis/rest/services/SB79/SB79/MapServer/0",
-        "name": { "field": "STOP_NAME" },
-        "tier": { "field": "SB79_TIER", "regex": "(\\d)" },
-        "mode": { "field": "TRN_MODE" },
-        "line": { "field": "TRN_LINE" }
+        "name": {
+          "field": "STOP_NAME"
+        },
+        "tier": {
+          "field": "SB79_TIER",
+          "regex": "(\\d)"
+        },
+        "mode": {
+          "field": "TRN_MODE"
+        },
+        "line": {
+          "field": "TRN_LINE"
+        }
       }
     },
     {
       "id": "mtc",
       "name": "Metropolitan Transportation Commission / ABAG (MTC)",
       "mapPage": "https://mtc.ca.gov/planning/land-use/senate-bill-79-regional-map",
-      "bbox": [-123.7, 36.85, -121.2, 38.9],
-      "counties": ["alameda", "san-francisco", "san-mateo", "santa-clara"],
-      "notes": ["MTC zones are measured from the station/stop pedestrian access points layer."],
+      "bbox": [
+        -123.7,
+        36.85,
+        -121.2,
+        38.9
+      ],
+      "counties": [
+        "alameda",
+        "san-francisco",
+        "san-mateo",
+        "santa-clara"
+      ],
+      "notes": [
+        "MTC zones are measured from the station/stop pedestrian access points layer."
+      ],
       "zoneLayers": [
         {
           "url": "https://services3.arcgis.com/i2dkYWmb4wHvYPda/arcgis/rest/services/mtc_sb79_tod_zones/FeatureServer/1",
-          "outFields": ["zone_label"],
-          "tier": { "field": "zone_label", "regex": "Tier (\\d)" },
-          "band": { "field": "zone_label", "map": { "200ft": "adjacent", "Quarter Mile": "quarter", "Half Mile": "half" } },
-          "label": { "field": "zone_label" }
+          "outFields": [
+            "zone_label"
+          ],
+          "tier": {
+            "field": "zone_label",
+            "regex": "Tier (\\d)"
+          },
+          "band": {
+            "field": "zone_label",
+            "map": {
+              "200ft": "adjacent",
+              "Quarter Mile": "quarter",
+              "Half Mile": "half"
+            }
+          },
+          "label": {
+            "field": "zone_label"
+          }
         }
       ],
       "stops": {
         "url": "https://services3.arcgis.com/i2dkYWmb4wHvYPda/arcgis/rest/services/mtc_sb79_tod_stops/FeatureServer/1",
-        "name": { "field": "stop_name" },
-        "tier": { "field": "tod_tier", "regex": "(\\d)" },
-        "mode": { "field": "agency_name" },
-        "line": { "field": "route_short_name" }
+        "name": {
+          "field": "stop_name"
+        },
+        "tier": {
+          "field": "tod_tier",
+          "regex": "(\\d)"
+        },
+        "mode": {
+          "field": "agency_name"
+        },
+        "line": {
+          "field": "route_short_name"
+        }
       },
       "accessPoints": {
         "url": "https://services3.arcgis.com/i2dkYWmb4wHvYPda/arcgis/rest/services/mtc_sb79_tod_access_points/FeatureServer/1",
-        "name": { "field": "access_point_name" },
-        "tier": { "field": "ranked_tod_tier", "regex": "(\\d)" }
+        "name": {
+          "field": "access_point_name"
+        },
+        "tier": {
+          "field": "ranked_tod_tier",
+          "regex": "(\\d)"
+        }
       }
     },
     {
       "id": "sandag",
       "name": "San Diego Association of Governments (SANDAG)",
       "mapPage": "https://www.sandag.org/planning/housing-and-land-use/transit-oriented-development/draft-sb-79-transit-oriented-development-map",
-      "bbox": [-117.65, 32.5, -116.05, 33.52],
-      "counties": ["san-diego"],
+      "bbox": [
+        -117.65,
+        32.5,
+        -116.05,
+        33.52
+      ],
+      "counties": [
+        "san-diego"
+      ],
       "draft": true,
       "notes": [
         "SANDAG's published map is labelled DRAFT.",
@@ -89,47 +203,102 @@
       "zoneLayers": [
         {
           "url": "https://services1.arcgis.com/HG80xaIVT1z1OdO5/arcgis/rest/services/SB79_DRAFT/FeatureServer/1",
-          "outFields": ["Tier", "distance"],
-          "tier": { "field": "Tier" },
-          "band": { "const": "quarter" }
+          "outFields": [
+            "Tier",
+            "distance"
+          ],
+          "tier": {
+            "field": "Tier"
+          },
+          "band": {
+            "const": "quarter"
+          }
         },
         {
           "url": "https://services1.arcgis.com/HG80xaIVT1z1OdO5/arcgis/rest/services/SB79_DRAFT/FeatureServer/2",
-          "outFields": ["Tier", "distance"],
-          "tier": { "field": "Tier" },
-          "band": { "const": "half" }
+          "outFields": [
+            "Tier",
+            "distance"
+          ],
+          "tier": {
+            "field": "Tier"
+          },
+          "band": {
+            "const": "half"
+          }
         }
       ],
-      "adjacencyFromStops": { "distanceFeet": 200 },
+      "adjacencyFromStops": {
+        "distanceFeet": 200
+      },
       "stops": {
         "url": "https://services1.arcgis.com/HG80xaIVT1z1OdO5/arcgis/rest/services/SB79_DRAFT/FeatureServer/0",
-        "name": { "field": "stop_name" },
-        "tier": { "field": "Tier" },
-        "mode": { "field": "service_type" }
+        "name": {
+          "field": "stop_name"
+        },
+        "tier": {
+          "field": "Tier"
+        },
+        "mode": {
+          "field": "service_type"
+        }
       }
     },
     {
       "id": "sacog",
       "name": "Sacramento Area Council of Governments (SACOG)",
       "mapPage": "https://www.sacog.org/planning/land-use/housing/housing-legislation",
-      "bbox": [-122.1, 38.0, -120.0, 39.35],
-      "counties": ["sacramento"],
+      "bbox": [
+        -122.1,
+        38.0,
+        -120.0,
+        39.35
+      ],
+      "counties": [
+        "sacramento"
+      ],
       "notes": [
         "SACOG's zone layer has no tier attribute. Every SACOG TOD stop is treated as Tier 2: HCD's March 20, 2026 advisory classifies SacRT as light rail, and the region has no heavy rail or very-high-frequency commuter rail."
       ],
       "zoneLayers": [
         {
           "url": "https://services.sacog.org/hosting/rest/services/Transportation/SB_79_Transit_Oriented_Development_Zones/FeatureServer/0",
-          "outFields": ["buff_dist"],
-          "tier": { "const": 2 },
-          "band": { "field": "buff_dist", "numeric": [[0.04, "adjacent"], [0.26, "quarter"], [0.51, "half"]] }
+          "outFields": [
+            "buff_dist"
+          ],
+          "tier": {
+            "const": 2
+          },
+          "band": {
+            "field": "buff_dist",
+            "numeric": [
+              [
+                0.04,
+                "adjacent"
+              ],
+              [
+                0.26,
+                "quarter"
+              ],
+              [
+                0.51,
+                "half"
+              ]
+            ]
+          }
         }
       ],
       "stops": {
         "url": "https://services.sacog.org/hosting/rest/services/Transportation/SB_79_Transit_Oriented_Development_Stops/FeatureServer/0",
-        "name": { "field": "sb79_type" },
-        "tier": { "const": 2 },
-        "mode": { "field": "sb79_type" }
+        "name": {
+          "field": "sb79_type"
+        },
+        "tier": {
+          "const": 2
+        },
+        "mode": {
+          "field": "sb79_type"
+        }
       }
     }
   ],
@@ -137,7 +306,10 @@
     {
       "id": "los-angeles",
       "name": "Los Angeles County",
-      "match": ["Los Angeles County", "Los Angeles"],
+      "match": [
+        "Los Angeles County",
+        "Los Angeles"
+      ],
       "mpo": "scag",
       "sb79Status": "in-effect",
       "statusNote": "Urban transit county; SB 79 operative July 1, 2026 (HCD advisory, Mar. 20, 2026).",
@@ -146,27 +318,49 @@
         "publisher": "LA County Assessor parcels — LA County Parcels (Public)",
         "url": "https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/LA_County_Parcels_(Public)/FeatureServer/0",
         "maxRecordCount": 2000,
-        "fields": { "apn": "APN", "id": "AIN", "address": ["SitusFullAddress"], "use": "UseDescription" },
+        "fields": {
+          "apn": "APN",
+          "id": "AIN",
+          "address": [
+            "SitusFullAddress"
+          ],
+          "use": "UseDescription"
+        },
         "fallback": {
           "type": "arcgis",
           "publisher": "LA County Dept. of Regional Planning (ZNET parcel layer)",
           "url": "https://arcgis.gis.lacounty.gov/arcgis/rest/services/DRP/ZNET_Public/MapServer/12",
           "maxRecordCount": 1000,
-          "fields": { "apn": "APN", "id": "AIN", "address": ["SitusFullAddress"], "use": "UseDescription" },
-          "notes": ["Served behind a bot filter; heavy scripted use may be throttled."]
+          "fields": {
+            "apn": "APN",
+            "id": "AIN",
+            "address": [
+              "SitusFullAddress"
+            ],
+            "use": "UseDescription"
+          },
+          "notes": [
+            "Served behind a bot filter; heavy scripted use may be throttled."
+          ]
         }
       },
       "zoning": {
         "publisher": "LA County DRP (unincorporated areas only)",
         "url": "https://arcgis.gis.lacounty.gov/arcgis/rest/services/DRP/ZNET_Public/MapServer/4",
-        "fields": { "code": "ZONE", "description": "Z_DESC" },
+        "fields": {
+          "code": "ZONE",
+          "description": "Z_DESC"
+        },
         "appliesTo": "unincorporated"
       }
     },
     {
       "id": "orange",
       "name": "Orange County",
-      "match": ["Orange County", "Orange"],
+      "match": [
+        "Orange County",
+        "Orange"
+      ],
       "mpo": "scag",
       "sb79Status": "pending",
       "statusNote": "Not yet an urban transit county. Per SCAG (SB 79 FAQ, Aug. 2026) it becomes one when the OC Streetcar opens for revenue service; zones will appear here automatically once SCAG maps them.",
@@ -175,13 +369,22 @@
         "publisher": "OC Public Works / OC Survey",
         "url": "https://www.ocgis.com/arcpub/rest/services/Map_Layers/Parcels/FeatureServer/0",
         "maxRecordCount": 1000,
-        "fields": { "apn": "ASSESSMENT_NO", "id": "OBJECTID", "address": ["SITE_ADDRESS"] }
+        "fields": {
+          "apn": "ASSESSMENT_NO",
+          "id": "OBJECTID",
+          "address": [
+            "SITE_ADDRESS"
+          ]
+        }
       }
     },
     {
       "id": "san-diego",
       "name": "San Diego County",
-      "match": ["San Diego County", "San Diego"],
+      "match": [
+        "San Diego County",
+        "San Diego"
+      ],
       "mpo": "sandag",
       "sb79Status": "in-effect",
       "statusNote": "Urban transit county; SB 79 operative July 1, 2026 (HCD advisory, Mar. 20, 2026).",
@@ -190,34 +393,79 @@
         "publisher": "SanGIS / SANDAG regional parcels",
         "url": "https://geo.sandag.org/server/rest/services/Hosted/Parcels/FeatureServer/0",
         "maxRecordCount": 2000,
-        "fields": { "apn": "apn", "id": "objectid", "address": ["situs_address", "situs_pre_dir", "situs_street", "situs_suffix", "situs_community"], "use": "asr_landuse" }
+        "fields": {
+          "apn": "apn",
+          "id": "objectid",
+          "address": [
+            "situs_address",
+            "situs_pre_dir",
+            "situs_street",
+            "situs_suffix",
+            "situs_community"
+          ],
+          "use": "asr_landuse"
+        }
       },
       "zoning": {
         "publisher": "City of San Diego zoning (via SANDAG)",
         "url": "https://geo.sandag.org/server/rest/services/Hosted/Zoning_Base_SD/FeatureServer/0",
-        "fields": { "code": "zone_name" },
+        "fields": {
+          "code": "zone_name"
+        },
         "appliesTo": "San Diego"
       }
     },
     {
       "id": "sacramento",
       "name": "Sacramento County",
-      "match": ["Sacramento County", "Sacramento"],
+      "match": [
+        "Sacramento County",
+        "Sacramento"
+      ],
       "mpo": "sacog",
       "sb79Status": "in-effect",
       "statusNote": "Urban transit county; SB 79 operative July 1, 2026 (HCD advisory, Mar. 20, 2026).",
       "parcels": {
         "type": "arcgis",
-        "publisher": "Sacramento County Assessor / GIS",
-        "url": "https://mapservices.gis.saccounty.gov/arcgis/rest/services/PARCELS/MapServer/8",
+        "publisher": "Sacramento County GIS — Parcels (hosted)",
+        "url": "https://services1.arcgis.com/5NARefyPVtAeuJPU/arcgis/rest/services/Parcels/FeatureServer/0",
         "maxRecordCount": 2000,
-        "fields": { "apn": "APN_DASH", "id": "OBJECTID", "address": ["SITUS_ADD1", "SITUS_ADD2"], "use": "LANDUSE", "zoning": "ZONE_", "jurisdiction": "JURISDICTION" }
+        "fields": {
+          "apn": "APN",
+          "id": "OBJECTID",
+          "address": [
+            "STREET_NBR",
+            "STREET_NAM",
+            "CITY"
+          ],
+          "use": "LU_SPECIF"
+        },
+        "fallback": {
+          "type": "arcgis",
+          "publisher": "Sacramento County Assessor / GIS (county map server)",
+          "url": "https://mapservices.gis.saccounty.gov/arcgis/rest/services/PARCELS/MapServer/8",
+          "maxRecordCount": 2000,
+          "fields": {
+            "apn": "APN_DASH",
+            "id": "OBJECTID",
+            "address": [
+              "SITUS_ADD1",
+              "SITUS_ADD2"
+            ],
+            "use": "LANDUSE",
+            "zoning": "ZONE_",
+            "jurisdiction": "JURISDICTION"
+          }
+        }
       }
     },
     {
       "id": "alameda",
       "name": "Alameda County",
-      "match": ["Alameda County", "Alameda"],
+      "match": [
+        "Alameda County",
+        "Alameda"
+      ],
       "mpo": "mtc",
       "sb79Status": "in-effect",
       "statusNote": "Urban transit county; SB 79 operative July 1, 2026 (HCD advisory, Mar. 20, 2026).",
@@ -226,13 +474,23 @@
         "publisher": "Alameda County Assessor / GIS",
         "url": "https://services5.arcgis.com/ROBnTHSNjoZ2Wm1P/arcgis/rest/services/Parcels/FeatureServer/0",
         "maxRecordCount": 2000,
-        "fields": { "apn": "APN", "id": "OBJECTID", "address": ["SitusAddress"], "use": "UseCode" }
+        "fields": {
+          "apn": "APN",
+          "id": "OBJECTID",
+          "address": [
+            "SitusAddress"
+          ],
+          "use": "UseCode"
+        }
       }
     },
     {
       "id": "san-francisco",
       "name": "San Francisco",
-      "match": ["San Francisco County", "San Francisco"],
+      "match": [
+        "San Francisco County",
+        "San Francisco"
+      ],
       "mpo": "mtc",
       "sb79Status": "in-effect",
       "statusNote": "Urban transit county; SB 79 operative July 1, 2026 (HCD advisory, Mar. 20, 2026).",
@@ -242,13 +500,26 @@
         "url": "https://data.sf.gov/resource/acdm-wktn.json",
         "geometryField": "shape",
         "where": "active = true",
-        "fields": { "apn": "mapblklot", "id": "mapblklot", "address": ["from_address_num", "street_name", "street_type"], "zoning": "zoning_code", "zoningDescription": "zoning_district" }
+        "fields": {
+          "apn": "mapblklot",
+          "id": "mapblklot",
+          "address": [
+            "from_address_num",
+            "street_name",
+            "street_type"
+          ],
+          "zoning": "zoning_code",
+          "zoningDescription": "zoning_district"
+        }
       }
     },
     {
       "id": "san-mateo",
       "name": "San Mateo County",
-      "match": ["San Mateo County", "San Mateo"],
+      "match": [
+        "San Mateo County",
+        "San Mateo"
+      ],
       "mpo": "mtc",
       "sb79Status": "in-effect",
       "statusNote": "Urban transit county; SB 79 operative July 1, 2026 (HCD advisory, Mar. 20, 2026).",
@@ -257,15 +528,26 @@
         "publisher": "San Mateo County GIS (Active Parcels)",
         "url": "https://services.arcgis.com/yq3FgOI44hYHAFVZ/arcgis/rest/services/Active__Parcels_2/FeatureServer/32",
         "maxRecordCount": 2000,
-        "fields": { "apn": "APN", "id": "OBJECTID", "address": ["SITUS_ADDR"] },
+        "fields": {
+          "apn": "APN",
+          "id": "OBJECTID",
+          "address": [
+            "SITUS_ADDR"
+          ]
+        },
         "stale": true,
-        "notes": ["San Mateo County does not currently publish a regularly updated public parcel REST service; this county-published layer was last edited in 2022. Confirm the APN with the County Assessor."]
+        "notes": [
+          "San Mateo County does not currently publish a regularly updated public parcel REST service; this county-published layer was last edited in 2022. Confirm the APN with the County Assessor."
+        ]
       }
     },
     {
       "id": "santa-clara",
       "name": "Santa Clara County",
-      "match": ["Santa Clara County", "Santa Clara"],
+      "match": [
+        "Santa Clara County",
+        "Santa Clara"
+      ],
       "mpo": "mtc",
       "sb79Status": "in-effect",
       "statusNote": "Urban transit county; SB 79 operative July 1, 2026 (HCD advisory, Mar. 20, 2026).",
@@ -274,7 +556,13 @@
         "publisher": "Santa Clara County Planning Office (Parcels Public View)",
         "url": "https://services2.arcgis.com/tcv2cMrq63AgvbHF/arcgis/rest/services/Parcels_Public_View/FeatureServer/0",
         "maxRecordCount": 2000,
-        "fields": { "apn": "APNdashed", "id": "OBJECTID_1", "address": ["Situs_Address_Full"] }
+        "fields": {
+          "apn": "APNdashed",
+          "id": "OBJECTID_1",
+          "address": [
+            "Situs_Address_Full"
+          ]
+        }
       }
     }
   ]

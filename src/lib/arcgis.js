@@ -110,7 +110,7 @@ export async function queryIntersecting(layerUrl, geo, { outFields = ['*'], wher
 }
 
 /** All features in a bbox as GeoJSON, following pagination up to maxFeatures. */
-export async function queryGeoJSONInBBox(layerUrl, bbox, { outFields = ['*'], where = '1=1', pageSize = 1000, maxFeatures = 4000, precision = 6 } = {}) {
+export async function queryGeoJSONInBBox(layerUrl, bbox, { outFields = ['*'], where = '1=1', pageSize = 1000, maxFeatures = 4000, precision = 6, maxAllowableOffset } = {}) {
   const env = envelope(bbox);
   const out = [];
   let offset = 0;
@@ -125,6 +125,7 @@ export async function queryGeoJSONInBBox(layerUrl, bbox, { outFields = ['*'], wh
       returnGeometry: true,
       outSR: 4326,
       geometryPrecision: precision,
+      maxAllowableOffset,
       resultOffset: offset,
       resultRecordCount: pageSize,
       f: 'geojson',

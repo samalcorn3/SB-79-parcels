@@ -123,6 +123,7 @@ ul.plain li { margin: 4px 0; }
 .sw { display: block; height: 14px; border-radius: 3px; }
 .sw.T1-adjacent { background: var(--t1-adj); } .sw.T1-quarter { background: var(--t1-q); } .sw.T1-half { background: var(--t1-h); }
 .sw.T2-adjacent { background: var(--t2-adj); } .sw.T2-quarter { background: var(--t2-q); } .sw.T2-half { background: var(--t2-h); }
+.sw.fire { background: rgba(215,48,31,.18); border: 1.5px solid #d7301f; height: 12px; }
 .sw.excl { background: none; border: 2px dashed var(--excl); height: 12px; }
 .legend-row { display: flex; align-items: center; gap: 6px; color: var(--ink-2); }
 .legend-row .sw { width: 34px; }

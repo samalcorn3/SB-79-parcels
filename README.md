@@ -16,6 +16,7 @@ A map and address lookup for every parcel in California's SB 79 urban transit co
 | Parcels | Each **county assessor or GIS** parcel service | Parcel polygon, APN, and situs address |
 | City and county limits | **California Department of Technology** | Jurisdiction, and incorporated vs. unincorporated |
 | Local exclusion parcels | City-published layers (San Francisco, Los Angeles) | Whether an ordinance covers this exact parcel |
+| Fire hazard severity zones | **CAL FIRE — Office of the State Fire Marshal** (LRA 2025 maps; SRA v23.3) | VHFHSZ / State Responsibility Area status and the fire-zone exclusions cities adopt |
 | Ordinances, TODAPs, HCD findings | [`data/jurisdictions.json`](data/jurisdictions.json), a curated registry citing HCD letters | Which instrument governs |
 
 ## Coverage
@@ -25,7 +26,7 @@ A map and address lookup for every parcel in California's SB 79 urban transit co
 | Los Angeles | SCAG | In effect since July 1, 2026 | LA County Assessor parcels (hosted), with LA County DRP as fallback |
 | Orange | SCAG | **Pending.** Becomes an urban transit county when the OC Streetcar opens; zones appear automatically once SCAG maps them | OC Public Works / OC Survey |
 | San Diego | SANDAG (draft map) | In effect | SanGIS/SANDAG parcels |
-| Sacramento | SACOG | In effect | Sacramento County parcels |
+| Sacramento | SACOG | In effect | Sacramento County GIS parcels (hosted), with the county map server as fallback |
 | Alameda | MTC | In effect | Alameda County parcels |
 | San Francisco | MTC | In effect | DataSF parcels (includes zoning) |
 | San Mateo | MTC | In effect | San Mateo County "Active Parcels" (**last edited 2022**; the county publishes no current parcel REST service) |
@@ -53,6 +54,16 @@ Project requirements, also from § 65912.157:
 - Projects over 10 units must set aside 7% extremely low, 10% very low, or 13% lower income units, for 55 years (rental) or 45 years (ownership) — (i).
 - Labor standards apply to any building over 85 ft — (k).
 - Setbacks and other local standards apply only if they do not, alone or in concert, prevent achieving these standards — (a)(3)–(6)(C), (c).
+
+## Fire hazard severity zones
+
+SB 79 does **not** remove fire zones from TOD zones on its own, so the MPO maps' smooth buffers are correct as published. The statute uses fire zones in three ways:
+
+- **§ 65912.161(b)(1)(D)** — a city *may* adopt an ordinance temporarily excluding "sites within a very high fire hazard severity zone, as determined by [CAL FIRE] pursuant to Section 51178, or within the state responsibility area."
+- **§ 65912.161(a)(2)(A)** — a TOD Alternative Plan may cut density on those sites by more than 50%.
+- **§ 65912.159(a)(3)** — the streamlined ministerial path (§ 65913.4) is unavailable on a site in a very high fire hazard severity zone.
+
+The site queries the State Fire Marshal's maps live for every parcel and reports the share of the lot in a VHFHSZ or the SRA. Where a city's ordinance in force excludes fire-zone sites, those parcels are excluded on the map and in the report, so the city's effective TOD zone takes on the fire zone's jagged edge. Currently that's Glendale, San Diego (O-22099), and Los Angeles (from the City's own layer). A parcel counts if any part of it (more than 1 m²) lies in the fire zone; the report shows the share.
 
 ## Which rules govern a parcel
 

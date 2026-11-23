@@ -1,15 +1,18 @@
 // App wiring: map, search, click-to-lookup, live layers.
 /* global L */
-import { reportForAddress, reportForPoint } from '../lib/lookup.js';
+import { reportForAddress, reportForPoint, cityAtPoint } from '../lib/lookup.js';
+import { findJurisdiction, instrumentInForce } from '../lib/policy.js';
 import { renderReport, renderLoading, renderError, renderNotOk } from './report.js';
 import {
   ZoneStore, classifyParcels, zoneLayer, stopsLayer, parcelLayer,
   loadParcelsInView, loadExclusionsInView, exclusionLayer, parcelsToCSV,
+  fireInView, fireLayer, applyFire,
 } from './maplayers.js';
 
 const REPO_URL = 'https://github.com/samalcorn3/sb-79-parcels';
 const PARCEL_MIN_ZOOM = 17;
 const STOPS_MIN_ZOOM = 12;
+const FIRE_MIN_ZOOM = 12;
 
 const $ = (id) => document.getElementById(id);
 const reportEl = $('report');
@@ -123,6 +126,25 @@ async function refreshZones() {
   if (!zoneErrors) setStatus('', 'zones');
 }
 
+let fireGroup = null;
+let fireToken = 0;
+/** Fire hazard overlay (State Fire Marshal), generalised to roughly one screen pixel. */
+async function refreshFire() {
+  const token = ++fireToken;
+  if (fireGroup) map.removeLayer(fireGroup);
+  fireGroup = null;
+  if (!$('tog-fire').checked || map.getZoom() < FIRE_MIN_ZOOM) return;
+  const bbox = bboxOf(map);
+  const pxDeg = (bbox[2] - bbox[0]) / map.getSize().x;
+  try {
+    const fire = await fireInView(data.sources, bbox, map.getZoom() >= PARCEL_MIN_ZOOM ? undefined : pxDeg);
+    if (token !== fireToken) return;
+    fireGroup = fireLayer(L, fire).addTo(map);
+  } catch (e) {
+    setStatus(`Fire hazard zones: ${e.message}`, 'zones');
+  }
+}
+
 async function refreshParcels() {
   const token = ++viewToken;
   const zoom = map.getZoom();
@@ -146,17 +168,29 @@ async function refreshParcels() {
   if (!$('tog-parcels').checked) return;
   setStatus('Loading parcels from the county assessor…');
   try {
-    const [{ parcels, errors, truncated }, zoneLists] = await Promise.all([
+    const [{ parcels, errors, truncated }, zoneLists, fire] = await Promise.all([
       loadParcelsInView(data.sources, bbox),
       Promise.all(store.mposInView(bbox).map((m) => store.loadZones(m).catch(() => []))),
+      fireInView(data.sources, bbox).catch((e) => {
+        errors.push(`Fire hazard zones: ${e.message}`);
+        return null;
+      }),
     ]);
     if (token !== viewToken) return;
-    classifyParcels(parcels, zoneLists.flat(), bbox);
+    const { errors: geomErrors } = classifyParcels(parcels, zoneLists.flat());
+    let excluded = 0;
+    if (fire) {
+      excluded = await applyFire(parcels, fire, { sources: data.sources, registry: data.registry, cityAt: cityAtPoint, instrumentInForce, findJurisdiction });
+      if (token !== viewToken) return;
+    }
     currentParcels = parcels;
     parcelGroup = parcelLayer(L, parcels, (e) => lookupPoint([e.latlng.lng, e.latlng.lat])).addTo(map);
     $('dl-parcels').disabled = !parcels.length;
     const inZone = parcels.filter((p) => p.properties._code !== 'none').length;
-    setStatus(errors.length ? errors.join(' · ') : `${parcels.length.toLocaleString()} parcels${truncated ? ' (truncated — zoom in)' : ''} · ${inZone.toLocaleString()} in a TOD zone`);
+    const parts = [`${parcels.length.toLocaleString()} parcels${truncated ? ' (truncated — zoom in)' : ''}`, `${inZone.toLocaleString()} in a TOD zone`];
+    if (excluded) parts.push(`${excluded.toLocaleString()} excluded by a local fire-zone ordinance`);
+    if (geomErrors) parts.push(`${geomErrors} geometry errors`);
+    setStatus(errors.length ? errors.join(' · ') : parts.join(' · '));
   } catch (e) {
     if (token === viewToken) setStatus(`Parcels: ${e.message}`);
   }
@@ -169,11 +203,13 @@ map.on('moveend', () => {
   moveTimer = setTimeout(() => {
     refreshZones();
     refreshParcels();
+    refreshFire();
   }, 350);
 });
 map.on('click', (e) => lookupPoint([e.latlng.lng, e.latlng.lat]));
 ['tog-parcels', 'tog-excl'].forEach((id) => $(id).addEventListener('change', refreshParcels));
 $('tog-stops').addEventListener('change', refreshZones);
+$('tog-fire').addEventListener('change', refreshFire);
 $('dl-parcels').addEventListener('click', downloadParcels);
 
 // ---------- lookup ----------
@@ -259,3 +295,4 @@ if (params.get('q')) {
 }
 refreshZones();
 refreshParcels();
+refreshFire();
