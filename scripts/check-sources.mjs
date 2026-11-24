@@ -66,7 +66,6 @@ for (const k of ['vhfhsz', 'sra']) tasks.push(checkArcgis(`State Fire Marshal ${
   for (const [k, l] of Object.entries(x)) {
     if (l?.url) tasks.push(checkArcgis(`Site exclusions: ${k}`, l.url, l.fields));
   }
-  tasks.push(checkArcgis('Site exclusions: wetlands (CDFW copy)', x.wetlands.fallback.url, x.wetlands.fallback.fields));
   x.hazardous.layers.forEach((l) => tasks.push(checkArcgis(`Site exclusions: DTSC ${l.label}`, l.url, l.fields)));
   tasks.push(latestFarmlandLayer(x.farmland)
     .then((f) => checkArcgis(`Site exclusions: farmland (${f.year} survey)`, f.url, x.farmland.fields, x.farmland.where))

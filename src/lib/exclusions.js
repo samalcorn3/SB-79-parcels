@@ -107,18 +107,9 @@ async function farmland(cfg, geo) {
 }
 
 async function wetlands(cfg, geo) {
-  // USFWS's own server first; its firewall rejects some clients, so fall back to CDFW's republished copy.
-  let w = cfg.wetlands;
-  let via = '';
-  let rows;
-  try {
-    rows = await q(w.url, geo, { outFields: w.fields });
-  } catch (e) {
-    if (!w.fallback) throw e;
-    w = w.fallback;
-    via = ' (USFWS’s server did not answer; result from CDFW’s copy of the inventory)';
-    rows = await q(w.url, geo, { outFields: w.fields });
-  }
+  const w = cfg.wetlands;
+  const via = '';
+  const rows = await q(w.url, geo, { outFields: w.fields });
   const src = { name: w.publisher, url: w.url };
   const h = { rows, hit: rows.length > 0, whole: false };
   const def = 'The test is the definition in the USFWS Manual, Part 660 FW 2 (June 21, 1993), not the map; the National Wetlands Inventory is mapped from imagery and is not a field delineation.';

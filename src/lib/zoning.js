@@ -5,15 +5,15 @@
 //
 // data/zoning.json lists, per jurisdiction, the live zoning layer and rules
 // mapping zone codes (or the city's own zone categories) to a class of zone
-// with a status. A city's own layer is used first; a regional compilation
-// (MTC 2023, SCAG 2019) only where the city's layer isn't configured.
+// with a status. Only the jurisdiction's own current layer is used: the city's,
+// or the county's for unincorporated land. No regional compilations.
 import * as turf from '@turf/turf';
-import { queryIntersecting, toEsriGeometry } from './arcgis.js';
+import { queryIntersecting, toEsriGeometry, getJSON } from './arcgis.js';
 import { getField } from './spec.js';
 
 const fold = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
 
-/** The zoning source for a parcel: the city's own, the county's for unincorporated land, or a regional fallback. */
+/** The zoning source for a parcel: the city's own, or the county's for unincorporated land. */
 export function pickZoningSource(zoning, { countyId, cityName }) {
   const s = zoning.sources;
   if (cityName) {
@@ -23,7 +23,7 @@ export function pickZoningSource(zoning, { countyId, cityName }) {
     const county = s.find((x) => x.unincorporatedOf === countyId);
     if (county) return county;
   }
-  return s.find((x) => (x.regionalFor || []).includes(countyId)) || null;
+  return null;
 }
 
 /** Class, status and reasons for one zone under a source's rules. */
@@ -49,6 +49,32 @@ export function combineZoneStatuses(statuses) {
   return 'confirm';
 }
 
+const updatedCache = new Map();
+/**
+ * When the agency last changed its zoning layer: the layer's edit date, or the latest
+ * value of a per-feature date field (`updatedField`) for services that don't track edits.
+ */
+export function layerUpdated(source) {
+  if (!source.url) return Promise.resolve(null);
+  if (!updatedCache.has(source.url)) {
+    updatedCache.set(source.url, (async () => {
+      const info = await getJSON(source.url, { f: 'json' }, { retries: 1, timeoutMs: 10000 });
+      const e = info.editingInfo || {};
+      let t = e.dataLastEditDate || e.lastEditDate || null;
+      if (source.updatedField) {
+        const st = await getJSON(`${source.url}/query`, {
+          where: '1=1', f: 'json',
+          outStatistics: JSON.stringify([{ statisticType: 'max', onStatisticField: source.updatedField, outStatisticFieldName: 'm' }]),
+        }, { retries: 1, timeoutMs: 10000 }).catch(() => null);
+        const m = st?.features?.[0]?.attributes?.m;
+        if (typeof m === 'number' && (!t || m > t)) t = m;
+      }
+      return t ? new Date(t).toISOString().slice(0, 10) : null;
+    })().catch(() => null));
+  }
+  return updatedCache.get(source.url);
+}
+
 /** Shrink the parcel slightly so slivers along a shared boundary don't count as a second zone. */
 function innerGeometry(parcel) {
   try {
@@ -66,7 +92,7 @@ export async function zoningForParcel(data, { countyId, cityName, parcel }) {
   const zoning = data.zoning;
   if (!zoning) return { status: 'not-evaluated', reason: 'Zoning rules not loaded.' };
   const source = pickZoningSource(zoning, { countyId, cityName });
-  if (!source) return { status: 'not-evaluated', reason: `No zoning layer is configured yet for ${cityName || 'this unincorporated area'}.` };
+  if (!source) return { status: 'not-evaluated', reason: `${cityName || 'This county'}’s own zoning layer is not wired in yet, so this test is not evaluated. (Regional compilations are not used: they lag the city’s current zoning.)` };
 
   let raw;
   if (source.fromParcel) {
@@ -89,12 +115,13 @@ export async function zoningForParcel(data, { countyId, cityName, parcel }) {
     seen.add(key);
     zones.push({ ...z, ...classifyZone(zoning, source, z) });
   }
-  if (!zones.length) return { status: 'not-evaluated', reason: `${source.publisher} shows no zone on this parcel.`, source: sourceInfo(source) };
-  return { source: sourceInfo(source), zones, status: combineZoneStatuses(zones.map((z) => z.status)) };
+  const info = { ...sourceInfo(source), updated: await layerUpdated(source) };
+  if (!zones.length) return { status: 'not-evaluated', reason: `${source.publisher} shows no zone on this parcel.`, source: info };
+  return { source: info, zones, status: combineZoneStatuses(zones.map((z) => z.status)) };
 }
 
 function sourceInfo(s) {
-  return { id: s.id, name: s.name, publisher: s.publisher, url: s.url || null, codeUrl: s.codeUrl || null, codeName: s.codeName || null, regional: !!s.regional, caveat: s.caveat || null };
+  return { id: s.id, name: s.name, publisher: s.publisher, url: s.url || null, codeUrl: s.codeUrl || null, codeName: s.codeName || null };
 }
 
 /** One line describing the zoning, for report headers. */

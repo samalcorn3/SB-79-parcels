@@ -27,16 +27,16 @@ test('registry is well formed', () => {
       assert.doesNotThrow(() => new RegExp(r.match), `${s.id}: bad regex ${r.match}`);
       if (r.on === 'category') assert.ok(s.fields?.category, `${s.id}: category rule without a category field`);
     }
-    if (s.regional) assert.ok(s.caveat, `${s.id}: regional compilation needs a caveat`);
+    assert.ok(!s.regional && !s.regionalFor, `${s.id}: regional compilations are not allowed`);
   }
 });
 
 test('source choice: city layer first, county for unincorporated land, regional fallback last', () => {
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Los Angeles' }).id, 'la-city');
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: null }).id, 'la-county');
-  assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Pasadena' }).id, 'scag-2019');
+  assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Pasadena' }), null); // no regional compilations
   assert.equal(pickZoningSource(zoning, { countyId: 'santa-clara', cityName: 'San José' }).id, 'sj-city');
-  assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Berkeley' }).id, 'mtc-2023');
+  assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Hayward' }), null);
   assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: null }).id, 'sd-county');
   assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: 'Chula Vista' }), null);
 });
@@ -66,9 +66,6 @@ test('zone classification', () => {
   assert.equal(cls('sf', { code: 'NCT-3' }).status, 'meets');
   assert.equal(cls('sf', { code: 'RH-2' }).status, 'fails');
   assert.equal(cls('la-county', { code: 'MXD' }).status, 'meets');
-  assert.equal(cls('mtc-2023', { code: 'C-1', category: 'Commercial' }).status, 'meets');
-  assert.equal(cls('scag-2019', { code: 'C2', category: '1220' }).status, 'meets');
-  assert.equal(cls('scag-2019', { code: 'R1', category: '1110' }).status, 'fails');
   assert.equal(cls('sj-city', { code: 'XYZ' }).class, 'unknown');
 });
 

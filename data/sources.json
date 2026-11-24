@@ -103,16 +103,7 @@
       "fields": [
         "ATTRIBUTE",
         "WETLAND_TYPE"
-      ],
-      "fallback": {
-        "publisher": "California Department of Fish and Wildlife — National Wetlands Inventory, California (USFWS data republished as BIOS ds2630)",
-        "url": "https://services2.arcgis.com/Uq9r85Potqm3MfRV/arcgis/rest/services/biosds2630_fpu/FeatureServer/0",
-        "fields": [
-          "ATTRIBUTE",
-          "WETLAND_TYPE"
-        ],
-        "note": "Used only when the USFWS server does not answer; its firewall rejects some clients."
-      }
+      ]
     },
     "hazardous": {
       "publisher": "Department of Toxic Substances Control — EnviroStor public data export (updated daily)",

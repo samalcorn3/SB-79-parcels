@@ -190,7 +190,7 @@ export function renderReport(r, { standardsDoc } = {}) {
   const p = r.parcel;
   const regime = r.regime;
   const zoning = r.zoning?.code
-    ? `<dt>Local zoning</dt><dd>${esc(r.zoning.code)}${r.zoning.description && r.zoning.description !== r.zoning.code ? ` — ${esc(r.zoning.description)}` : ''}${r.zoning.source ? `<div class="fine">${link(r.zoning.source.url, r.zoning.source.publisher)}${r.zoning.source.regional ? ' (regional compilation)' : ''}</div>` : ''}</dd>`
+    ? `<dt>Local zoning</dt><dd>${esc(r.zoning.code)}${r.zoning.description && r.zoning.description !== r.zoning.code ? ` — ${esc(r.zoning.description)}` : ''}${r.zoning.source ? `<div class="fine">${link(r.zoning.source.url, r.zoning.source.publisher)}${r.zoning.source.updated ? `, updated ${esc(r.zoning.source.updated)}` : ''}</div>` : ''}</dd>`
     : '';
   const warnings = [
     ...(p.stale ? p.sourceNotes : []),

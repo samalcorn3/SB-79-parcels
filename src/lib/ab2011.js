@@ -55,10 +55,10 @@ export function zoningCriterion(zoning) {
     return `${name}: ${z.label}. ${z.why}${z.cite ? ` [${z.cite}]` : ''}${z.notes?.length ? ` ${z.notes.join(' ')}` : ''}`;
   });
   const split = zoning.zones.length > 1 ? 'The parcel is split between zones. ' : '';
-  const detail = `${split}${parts.join(' ')}${src.regional ? ` Source is a regional compilation: ${src.caveat}` : ''}`;
+  const detail = `${split}${parts.join(' ')}`;
   return {
     ...C('zoning', cite, text, zoning.status, detail),
-    source: { name: src.publisher, url: src.url },
+    source: { name: `${src.publisher}${src.updated ? ` (updated ${src.updated})` : ''}`, url: src.url },
     links: src.codeUrl ? [{ label: src.codeName || 'Zoning code', url: src.codeUrl }] : [],
   };
 }

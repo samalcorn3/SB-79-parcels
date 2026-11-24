@@ -75,7 +75,7 @@ test('coastal clause (A)(ii): certified LCP or LUP required', () => {
 
 test('every exclusion source is an agency service, not a third-party copy', () => {
   const x = sources.siteExclusions;
-  const urls = [x.coastalZone.url, x.lcpSegments.url, x.farmland.folder, x.wetlands.url, x.wetlands.fallback.url, ...x.hazardous.layers.map((l) => l.url), x.faultZones.url, x.flood.url, x.conservationPlans.url, x.criticalHabitat.url, x.agEasements.url];
+  const urls = [x.coastalZone.url, x.lcpSegments.url, x.farmland.folder, x.wetlands.url, ...x.hazardous.layers.map((l) => l.url), x.faultZones.url, x.flood.url, x.conservationPlans.url, x.criticalHabitat.url, x.agEasements.url];
   const owners = [
     /services9\.arcgis\.com\/wwVnNW92ZHUIr0V0\//, // California Coastal Commission
     /gis\.conservation\.ca\.gov\//, // Department of Conservation
