@@ -34,6 +34,18 @@ RELATED = [("GOV", "65913.4"), ("GOV", "51178"), ("GOV", "51179"), ("PRC", "4102
 WANTED = {("GOV", s) for s in SECTIONS} | set(RELATED)
 
 
+def wanted(code, sec):
+    """SB 79 sections, the sections they cite, and AB 2011's chapter (§§ 65912.100–65912.140)."""
+    if (code, sec) in WANTED:
+        return True
+    if code == "GOV" and sec.startswith("65912.1"):
+        try:
+            return 100 <= float(sec.split(".", 1)[1]) <= 140
+        except ValueError:
+            return False
+    return False
+
+
 def key(code, sec):
     return sec if code == "GOV" and sec.startswith("65912.") else f"{code}-{sec}"
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "statute")
@@ -91,7 +103,7 @@ def fetch():
     out = {}
     for row in table.split("\n"):
         cols = [c.strip("`") for c in row.split("\t")]
-        if len(cols) < 15 or (cols[1], cols[2].rstrip(".")) not in WANTED:
+        if len(cols) < 15 or not wanted(cols[1], cols[2].rstrip(".")):
             continue
         code, sec = cols[1], cols[2].rstrip(".")
         text = lob_to_text(zf.read(cols[14]))
@@ -104,6 +116,8 @@ def fetch():
             "text": text,
         }
     missing = [key(c, s) for c, s in WANTED if key(c, s) not in out]
+    if not any(k.startswith("65912.1") and k.split(".")[1][:3] in ("100", "101") for k in out):
+        missing.append("AB 2011 chapter (65912.100+)")
     if missing:
         raise SystemExit(f"Sections not found in leginfo export: {missing}")
     return out, src.modified
