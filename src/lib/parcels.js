@@ -44,12 +44,13 @@ export async function parcelsAtPoint(county, [lon, lat]) {
   });
 }
 
-export async function parcelsInBBox(county, bbox, { maxFeatures = 3000 } = {}) {
+export async function parcelsInBBox(county, bbox, { maxFeatures = 3000, withLandUse = false } = {}) {
   return withFallback(county, async (src) => {
+    const outFields = [...Object.values(src.fields).flat(), ...(withLandUse && src.landUse ? Object.values(src.landUse.fields).flat() : [])];
     const res =
       src.type === 'socrata'
         ? await socrataInBBox(src, bbox, { maxFeatures })
-        : await queryGeoJSONInBBox(src.url, bbox, { where: src.where || '1=1', pageSize: src.maxRecordCount || 1000, maxFeatures, outFields: Object.values(src.fields).flat() });
+        : await queryGeoJSONInBBox(src.url, bbox, { where: src.where || '1=1', pageSize: src.maxRecordCount || 1000, maxFeatures, outFields: [...new Set(outFields)] });
     return { features: res.features.filter((f) => f.geometry).map((f) => normalizeParcel(county, f, src)), truncated: res.truncated };
   });
 }

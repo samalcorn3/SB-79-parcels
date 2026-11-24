@@ -18,6 +18,7 @@ import * as turf from '@turf/turf';
 import { queryIntersecting, toEsriGeometry, getJSON } from './arcgis.js';
 import { measureFrontages, corridorTest } from './row.js';
 import { parcelsInBBox } from './parcels.js';
+import { useTests, CLASS_LABEL } from './landuse.js';
 import { getField } from './spec.js';
 
 export const AB2011 = {
@@ -35,6 +36,8 @@ export const AB2011 = {
 };
 
 const C = (id, cite, text, status, detail) => ({ id, cite, text, status, detail });
+// Caltrans and Census servers are sometimes slow; give up after 8 s rather than hold the report.
+const SLOW_OK = { timeoutMs: 8000, retries: 1 };
 
 /**
  * § 65912.111(a) / § 65912.121(a): "located in a zone where office, retail, or parking are a principally
@@ -65,6 +68,7 @@ async function roadClassesNear(sources, [lon, lat], radiusFt) {
   const rows = await queryIntersecting(sources.caltrans.functionalClass.url, toEsriGeometry({ type: 'Point', coordinates: [lon, lat] }), {
     outFields: ['RouteID', 'F_System'],
     distanceFeet: radiusFt,
+    request: SLOW_OK,
   });
   return rows.map((r) => ({ route: getField(r, 'RouteID'), fSystem: Number(getField(r, 'F_System')) }));
 }
@@ -103,6 +107,60 @@ async function cityInUrbanArea(sources, cityName) {
   return rows.length ? getField(rows[0], 'NAME') : false;
 }
 
+const pct = (x) => `${Math.round(x * 100)}%`;
+const withSrc = (c, uses) => ({ ...c, source: uses ? { name: uses.publisher, url: uses.url } : undefined });
+
+/** § 65912.111(c) / § 65912.121(e): 75% of the perimeter adjoins urban uses. */
+export function urbanUsesCriterion(uses) {
+  const cite = '§ 65912.111(c); § 65912.121(e)';
+  const text = 'At least 75% of the site perimeter adjoins parcels developed with urban uses (parcels across a street count as adjoining)';
+  if (!uses) return C('urban-uses', cite, text, 'confirm', 'This county\'s parcel layer does not publish land-use descriptions, so the neighbouring uses cannot be read from it.');
+  const { share, byClass } = uses;
+  const mix = Object.entries(byClass).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${CLASS_LABEL[k]} ${pct(v)}`).join(', ');
+  const status = share.urban >= 0.75 ? 'meets' : share.urban + share.undetermined < 0.75 ? 'fails' : 'confirm';
+  const detail = `${pct(share.urban)} of the ${uses.perimeterFt}-ft perimeter adjoins urban uses on the assessor roll (${mix || 'no neighbours found'})${share.undetermined > 0.005 ? `; ${pct(share.undetermined)} adjoins vacant, unclassified, or no parcels within 250 ft` : ''}. Urban uses are residential, commercial, public institutional, parking, transit, retail, and parks surrounded by urban uses (§ 65912.101(x)); the 100% affordable path also counts former urban uses (§ 65912.111(c)).${status === 'confirm' ? ' The undetermined stretches decide it.' : ''}`;
+  return withSrc(C('urban-uses', cite, text, status, detail), uses);
+}
+
+/** § 65912.111(d) / § 65912.121(f): no industrial use on or adjoining the site. */
+export function industrialCriterion(uses, zoning) {
+  const cite = '§ 65912.111(d); § 65912.121(f)';
+  const text = 'Not on or adjoining (including across a street) a site where more than one-third of the square footage is dedicated to industrial use';
+  const gp = 'A site also counts as industrial if its pre-2022 general plan designation was industrial and residential uses are not principally permitted there; general plan maps are not checked here.';
+  if (!uses) return C('industrial', cite, text, 'confirm', `This county's parcel layer does not publish land-use descriptions. ${gp}`);
+  const siteInd = uses.site && (uses.site.class === 'industrial' || uses.site.class === 'utility');
+  const list = uses.industrialNeighbors.map((n) => `${n.address || n.apn || 'a parcel'}${n.acrossStreet ? ' (across the street)' : ''}: ${n.use.description || n.use.label}`);
+  if (siteInd || list.length) {
+    return withSrc(C('industrial', cite, text, 'confirm',
+      `${siteInd ? `The assessor records this parcel itself as ${uses.site.description || uses.site.label}. ` : ''}${list.length ? `Adjoining parcels recorded with industrial or utility uses: ${list.join('; ')}. ` : ''}The site fails if more than one-third of the square footage on any of these is actively in industrial use (manufacturing, warehousing, transportation storage and maintenance, utilities other than substations and conveyances, or air-district-permitted sources; § 65912.101(j)), or was so used and permitted within the past three years. ${gp}`), uses);
+  }
+  const zoneNote = zoning?.zones?.some((z) => z.class === 'industrial') ? ' The parcel is zoned industrial; check its current use.' : '';
+  return withSrc(C('industrial', cite, text, 'none-mapped',
+    `No industrial or utility use is recorded on the assessor roll for this parcel or the ${uses.adjoiningCount} parcels adjoining it (including across the street).${zoneNote} ${gp}`), uses);
+}
+
+/** § 65912.121(h)(1)–(2), (4)–(5): existing housing on a mixed-income site. */
+export function housingCriterion(uses, zoning) {
+  const cite = '§ 65912.121(h)(1)–(2), (4)–(5)';
+  const text = 'No demolition of rent-restricted, rent-controlled, or recently tenant-occupied housing; not a property with 1–4 units; not vacant land zoned for housing but not multifamily';
+  const tenants = 'Demolishing housing that is rent-restricted, rent-controlled, or was tenant-occupied in the past 10 years is barred, as is a site whose tenant-occupied housing was demolished in the past 10 years.';
+  const site = uses?.site;
+  if (!site) return C('existing-housing', cite, text, 'confirm', `The county's parcel record does not say what is on the site. ${tenants}`);
+  const units = site.units ? ` (${site.units} unit${site.units === 1 ? '' : 's'})` : '';
+  if (site.class === 'residential-small') {
+    return withSrc(C('existing-housing', cite, text, 'fails', `The assessor records ${site.description || 'housing'}${units} on this parcel; a property with one to four dwelling units is excluded (§ 65912.121(h)(4)).`), uses);
+  }
+  if (site.class === 'residential') {
+    return withSrc(C('existing-housing', cite, text, 'confirm', `The assessor records ${site.description || 'housing'}${units} on this parcel. ${tenants}`), uses);
+  }
+  if (site.class === 'vacant') {
+    const zoned = zoning?.zones?.length ? ` It is zoned ${zoning.zones.map((z) => z.code).join(' / ')}.` : '';
+    return withSrc(C('existing-housing', cite, text, 'confirm', `The assessor records no improvements on this parcel.${zoned} Vacant land zoned for housing but not for multifamily housing is excluded (§ 65912.121(h)(5)); so is a site where tenant-occupied housing was demolished in the past 10 years.`), uses);
+  }
+  return withSrc(C('existing-housing', cite, text, 'none-mapped',
+    `The assessor records ${site.description || site.label} on this parcel${site.units ? `, with ${site.units} dwelling unit${site.units === 1 ? '' : 's'}` : ', with no dwelling units'}. Check that no tenant-occupied housing on the site was demolished in the past 10 years.`), uses);
+}
+
 /**
  * Evaluate AB 2011 for a parcel already resolved by the SB 79 lookup.
  * @param data  { sources }
@@ -121,9 +179,11 @@ export async function ab2011ForParcel(data, ctx) {
   // Parcels around the site, for frontage measurement and neighbour uses.
   const [x0, y0, x1, y1] = turf.bbox(parcel);
   const pad = 0.00075; // ~270 ft: corridors are at most 150 ft wide; rays stop at 250 ft
-  const around = await soft('Neighbouring parcels', parcelsInBBox(county, [x0 - pad, y0 - pad, x1 + pad, y1 + pad], { maxFeatures: 3000 }));
+  const around = await soft('Neighbouring parcels', parcelsInBBox(county, [x0 - pad, y0 - pad, x1 + pad, y1 + pad], { maxFeatures: 3000, withLandUse: true }));
   const neighbours = around?.features || [];
   const frontages = neighbours.length ? measureFrontages(parcel, neighbours) : [];
+  const uses = neighbours.length ? useTests(county.parcels.landUse, parcel, neighbours) : null;
+  if (uses) uses.url = county.parcels.url;
   await Promise.all(frontages.map(async (f) => {
     f.test = corridorTest(f, { min: AB2011.corridor.minFt, max: AB2011.corridor.maxFt, minFrontageFt: AB2011.corridor.minFrontageFt });
     f.freeway = f.test.rowInRange ? await soft('Caltrans road class', frontageFreeway(sources, f)) : null;
@@ -136,7 +196,7 @@ export async function ab2011ForParcel(data, ctx) {
     city ? (ua ? Promise.resolve(ua) : soft('Census urban areas', cityInUrbanArea(sources, city.name))) : null,
     soft('Caltrans road class', (async () => {
       const rows = await queryIntersecting(sources.caltrans.functionalClass.url, toEsriGeometry(parcel.geometry), {
-        where: 'F_System IN (1, 2)', outFields: ['RouteID', 'F_System'], distanceFeet: AB2011.freewayBufferFt,
+        where: 'F_System IN (1, 2)', outFields: ['RouteID', 'F_System'], distanceFeet: AB2011.freewayBufferFt, request: SLOW_OK,
       });
       return rows.map((r) => Number(getField(r, 'F_System')));
     })()),
@@ -159,10 +219,8 @@ export async function ab2011ForParcel(data, ctx) {
       return C('urbanized', '§ 65912.111(b)(2); § 65912.121(b)(2)', 'Unincorporated parcel wholly within an urbanized area', ua ? 'confirm' : 'fails',
         ua ? `Parcel interior is in the ${ua}; confirm the whole parcel lies within it.` : 'Parcel is not in a 2020 Census Urban Area.');
     })(),
-    C('urban-uses', '§ 65912.111(c); § 65912.121(e)', 'At least 75% of the site perimeter adjoins parcels developed with urban uses (parcels across a street count as adjoining)', 'confirm',
-      'Requires the current use of the surrounding parcels; assessor land-use codes are not an authoritative record of use.'),
-    C('industrial', '§ 65912.111(d); § 65912.121(f)', 'Not on or adjoining (including across a street) a site where more than one-third of the square footage is dedicated to industrial use', 'confirm',
-      'Depends on current and most recently permitted uses and the pre-2022 general plan designation.'),
+    urbanUsesCriterion(uses),
+    industrialCriterion(uses, zoning),
     // § 65912.111(e) / § 65912.121(g): all of § 65913.4(a)(6) except clause (A)(iv), checked map by map.
     ...(exclusions?.length
       ? exclusions.map((x) => ({
@@ -173,7 +231,10 @@ export async function ab2011ForParcel(data, ctx) {
         links: x.links,
       }))
       : [C('a6', '§ 65912.111(e); § 65912.121(g) → § 65913.4(a)(6)', 'Site exclusions: coastal zone, farmland, wetlands, fire, hazardous waste, fault zone, flood, conservation lands, habitat, easements', 'not-evaluated', 'Site-exclusion check unavailable.')]),
-    C('historic-mobilehome', '§ 65912.111(f); § 65912.121(h)(3), (6)', 'Does not demolish a historic structure on a national, state, or local register; not a mobilehome or RV park', 'confirm', 'No statewide authoritative parcel layer.'),
+    uses?.site?.class === 'mobilehome-park'
+      ? withSrc(C('historic-mobilehome', '§ 65912.111(f); § 65912.121(h)(3), (6)', 'Does not demolish a historic structure on a national, state, or local register; not a mobilehome or RV park', 'fails', `The assessor records this parcel as a mobilehome park (${uses.site.description}).`), uses)
+      : C('historic-mobilehome', '§ 65912.111(f); § 65912.121(h)(3), (6)', 'Does not demolish a historic structure on a national, state, or local register; not a mobilehome or RV park', 'confirm',
+        `${uses?.site ? `Not recorded as a mobilehome park (assessor use: ${uses.site.description || uses.site.label}). ` : ''}Historic registers (national, state, and local) are not published as one statewide parcel layer; check the city's historic resources inventory.`),
     C('neighborhood-plan', '§ 65912.111(g); § 65912.121(i)', 'If in a neighborhood plan area, the plan permits multifamily housing on the site', 'confirm', 'Check for a specific, area, community, or similar plan adopted before 2024 (§ 65912.101(t)).'),
     C('tribal', '§ 65912.111(h)(1); § 65912.121(j)(1)', 'If vacant, no tribal cultural resources identified through AB 52 consultation that cannot be mitigated', 'confirm', 'Determined through consultation, not mapping.'),
   ];
@@ -196,8 +257,7 @@ export async function ab2011ForParcel(data, ctx) {
   })();
   const size = C('size', '§ 65912.121(d)', `Site not greater than ${AB2011.maxAcres} acres (${AB2011.maxAcresRegionalMall} for a regional mall)`, acres <= AB2011.maxAcres ? 'meets' : acres <= AB2011.maxAcresRegionalMall ? 'confirm' : 'fails',
     `This parcel is ${acres.toFixed(2)} acres${acres > AB2011.maxAcres && acres <= AB2011.maxAcresRegionalMall ? ' — eligible only if the site is a regional mall (§ 65912.101(v))' : ''}. A project site combining several parcels is measured as a whole.`);
-  const housing = C('existing-housing', '§ 65912.121(h)(1)–(2), (4)–(5)', 'No demolition of rent-restricted, rent-controlled, or recently tenant-occupied housing; not a property with 1–4 units; not vacant land zoned for housing but not multifamily', 'confirm',
-    ctx.parcel.properties.use ? `Assessor use: ${ctx.parcel.properties.use}.` : 'Depends on current occupancy and tenancy history.');
+  const housing = housingCriterion(uses, zoning);
 
   const statusOf = (list) => (list.some((c) => c.status === 'fails') ? 'fails' : list.every((c) => c.status === 'meets') ? 'meets' : 'confirm');
   const affordable = { title: '100% affordable (Article 2, § 65912.110–65912.114)', criteria: shared };

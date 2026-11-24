@@ -22,13 +22,13 @@ export function projector([lon0, lat0]) {
   };
 }
 
-function rings(geom) {
+export function rings(geom) {
   if (geom.type === 'Polygon') return geom.coordinates;
   if (geom.type === 'MultiPolygon') return geom.coordinates.flat();
   return [];
 }
 
-function pointInRings(pt, rs) {
+export function pointInRings(pt, rs) {
   // Even-odd rule across all rings (outer + holes).
   let inside = false;
   for (const r of rs) {
@@ -42,7 +42,7 @@ function pointInRings(pt, rs) {
 }
 
 /** Distance along ray (o + t·d, t > 0) to segment a–b, or Infinity. */
-function rayHit(o, d, a, b) {
+export function rayHit(o, d, a, b) {
   const ex = b[0] - a[0];
   const ey = b[1] - a[1];
   const den = d[0] * ey - d[1] * ex;

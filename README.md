@@ -148,6 +148,8 @@ The site is static: `index.html`, `assets/`, `src/`, and `data/`. [`.github/work
 
 Each parcel report also checks **AB 2011**, the Affordable Housing and High Road Jobs Act (Gov. Code §§ 65912.100–65912.140, as amended by AB 2243 and AB 893). It covers both paths: 100% affordable (§ 65912.111) and mixed-income (§ 65912.121). Each requirement is marked:
 
+The report shows SB 79 and AB 2011 on separate tabs.
+
 | Mark | Meaning |
 |---|---|
 | ✓ / ✗ | Decided from authoritative data |
@@ -159,6 +161,9 @@ What it computes:
 - **Commercial corridor (§ 65912.101(c), § 65912.121(c)).** The right-of-way is measured property line to property line from the county assessor's parcels: perpendicular to each street frontage, sampled every 10 ft, ignoring samples near corners ([`src/lib/row.js`](src/lib/row.js)). Per HCD's draft AB 2011 guidelines (May 5, 2026), a site qualifies if any portion of the right-of-way fronting it is 70–150 ft wide. At least two adjacent samples must be in range, and the frontage must be at least 50 ft. Measured frontages are drawn on the map, green where they qualify.
 - **Not a freeway (§ 65912.101(g); Veh. Code § 332).** Uses Caltrans's Public Road Functional Classification. Class 1 (Interstate) is a freeway. Class 2 ("other freeway or expressway") is flagged to confirm, since expressways aren't freeways. Caltrans publishes no live layer of access control; its State Highway Network lines carry only route type.
 - **Urbanized area (§ 65912.121(b)).** Uses Census Bureau 2020 Urban Areas (TIGERweb).
+- **Zoning: office, retail, or parking principally permitted (§§ 65912.111(a), 65912.121(a); § 65912.101(u)).** From each city's own zoning layer, queried live, with rules in [`data/zoning.json`](data/zoning.json) that map zone codes (or the city's own zone categories) to a class, cited to the zoning code: Los Angeles, San Diego, San José, Oakland, Sacramento, Long Beach, San Francisco, and unincorporated Los Angeles and San Diego counties. Elsewhere it falls back to the regional compilations, labelled as such: MTC/ABAG 2023 in the Bay Area and SCAG 2019 in Los Angeles County. Commercial, office, parking, and commercial mixed-use zones meet the test. Residential, open-space, and agricultural zones fail it. Residential mixed-use, industrial, public, and planned districts are flagged with the reason, as are Los Angeles [Q] conditions and split-zoned parcels.
+- **Neighbouring uses (§§ 65912.111(c)–(d), 65912.121(e)–(f)).** From the county assessor's use on each parcel record (Los Angeles and Sacramento counties, which publish readable use descriptions; [`src/lib/landuse.js`](src/lib/landuse.js)). The site's perimeter is walked every 5 ft and each stretch matched to the parcel touching it or straight across the street. The report gives the share adjoining urban uses (§ 65912.101(x)) and lists any industrial or utility use on or next to the site.
+- **Existing housing (§ 65912.121(h)(4)–(6)).** The assessor's use and unit count: one to four units fails; five or more is flagged for the tenancy rules; a mobilehome park fails.
 - **Site size (§ 65912.121(d)).**
 - **Site exclusions (§§ 65912.111(e), 65912.121(g)).** All of § 65913.4(a)(6) except clause (A)(iv), from the same checks as the Site exclusions card (see above).
 - **Density and height (§ 65912.123).** Shown from the measured corridor width and whether the parcel is within ½ mile of an SB 79 TOD stop. Every TOD stop is a major transit stop (§ 65912.156(p)).

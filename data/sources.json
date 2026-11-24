@@ -491,6 +491,74 @@
           "notes": [
             "Served behind a bot filter; heavy scripted use may be throttled."
           ]
+        },
+        "landUse": {
+          "publisher": "Los Angeles County Assessor (use description, units, and improvement value on the parcel record)",
+          "fields": {
+            "description": "UseDescription",
+            "code": "UseCode",
+            "units": [
+              "Units1",
+              "Units2",
+              "Units3",
+              "Units4",
+              "Units5"
+            ],
+            "improvementValue": "Roll_ImpValue"
+          },
+          "vacantWhenNoImprovements": true,
+          "rules": [
+            {
+              "on": "description",
+              "match": "^Mobile Home Parks$",
+              "class": "mobilehome-park"
+            },
+            {
+              "on": "description",
+              "match": "^(Single|Two Units|Three Units|Four Units \\(Any Combination\\)|Mobile Homes)$",
+              "class": "residential-small"
+            },
+            {
+              "on": "description",
+              "match": "^(Five or more apartments|Rooming Houses|Homes For Aged & Others)$",
+              "class": "residential"
+            },
+            {
+              "on": "description",
+              "match": "^Parking Lots",
+              "class": "parking"
+            },
+            {
+              "on": "description",
+              "match": "^(Commercial|Stores|Store Combination|Department Stores|Supermarkets|Shopping Centers.*|Office Buildings|Professional Buildings|Banks Savings & Loan|Restaurants, Cocktail Lounges|Hotel & Motels|Service Stations|Theaters|Bowling Alleys|Skating Rinks|Race Tracks|Athletic & Amusement Facilities|Auto, Recreation EQPT.*|Srvc Shps.*|Animal Kennels|Wholesale & Manufacturing Outlets)$",
+              "class": "commercial"
+            },
+            {
+              "on": "description",
+              "match": "^(Government Parcel|Institutional|Churches|Schools \\(Private\\)|Colleges, Universities \\(Private\\)|Hospitals|Clubs., Lodge Halls, Fraternal Organizations)$",
+              "class": "public"
+            },
+            {
+              "on": "description",
+              "match": "^Recreational$",
+              "class": "park"
+            },
+            {
+              "on": "description",
+              "match": "^(Industrial|Heavy Manufacturing|Lgt Manf.*|Food Processing Plants|Lumber Yards|Mineral Processing|Open Storage|Warehousing, Distribution, Storage|Petroleum & Gas|Waste)$",
+              "class": "industrial"
+            },
+            {
+              "on": "description",
+              "match": "^(Utility Commercial.*|Pipelines, Canals)$",
+              "class": "utility"
+            },
+            {
+              "on": "description",
+              "match": "^(Dairies|Feed Lots|Field Crops|Fruit & Nuts|Irrigated Farm|Pasture|Poultry|Truck Crops|Vineyards|Nurseries or Greenhouses|Timber-Pine)$",
+              "class": "agricultural"
+            }
+          ]
         }
       }
     },
@@ -602,6 +670,85 @@
             "zoning": "ZONE_",
             "jurisdiction": "JURISDICTION"
           }
+        },
+        "landUse": {
+          "publisher": "Sacramento County Assessor (general and specific land use on the parcel record)",
+          "fields": {
+            "general": "LU_GENERAL",
+            "specific": "LU_SPECIF"
+          },
+          "rules": [
+            {
+              "on": "general",
+              "match": "^Vacant$",
+              "class": "vacant"
+            },
+            {
+              "on": "specific",
+              "match": "^Mobile Home Park$",
+              "class": "mobilehome-park"
+            },
+            {
+              "on": "specific",
+              "match": "^(Single Family|Two Family|Three Family|Four Family|Mobile Home)$",
+              "class": "residential-small"
+            },
+            {
+              "on": "specific",
+              "match": "^(Hotel|Motel|Bed & Breakfast)$",
+              "class": "commercial"
+            },
+            {
+              "on": "general",
+              "match": "^Residential$",
+              "class": "residential"
+            },
+            {
+              "on": "general",
+              "match": "^(Retail / Commercial|Office)$",
+              "class": "commercial"
+            },
+            {
+              "on": "specific",
+              "match": "^Cemetery / Mortuary$",
+              "class": "other"
+            },
+            {
+              "on": "general",
+              "match": "^(Care / Health|Church / Welfare|Public / Utilities)$",
+              "class": "public"
+            },
+            {
+              "on": "specific",
+              "match": "^(Golf Course|Marina)$",
+              "class": "other"
+            },
+            {
+              "on": "general",
+              "match": "^Recreational$",
+              "class": "commercial"
+            },
+            {
+              "on": "general",
+              "match": "^Industrial$",
+              "class": "industrial"
+            },
+            {
+              "on": "specific",
+              "match": "^Park / Greenbelt$",
+              "class": "park"
+            },
+            {
+              "on": "specific",
+              "match": "^Utility / Power / Sewer$",
+              "class": "utility"
+            },
+            {
+              "on": "general",
+              "match": "^Agricultural$",
+              "class": "agricultural"
+            }
+          ]
         }
       }
     },
