@@ -616,6 +616,402 @@
         }
       ],
       "updatedField": "Date_Updated"
+    },
+    {
+      "id": "glendale",
+      "name": "City of Glendale",
+      "jurisdictions": [
+        "Glendale"
+      ],
+      "publisher": "City of Glendale — Zoning",
+      "url": "https://gismap.glendaleca.gov/arcgis/rest/services/Common/Zoning/MapServer/2",
+      "fields": {
+        "code": "ZONE_DISTR",
+        "description": "ZONE_DESC"
+      },
+      "codeUrl": "https://library.municode.com/ca/glendale/codes/code_of_ordinances?nodeId=TIT30ZO",
+      "codeName": "Glendale Municipal Code, Title 30",
+      "rules": [
+        {
+          "match": "(^| )PS?$",
+          "class": "parking",
+          "cite": "GMC Ch. 30.17 (P and PS parking overlay zones)"
+        },
+        {
+          "match": "^(C1|C2|C3|CR|CA|CH|CE|MS)( |$)",
+          "class": "commercial",
+          "cite": "GMC Ch. 30.12, Table 30.12-A (commercial zones); Ch. 30.14 (MS medical services)"
+        },
+        {
+          "match": "^CPD",
+          "class": "planned",
+          "cite": "GMC Ch. 30.12 (commercial planned development)"
+        },
+        {
+          "match": "^DSP/",
+          "class": "planned",
+          "cite": "Downtown Specific Plan"
+        },
+        {
+          "match": "^(SFMU|TOD)",
+          "class": "mixed-residential",
+          "cite": "GMC Ch. 30.13 (mixed use and transit-oriented zones)"
+        },
+        {
+          "match": "^(IMU|IND)",
+          "class": "industrial",
+          "cite": "GMC Ch. 30.13 (IMU), Ch. 30.14 (IND)"
+        },
+        {
+          "match": "^(R|ROS)",
+          "class": "residential",
+          "cite": "GMC Ch. 30.11 (residential zones)"
+        },
+        {
+          "match": "^(SR|CEM)",
+          "class": "open-space",
+          "cite": "GMC Ch. 30.15 (special recreation; cemetery)"
+        },
+        {
+          "match": "^T$",
+          "class": "transportation"
+        }
+      ]
+    },
+    {
+      "id": "hayward",
+      "name": "City of Hayward",
+      "jurisdictions": [
+        "Hayward"
+      ],
+      "publisher": "City of Hayward — Zoning",
+      "url": "https://services3.arcgis.com/VRO5V8PH7DzSE6AU/arcgis/rest/services/Zoning/FeatureServer/0",
+      "fields": {
+        "code": "ZONING_"
+      },
+      "codeUrl": "https://library.municode.com/ca/hayward/codes/municipal_code?nodeId=HAYWARD_MUNICIPAL_CODE_CH10PLZOSU_ART1ZOOR",
+      "codeName": "Hayward Municipal Code, Ch. 10, Art. 1",
+      "rules": [
+        {
+          "match": "^(CN|CG|CB|CC-C|DT-MS)",
+          "class": "commercial",
+          "cite": "HMC §§ 10-1.1000–1.1500 (commercial districts); Downtown Hayward Code"
+        },
+        {
+          "match": "^CO$",
+          "class": "office",
+          "cite": "HMC § 10-1.1700 (commercial office)"
+        },
+        {
+          "match": "^(CN-R|CC-R|RO|SMU)",
+          "class": "mixed-residential",
+          "cite": "HMC (residential–commercial and sustainable mixed-use districts)"
+        },
+        {
+          "match": "^(IG|IL|IP)",
+          "class": "industrial",
+          "cite": "HMC § 10-1.1600 (industrial districts)"
+        },
+        {
+          "match": "^(RH|RL|RM|RN|RS|MH)",
+          "class": "residential",
+          "cite": "HMC §§ 10-1.200–1.800 (residential districts)"
+        },
+        {
+          "match": "^PF$",
+          "class": "public",
+          "cite": "HMC (public facilities district)"
+        },
+        {
+          "match": "^(OS|FP)$",
+          "class": "open-space",
+          "cite": "HMC (open space and flood plain districts)"
+        },
+        {
+          "match": "^A",
+          "class": "agriculture",
+          "cite": "HMC (agricultural district)"
+        },
+        {
+          "match": "^(PD|AT-|MB-|UN|UNL|NE|NG|UC)",
+          "class": "planned",
+          "cite": "Planned development and form-based code districts (Mission Boulevard, Airport Terminal, South Hayward)"
+        }
+      ]
+    },
+    {
+      "id": "sunnyvale",
+      "name": "City of Sunnyvale",
+      "jurisdictions": [
+        "Sunnyvale"
+      ],
+      "publisher": "City of Sunnyvale — Zoning Districts",
+      "url": "https://services.arcgis.com/IBwZaktrBtZuqQmg/arcgis/rest/services/Zoning/FeatureServer/4",
+      "fields": {
+        "code": "Zoning"
+      },
+      "codeUrl": "https://library.municode.com/ca/sunnyvale/codes/code_of_ordinances?nodeId=TIT19ZO",
+      "codeName": "Sunnyvale Municipal Code, Title 19",
+      "rules": [
+        {
+          "match": "^(C1|C2|C4|VCC)$",
+          "class": "commercial",
+          "cite": "SMC Ch. 19.20, Table 19.20.030 (commercial zoning districts)"
+        },
+        {
+          "match": "^(O|VCO)$",
+          "class": "office",
+          "cite": "SMC Ch. 19.20 (office district)"
+        },
+        {
+          "match": "^(MXD|VCMU)",
+          "class": "mixed-residential",
+          "cite": "SMC (mixed-use districts)"
+        },
+        {
+          "match": "^(M3|MS)$",
+          "class": "industrial",
+          "cite": "SMC Ch. 19.22 (industrial districts)"
+        },
+        {
+          "match": "^(R|RMH)",
+          "class": "residential",
+          "cite": "SMC Ch. 19.18 (residential districts)"
+        },
+        {
+          "match": "^PF$",
+          "class": "public",
+          "cite": "SMC Ch. 19.24 (public facilities)"
+        },
+        {
+          "match": "^(MP-|DSP|LSP|PPSP|ECR)",
+          "class": "planned",
+          "cite": "Specific plan districts (Moffett Park, Downtown, Lawrence Station, Peery Park, El Camino Real)"
+        }
+      ]
+    },
+    {
+      "id": "santa-clara-city",
+      "name": "City of Santa Clara",
+      "jurisdictions": [
+        "Santa Clara"
+      ],
+      "publisher": "City of Santa Clara — Zoning Codes",
+      "url": "https://map.santaclaraca.gov/maps/rest/services/OPENDATA/RegionalZoningOpenData/MapServer/0",
+      "fields": {
+        "code": "ZONGDSGN"
+      },
+      "codeUrl": "https://www.codepublishing.com/CA/SantaClara/#!/SantaClara18/SantaClara18.html",
+      "codeName": "Santa Clara City Code, Title 18",
+      "rules": [
+        {
+          "match": "^C",
+          "class": "commercial",
+          "cite": "SCCC Title 18 (commercial zones)"
+        },
+        {
+          "match": "^MU",
+          "class": "mixed-residential",
+          "cite": "SCCC Title 18 (mixed-use zones)"
+        },
+        {
+          "match": "^(HI|LI|ML|MH|IP)",
+          "class": "industrial",
+          "cite": "SCCC Title 18 (industrial zones)"
+        },
+        {
+          "match": "^R",
+          "class": "residential",
+          "cite": "SCCC Title 18 (residential zones)"
+        },
+        {
+          "match": "^PQP$",
+          "class": "public",
+          "cite": "SCCC Title 18 (public/quasi-public)"
+        },
+        {
+          "match": "^OS$",
+          "class": "open-space",
+          "cite": "SCCC Title 18 (open space)"
+        },
+        {
+          "match": "^PD",
+          "class": "planned",
+          "cite": "SCCC Title 18 (planned development)"
+        }
+      ]
+    },
+    {
+      "id": "santa-clara-county",
+      "name": "Unincorporated Santa Clara County",
+      "unincorporatedOf": "santa-clara",
+      "publisher": "County of Santa Clara Planning — Unincorporated Zoning Districts",
+      "url": "https://services2.arcgis.com/tcv2cMrq63AgvbHF/arcgis/rest/services/Zoning/FeatureServer/0",
+      "fields": {
+        "code": "BaseZone",
+        "description": "Zoning"
+      },
+      "codeUrl": "https://plandev.santaclaracounty.gov/regulations-and-ordinances/zoning-ordinance",
+      "codeName": "Santa Clara County Zoning Ordinance",
+      "rules": [
+        {
+          "match": "^(CG|CN)$",
+          "class": "commercial",
+          "cite": "County Zoning Ordinance Ch. 2.30 (commercial districts)"
+        },
+        {
+          "match": "^ML$",
+          "class": "industrial",
+          "cite": "County Zoning Ordinance Ch. 2.40 (industrial)"
+        },
+        {
+          "match": "^(R|RR|RHS|RS|MH)",
+          "class": "residential",
+          "cite": "County Zoning Ordinance Ch. 2.20 (residential districts)"
+        },
+        {
+          "match": "^(A|A1|AR|HS|OA)$",
+          "class": "agriculture",
+          "cite": "County Zoning Ordinance Ch. 2.10 (rural base districts)"
+        },
+        {
+          "match": "^OSF$",
+          "class": "open-space",
+          "cite": "County Zoning Ordinance Ch. 2.10 (open space and field research)"
+        },
+        {
+          "match": "^SCA$",
+          "class": "planned",
+          "cite": "Stanford Community Plan area"
+        }
+      ]
+    },
+    {
+      "id": "elk-grove",
+      "name": "City of Elk Grove",
+      "jurisdictions": [
+        "Elk Grove"
+      ],
+      "publisher": "City of Elk Grove — Zoning",
+      "url": "https://webmaps.elkgrove.gov/arcgis/rest/services/OPEN_DATA_PORTAL/Zoning/MapServer/0",
+      "fields": {
+        "code": "ZONE"
+      },
+      "codeUrl": "https://www.codepublishing.com/CA/ElkGrove/#!/ElkGrove23/ElkGrove23.html",
+      "codeName": "Elk Grove Municipal Code, Title 23",
+      "rules": [
+        {
+          "match": "^(AC|GC|LC)$",
+          "class": "commercial",
+          "cite": "EGMC § 23.27.030, Table 23.27-1 (commercial zones)"
+        },
+        {
+          "match": "^(BP|O)$",
+          "class": "office",
+          "cite": "EGMC § 23.27.030 (business park and office zones)"
+        },
+        {
+          "match": "^(MP|LI|LI/FX|HI)$",
+          "class": "industrial",
+          "cite": "EGMC § 23.27.030 (industrial zones)"
+        },
+        {
+          "match": "^RD-",
+          "class": "residential",
+          "cite": "EGMC § 23.27.030 (residential zones)"
+        },
+        {
+          "match": "^(AG|AR)-",
+          "class": "agriculture",
+          "cite": "EGMC § 23.27.030 (agricultural-residential zones)"
+        },
+        {
+          "match": "^PR$",
+          "class": "open-space",
+          "cite": "EGMC (parks and open space)"
+        },
+        {
+          "match": "^PS$",
+          "class": "public",
+          "cite": "EGMC (public services)"
+        },
+        {
+          "match": "SPA|^SPALEA$",
+          "class": "planned",
+          "cite": "Special planning areas"
+        }
+      ]
+    },
+    {
+      "id": "oceanside",
+      "name": "City of Oceanside",
+      "jurisdictions": [
+        "Oceanside"
+      ],
+      "publisher": "City of Oceanside Planning — Zoning (with the city's zone categories)",
+      "url": "https://gis.oceansideca.org/gis/rest/services/WebService/Planning_Hub/FeatureServer/11",
+      "fields": {
+        "code": "Zone_Code",
+        "category": "Category",
+        "description": "Zone_Descr"
+      },
+      "codeUrl": "https://library.municode.com/ca/oceanside/codes/zoning_ordinance",
+      "codeName": "Oceanside Zoning Ordinance",
+      "rules": [
+        {
+          "match": "^(PD|MP-|SP-|PBD|PRD)",
+          "class": "planned",
+          "cite": "Oceanside planned development, master plan, and specific plan districts"
+        },
+        {
+          "on": "category",
+          "match": "^Commercial$",
+          "class": "commercial",
+          "cite": "Oceanside Zoning Ordinance Art. 11 (commercial districts) and Downtown District"
+        },
+        {
+          "on": "category",
+          "match": "^Mixed Use$",
+          "class": "mixed-residential",
+          "cite": "Oceanside Downtown District mixed-use subdistricts"
+        },
+        {
+          "on": "category",
+          "match": "^Industrial$",
+          "class": "industrial",
+          "cite": "Oceanside Zoning Ordinance Art. 13 (industrial districts)"
+        },
+        {
+          "on": "category",
+          "match": "^Residential$",
+          "class": "residential",
+          "cite": "Oceanside Zoning Ordinance Art. 10 (residential districts)"
+        },
+        {
+          "on": "category",
+          "match": "^Civic$",
+          "class": "public",
+          "cite": "Oceanside Zoning Ordinance (public and semi-public)"
+        },
+        {
+          "on": "category",
+          "match": "^Open Space$",
+          "class": "open-space",
+          "cite": "Oceanside Zoning Ordinance (open space)"
+        },
+        {
+          "on": "category",
+          "match": "^Agriculture$",
+          "class": "agriculture",
+          "cite": "Oceanside Zoning Ordinance (agriculture)"
+        },
+        {
+          "on": "category",
+          "match": "^Harbor$",
+          "class": "planned",
+          "cite": "Oceanside Harbor district"
+        }
+      ]
     }
   ]
 }

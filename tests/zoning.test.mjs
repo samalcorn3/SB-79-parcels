@@ -31,12 +31,12 @@ test('registry is well formed', () => {
   }
 });
 
-test('source choice: city layer first, county for unincorporated land, regional fallback last', () => {
+test('source choice: the city’s own layer, or the county’s for unincorporated land; nothing else', () => {
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Los Angeles' }).id, 'la-city');
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: null }).id, 'la-county');
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Pasadena' }), null); // no regional compilations
   assert.equal(pickZoningSource(zoning, { countyId: 'santa-clara', cityName: 'San José' }).id, 'sj-city');
-  assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Hayward' }), null);
+  assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Pleasanton' }), null);
   assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: null }).id, 'sd-county');
   assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: 'Chula Vista' }), null);
 });
@@ -67,6 +67,14 @@ test('zone classification', () => {
   assert.equal(cls('sf', { code: 'RH-2' }).status, 'fails');
   assert.equal(cls('la-county', { code: 'MXD' }).status, 'meets');
   assert.equal(cls('sj-city', { code: 'XYZ' }).class, 'unknown');
+  assert.equal(cls('glendale', { code: 'R 1650 P' }).class, 'parking'); // Glendale P overlay permits parking lots
+  assert.equal(cls('glendale', { code: 'C2 II' }).status, 'meets');
+  assert.equal(cls('glendale', { code: 'R1 II' }).status, 'fails');
+  assert.equal(cls('hayward', { code: 'CG' }).status, 'meets');
+  assert.equal(cls('sunnyvale', { code: 'O' }).status, 'meets');
+  assert.equal(cls('elk-grove', { code: 'RD-5' }).status, 'fails');
+  assert.equal(cls('oceanside', { code: 'D-6A', category: 'Commercial' }).status, 'meets');
+  assert.equal(cls('oceanside', { code: 'PD-27', category: 'Commercial' }).class, 'planned');
 });
 
 test('split-zoned sites', () => {
