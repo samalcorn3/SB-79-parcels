@@ -1643,9 +1643,10 @@
         "Alameda"
       ],
       "publisher": "City of Alameda — Zoning",
-      "url": "https://services9.arcgis.com/ucDLsG1EwPnOGY4c/arcgis/rest/services/Zoning_v02_view/FeatureServer/0",
+      "url": "https://services9.arcgis.com/ucDLsG1EwPnOGY4c/arcgis/rest/services/Zoning_v03/FeatureServer/0",
       "fields": {
-        "code": "zone"
+        "code": "zone",
+        "description": "description"
       },
       "rules": [
         {
@@ -1676,13 +1677,9 @@
           "match": "^(R-\\d|E)",
           "class": "residential",
           "cite": "Alameda Municipal Code Ch. 30-4 (residential districts)"
-        },
-        {
-          "match": "^O",
-          "class": "unknown"
         }
       ],
-      "generic": false,
+      "generic": true,
       "codeName": "Alameda Municipal Code, Ch. 30"
     },
     {
@@ -1892,6 +1889,249 @@
       "generic": false,
       "updatedField": "LASTUPDATE",
       "codeName": "Mountain View City Code, Ch. 36"
+    },
+    {
+      "id": "pasadena",
+      "name": "City of Pasadena",
+      "publisher": "City of Pasadena Planning — Zoning",
+      "url": "https://services2.arcgis.com/zNjnZafDYCAJAbN0/arcgis/rest/services/Zoning/FeatureServer/0",
+      "fields": {
+        "code": "ZONE_CODE"
+      },
+      "rules": [
+        {
+          "match": "^(CD|EC|ECSP|EPSP|FGSP|LA|LP|SFO|WGSP)-",
+          "class": "planned",
+          "cite": "Pasadena specific plans (Central District, East Colorado, East Pasadena, Fair Oaks/Orange Grove, Lincoln Avenue, Lamanda Park, South Fair Oaks, West Gateway)"
+        },
+        {
+          "match": "^CO$",
+          "class": "office",
+          "cite": "Pasadena Zoning Code § 17.24.030, Table 2-5 (CO office commercial)"
+        },
+        {
+          "match": "^(CG|CL|CL-2)$",
+          "class": "commercial",
+          "cite": "Pasadena Zoning Code § 17.24.030, Table 2-5 (commercial districts)"
+        },
+        {
+          "match": "^IG$",
+          "class": "industrial",
+          "cite": "Pasadena Zoning Code Ch. 17.26 (industrial district)"
+        },
+        {
+          "match": "^(RM|RS)-",
+          "class": "residential",
+          "cite": "Pasadena Zoning Code Ch. 17.22 (residential districts)"
+        },
+        {
+          "match": "^PD",
+          "class": "planned",
+          "cite": "Pasadena Zoning Code Ch. 17.26 (planned development)"
+        },
+        {
+          "match": "^PS",
+          "class": "public",
+          "cite": "Pasadena Zoning Code Ch. 17.26 (public and semi-public)"
+        },
+        {
+          "match": "^OS$",
+          "class": "open-space"
+        }
+      ],
+      "generic": false,
+      "jurisdictions": [
+        "Pasadena"
+      ],
+      "codeName": "Pasadena Municipal Code, Title 17"
+    },
+    {
+      "id": "fremont",
+      "name": "City of Fremont",
+      "publisher": "City of Fremont GIS — Zoning (with the city's zoning classes)",
+      "url": "https://services2.arcgis.com/AVso4yDITKsybTJg/arcgis/rest/services/Zoning_Class/FeatureServer/0",
+      "fields": {
+        "code": "ZP_DIST",
+        "category": "ZN_CLASS"
+      },
+      "rules": [
+        {
+          "match": "^P-\\d",
+          "class": "planned",
+          "cite": "Fremont planned districts (Fremont Municipal Code Ch. 18.110)"
+        },
+        {
+          "match": "^C-O",
+          "class": "office",
+          "cite": "Fremont Municipal Code Ch. 18.40 (commercial office)"
+        },
+        {
+          "match": "^CC-UO",
+          "class": "office",
+          "cite": "Fremont Municipal Code Ch. 18.45 (City Center urban office)"
+        },
+        {
+          "match": "^TC-",
+          "class": "commercial",
+          "cite": "Fremont Municipal Code Ch. 18.45 (Town Center districts)"
+        },
+        {
+          "match": "^(CC-|MX)",
+          "class": "mixed-residential",
+          "cite": "Fremont Municipal Code Ch. 18.45 (City Center and mixed-use districts)"
+        },
+        {
+          "match": "^(D-|WSI)",
+          "class": "planned",
+          "cite": "Fremont Downtown and Warm Springs Innovation districts"
+        },
+        {
+          "on": "category",
+          "match": "^C$",
+          "class": "commercial",
+          "cite": "Fremont Municipal Code Ch. 18.40 (commercial districts)"
+        },
+        {
+          "on": "category",
+          "match": "^I$",
+          "class": "industrial",
+          "cite": "Fremont Municipal Code Ch. 18.50 (industrial districts)"
+        },
+        {
+          "on": "category",
+          "match": "^R$",
+          "class": "residential",
+          "cite": "Fremont Municipal Code Ch. 18.25–18.35 (residential districts)"
+        },
+        {
+          "on": "category",
+          "match": "^OS$",
+          "class": "open-space"
+        },
+        {
+          "on": "category",
+          "match": "^PF$",
+          "class": "public"
+        },
+        {
+          "on": "category",
+          "match": "^(ROW|RR)$",
+          "class": "transportation"
+        }
+      ],
+      "generic": false,
+      "jurisdictions": [
+        "Fremont"
+      ],
+      "codeName": "Fremont Municipal Code, Title 18"
+    },
+    {
+      "id": "glendora",
+      "name": "City of Glendora",
+      "publisher": "City of Glendora — Zoning",
+      "url": "https://services2.arcgis.com/NQC8oBejgXkIxQpu/arcgis/rest/services/Zoning_Glendora/FeatureServer/0",
+      "fields": {
+        "code": "ZONING_1",
+        "description": "ZONING_N_1"
+      },
+      "rules": [
+        {
+          "match": "^(AHSP|RT66|SP-|CCAP)",
+          "class": "planned",
+          "cite": "Glendora specific and area plans (Alosta, Route 66, Civic Center)"
+        },
+        {
+          "match": "^(C-1|MS)$",
+          "class": "office",
+          "cite": "Glendora Municipal Code Title 21 (C-1 professional; MS medical services)"
+        },
+        {
+          "match": "^(C-2|C-3|CM)$",
+          "class": "commercial",
+          "cite": "Glendora Municipal Code Title 21 (commercial zones)"
+        },
+        {
+          "match": "^M-1",
+          "class": "industrial",
+          "cite": "Glendora Municipal Code Title 21 (manufacturing zones)"
+        },
+        {
+          "match": "^(E-\\d|R-[123]|GA|LGA|RHR)$",
+          "class": "residential",
+          "cite": "Glendora Municipal Code Title 21 (residential zones)"
+        },
+        {
+          "match": "^(OSN|B)$",
+          "class": "open-space"
+        },
+        {
+          "match": "^(PD|PR)$",
+          "class": "planned"
+        },
+        {
+          "match": "^(R-4|U)$",
+          "class": "transportation"
+        }
+      ],
+      "generic": false,
+      "jurisdictions": [
+        "Glendora"
+      ],
+      "codeName": "Glendora Municipal Code, Title 21"
+    },
+    {
+      "id": "san-mateo-county",
+      "name": "Unincorporated San Mateo County",
+      "publisher": "County of San Mateo Planning — Zoning Districts",
+      "url": "https://services.arcgis.com/yq3FgOI44hYHAFVZ/arcgis/rest/services/Zoning_Districts/FeatureServer/0",
+      "fields": {
+        "code": "Zone"
+      },
+      "rules": [
+        {
+          "match": "^(PUD|PC)",
+          "class": "planned",
+          "cite": "San Mateo County planned unit and planned community districts"
+        },
+        {
+          "match": "^(C-1|C-2|CCR)",
+          "class": "commercial",
+          "cite": "San Mateo County Zoning Regulations (C-1, C-2, CCR commercial districts)"
+        },
+        {
+          "match": "^CMU-",
+          "class": "mixed-commercial",
+          "cite": "San Mateo County Zoning Regulations, North Fair Oaks commercial mixed-use districts"
+        },
+        {
+          "match": "^(NMU|TS-MU)",
+          "class": "mixed-residential",
+          "cite": "San Mateo County Zoning Regulations (neighborhood and transit mixed-use districts)"
+        },
+        {
+          "match": "^(M-1|M-2|I/)",
+          "class": "industrial",
+          "cite": "San Mateo County Zoning Regulations (industrial districts)"
+        },
+        {
+          "match": "^(R-1|R-2|R-3|R-E|RH|MH)",
+          "class": "residential",
+          "cite": "San Mateo County Zoning Regulations (residential districts)"
+        },
+        {
+          "match": "^(PAD|A-1)",
+          "class": "agriculture",
+          "cite": "San Mateo County Zoning Regulations (agricultural districts)"
+        },
+        {
+          "match": "^(COSC|TPZ|RM)",
+          "class": "open-space",
+          "cite": "San Mateo County Zoning Regulations (open space, timberland, resource management)"
+        }
+      ],
+      "generic": false,
+      "unincorporatedOf": "san-mateo",
+      "codeName": "San Mateo County Zoning Regulations"
     }
   ],
   "genericRules": {

@@ -34,7 +34,7 @@ test('registry is well formed', () => {
 test('source choice: the city’s own layer, or the county’s for unincorporated land; nothing else', () => {
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Los Angeles' }).id, 'la-city');
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: null }).id, 'la-county');
-  assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Pasadena' }), null); // no regional compilations
+  assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Carson' }), null); // no regional compilations
   assert.equal(pickZoningSource(zoning, { countyId: 'santa-clara', cityName: 'San José' }).id, 'sj-city');
   assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Pleasanton' }), null);
   assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: null }).id, 'sd-county');
