@@ -25,7 +25,8 @@ const server = createServer(async (req, res) => {
     res.writeHead(404).end();
   }
 }).listen(0);
-const base = `http://127.0.0.1:${server.address().port}/`;
+// SMOKE_BASE=<url> tests a published copy (e.g. a preview) instead of this checkout.
+const base = process.env.SMOKE_BASE || `http://127.0.0.1:${server.address().port}/`;
 
 const turfNames = Object.keys(require('@turf/turf')).filter((k) => /^[A-Za-z_$][\w$]*$/.test(k) && k !== 'default');
 const turfUmd = await readFile(join(root, 'node_modules/@turf/turf/turf.min.js'), 'utf8');
@@ -70,6 +71,7 @@ async function check(name, url, waitFor, shot) {
 // Partial address "9922 S Figueroa" once resolved to a place named "Figueroa" in Paramount.
 // Free-text submit must land on the right address or offer it; never a wrong match.
 await page.goto(base);
+await page.waitForSelector('.leaflet-container', { timeout: 30000 }).catch(() => null); // app modules loaded
 await page.fill('#q', '9922 S Figueroa');
 await page.press('#q', 'Enter');
 await page.waitForSelector('.didyoumean button, .matched', { timeout: 60000 }).catch(() => null);
@@ -81,6 +83,7 @@ results.push({
 });
 // Picking from the suggestion list.
 await page.goto(base);
+await page.waitForSelector('.leaflet-container', { timeout: 30000 }).catch(() => null); // app modules loaded
 await page.fill('#q', '9922 S Figueroa');
 await page.waitForSelector('#suggestions li', { timeout: 20000 }).catch(() => null);
 const sugg = await page.$$eval('#suggestions li', (els) => els.map((e) => e.textContent)).catch(() => []);
@@ -96,14 +99,23 @@ const chips = await page.$$eval('.chip', (els) => els.map((e) => e.textContent))
 await page.setViewportSize({ width: 1400, height: 2600 });
 await check('address lookup (San Francisco)', '?q=1%20Embarcadero%20Center%2C%20San%20Francisco', () => document.querySelector('.verdict h3'), 'lookup-sf.png');
 await check('point lookup (LA City Hall)', '?pt=-118.2428,34.0537', () => document.querySelector('.verdict h3'), 'lookup-la.png');
-await check('AB 2011 card (3600 Wilshire Blvd)', '?q=3600%20Wilshire%20Blvd%2C%20Los%20Angeles%2C%20CA', () => document.querySelector('.ab-path summary'), 'ab2011-wilshire.png');
+await page.goto(base).catch(() => null);
+await page.evaluate(() => { try { localStorage.removeItem('lawTab'); } catch { /* */ } });
+await check('AB 2011 card (3600 Wilshire Blvd)', '?q=3600%20Wilshire%20Blvd%2C%20Los%20Angeles%2C%20CA', () => document.querySelector('.ab-path summary') && document.querySelector('.card.exclusions'), 'sb79-wilshire.png');
+// The two laws are separate tabs: SB 79 shows first; AB 2011 on its own tab.
+const tabsBefore = await page.evaluate(() => [...document.querySelectorAll('section.law')].map((s) => `${s.dataset.law}:${s.hidden ? 'hidden' : 'shown'}`).join(' '));
+await page.click('.lawtabs [data-law="ab2011"]').catch(() => null);
+const tabsAfter = await page.evaluate(() => [...document.querySelectorAll('section.law')].map((s) => `${s.dataset.law}:${s.hidden ? 'hidden' : 'shown'}`).join(' '));
+const tabBadge = await page.textContent('#ab2011-tabbadge').catch(() => '');
+results.push({ name: 'SB 79 and AB 2011 on separate tabs', ok: tabsBefore === 'sb79:shown ab2011:hidden' && tabsAfter === 'sb79:hidden ab2011:shown' && /eligible/i.test(tabBadge || ''), tabsBefore, tabsAfter, tabBadge });
+await page.screenshot({ path: join(outDir, 'ab2011-wilshire.png') });
 const abText = await page.$$eval('.ab-path summary', (els) => els.map((e) => e.textContent.trim())).catch(() => []);
 results.push({ name: 'AB 2011: mixed-income path possibly eligible on Wilshire', ok: abText.some((t) => /Possibly eligible\s+Mixed-income/.test(t)), abText });
 const exText = await page.$$eval('.card h2', (els) => els.filter((e) => /Site exclusions/.test(e.textContent)).map((e) => e.parentElement.textContent)).catch(() => []);
 const exEval = await page.$$eval('.card.exclusions .ab-not-evaluated b', (els) => els.map((e) => e.textContent)).catch(() => []);
 results.push({ name: 'Site exclusions: every source answered', ok: exEval.length === 0, notEvaluated: exEval });
 results.push({ name: 'Site exclusions card: all 11 checks (A)–(K) rendered', ok: exText.length === 1 && ['(A)', '(B)', '(C)', '(D)', '(E)', '(F)', '(G)', '(H)', '(I)', '(J)', '(K)'].every((x) => exText[0].includes(`65913.4(a)(6)${x}`)) });
-const abCites = await page.$$eval('.ab-mini .cite', (els) => els.map((e) => e.textContent)).catch(() => []);
+const abCites = await page.$$eval('.ab-a6 .cite', (els) => els.map((e) => e.textContent)).catch(() => []);
 results.push({ name: 'AB 2011 lists each § 65913.4(a)(6) exclusion on both paths', ok: abCites.filter((c) => /65913\.4\(a\)\(6\)\([A-K]\)/.test(c)).length >= 22 });
 await page.setViewportSize({ width: 1400, height: 900 });
 await check('parcel layer (downtown LA, z17)', '#17/34.04870/-118.25860', () => /(in a TOD zone|Parcels:|parcels: )/.test(document.getElementById('map-status')?.textContent || ''), 'parcels-la.png');

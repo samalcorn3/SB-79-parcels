@@ -2,7 +2,7 @@
 /* global L */
 import { reportForAddress, reportForPoint, suggest, ab2011ForReport, exclusionsForReport } from '../lib/lookup.js';
 import { instrumentInForce } from '../lib/policy.js';
-import { renderReport, renderLoading, renderError, renderNotOk, ab2011Card, exclusionsCard } from './report.js';
+import { renderReport, renderLoading, renderError, renderNotOk, ab2011Card, ab2011TabBadge, exclusionsCard } from './report.js';
 import {
   ZoneStore, classifyParcels, zoneLayer, stopsLayer, parcelLayer,
   loadParcelsInView, loadExclusionsInView, parcelsToCSV,
@@ -248,7 +248,8 @@ async function run(promise, label) {
     }
     reportEl.innerHTML = renderReport(r, { standardsDoc: data.standards });
     showParcel(r.parcel.geometry);
-    showFrontages([]);
+    lastFrontages = [];
+    selectLaw(savedLaw());
     // Site exclusions and AB 2011 query more servers; fill them in when ready.
     const token = ++lookupToken;
     const ex = exclusionsForReport(data, r);
@@ -261,7 +262,10 @@ async function run(promise, label) {
       if (token !== lookupToken) return;
       const slot = document.getElementById('ab2011-slot');
       if (slot) slot.outerHTML = ab2011Card({ ab2011: ab });
-      showFrontages(ab?.frontages || []);
+      const badge = document.getElementById('ab2011-tabbadge');
+      if (badge) badge.innerHTML = ab2011TabBadge(ab);
+      lastFrontages = ab?.frontages || [];
+      selectLaw(currentLaw);
     });
   } catch (e) {
     reportEl.innerHTML = renderError(`A live source did not respond: ${e.message}${e.url ? ` (${new URL(e.url).host})` : ''}. Try again in a moment.`);
@@ -270,6 +274,27 @@ async function run(promise, label) {
 
 let frontageGroup = null;
 let lookupToken = 0;
+let lastFrontages = [];
+
+// ---------- SB 79 / AB 2011 tabs ----------
+let currentLaw = 'sb79';
+function savedLaw() {
+  try {
+    return localStorage.getItem('lawTab') === 'ab2011' ? 'ab2011' : 'sb79';
+  } catch {
+    return 'sb79';
+  }
+}
+/** Show one law's panel; AB 2011's measured street frontages are drawn only on its tab. */
+function selectLaw(law) {
+  currentLaw = law;
+  try {
+    localStorage.setItem('lawTab', law);
+  } catch { /* storage unavailable */ }
+  reportEl.querySelectorAll('.lawtabs [data-law]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.law === law)));
+  reportEl.querySelectorAll('section.law').forEach((s) => { s.hidden = s.dataset.law !== law; });
+  showFrontages(law === 'ab2011' ? lastFrontages : []);
+}
 /** AB 2011: measured street frontages — green where the right-of-way is 70–150 ft. */
 function showFrontages(frontages) {
   if (frontageGroup) map.removeLayer(frontageGroup);
@@ -362,6 +387,8 @@ $('search').addEventListener('submit', (e) => {
 reportEl.addEventListener('click', (e) => {
   const b = e.target.closest('.didyoumean button');
   if (b) lookupAddress(b.dataset.text, b.dataset.magic);
+  const tab = e.target.closest('.lawtabs [data-law]');
+  if (tab) selectLaw(tab.dataset.law);
 });
 
 // ---------- downloads ----------

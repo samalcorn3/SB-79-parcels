@@ -143,9 +143,13 @@ export async function ab2011ForParcel(data, ctx) {
       'Depends on current and most recently permitted uses and the pre-2022 general plan designation.'),
     // § 65912.111(e) / § 65912.121(g): all of § 65913.4(a)(6) except clause (A)(iv), checked map by map.
     ...(exclusions?.length
-      ? exclusions.map((x) => C(`a6-${x.id}`, x.cite, x.title, x.status, x.id === 'fire' && x.status === 'confirm'
-        ? `${x.detail} If the site is vacant, § 65912.111(h)(2) / § 65912.121(j)(2) bar VHFHSZ sites outright.`
-        : x.detail))
+      ? exclusions.map((x) => ({
+        ...C(`a6-${x.id}`, x.cite, x.title, x.status, x.id === 'fire' && x.status === 'confirm'
+          ? `${x.detail} If the site is vacant, § 65912.111(h)(2) / § 65912.121(j)(2) bar VHFHSZ sites outright.`
+          : x.detail),
+        source: x.source,
+        links: x.links,
+      }))
       : [C('a6', '§ 65912.111(e); § 65912.121(g) → § 65913.4(a)(6)', 'Site exclusions: coastal zone, farmland, wetlands, fire, hazardous waste, fault zone, flood, conservation lands, habitat, easements', 'not-evaluated', 'Site-exclusion check unavailable.')]),
     C('historic-mobilehome', '§ 65912.111(f); § 65912.121(h)(3), (6)', 'Does not demolish a historic structure on a national, state, or local register; not a mobilehome or RV park', 'confirm', 'No statewide authoritative parcel layer.'),
     C('neighborhood-plan', '§ 65912.111(g); § 65912.121(i)', 'If in a neighborhood plan area, the plan permits multifamily housing on the site', 'confirm', 'Check for a specific, area, community, or similar plan adopted before 2024 (§ 65912.101(t)).'),
