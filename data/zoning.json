@@ -2132,6 +2132,110 @@
       "generic": false,
       "unincorporatedOf": "san-mateo",
       "codeName": "San Mateo County Zoning Regulations"
+    },
+    {
+      "id": "campbell",
+      "name": "City of Campbell",
+      "jurisdictions": [
+        "Campbell"
+      ],
+      "publisher": "City of Campbell Planning — Zoning Districts (2024)",
+      "url": "https://gis.campbellca.gov/arcgis/rest/services/Planning/Zoning/MapServer/3",
+      "fields": {
+        "code": "ZONING",
+        "description": "ZoningDescription",
+        "category": "ZoningDistrict"
+      },
+      "rules": [
+        {
+          "match": "^(C-PD|P-D)$",
+          "class": "planned",
+          "cite": "Campbell Municipal Code Title 21 (planned development)"
+        },
+        {
+          "match": "^ROW$",
+          "class": "transportation"
+        }
+      ],
+      "generic": true,
+      "updatedField": "RevDate",
+      "codeName": "Campbell Municipal Code, Title 21"
+    },
+    {
+      "id": "beverly-hills",
+      "name": "City of Beverly Hills",
+      "jurisdictions": [
+        "Beverly Hills"
+      ],
+      "publisher": "City of Beverly Hills — Zoning",
+      "url": "https://gis.beverlyhills.org/arcgis/rest/services/Zoning/FeatureServer/2",
+      "fields": {
+        "code": "ZONE"
+      },
+      "generic": false,
+      "updatedField": "last_edited_date",
+      "codeName": "Beverly Hills Municipal Code, Title 10",
+      "rules": [
+        {
+          "match": "SP$",
+          "class": "planned",
+          "cite": "Beverly Hills specific plans"
+        },
+        {
+          "match": "^M-PD",
+          "class": "planned",
+          "cite": "Beverly Hills municipal planned development"
+        },
+        {
+          "match": "^(C-3|C-5|C-Z)",
+          "class": "commercial",
+          "cite": "Beverly Hills Municipal Code Title 10, Ch. 3 (commercial zones)"
+        },
+        {
+          "match": "^(R-|RMCP)",
+          "class": "residential",
+          "cite": "Beverly Hills Municipal Code Title 10, Ch. 3 (residential zones)"
+        },
+        {
+          "match": "^T-1$",
+          "class": "transportation"
+        }
+      ]
+    },
+    {
+      "id": "west-hollywood",
+      "name": "City of West Hollywood",
+      "jurisdictions": [
+        "West Hollywood"
+      ],
+      "publisher": "City of West Hollywood Planning — Zoning (by parcel)",
+      "url": "https://gis.weho.org/arcgis/rest/services/Planning/WeHo_Zoning/MapServer/0",
+      "fields": {
+        "code": "CITY_ZN_CO"
+      },
+      "generic": false,
+      "codeName": "West Hollywood Municipal Code, Title 19",
+      "rules": [
+        {
+          "match": "^(CC|CN)\\d",
+          "class": "commercial",
+          "cite": "West Hollywood Municipal Code Ch. 19.10 (commercial zoning districts)"
+        },
+        {
+          "match": "^(PDCSP|SSP)$",
+          "class": "planned",
+          "cite": "Pacific Design Center and Sunset specific plans"
+        },
+        {
+          "match": "^PF$",
+          "class": "public"
+        },
+        {
+          "match": "^R\\d",
+          "class": "residential",
+          "cite": "West Hollywood Municipal Code Ch. 19.06 (residential zoning districts)"
+        }
+      ]
     }
   ],
   "genericRules": {
