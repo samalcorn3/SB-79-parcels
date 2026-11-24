@@ -1,0 +1,74 @@
+{
+  "id": "carlsbad",
+  "name": "City of Carlsbad",
+  "jurisdictions": [
+    "Carlsbad"
+  ],
+  "publisher": "City of Carlsbad GIS — Zoning",
+  "url": "https://utility.arcgis.com/usrsvcs/servers/dd91556723f94fc18af59ac284080d1e/rest/services/AGOL/eZoning/FeatureServer/4",
+  "fields": {
+    "code": "ZONECLASS",
+    "description": "ZONEDESC"
+  },
+  "codeName": "Carlsbad Municipal Code, Title 21 (Zoning)",
+  "rules": [
+    {
+      "match": "/",
+      "class": "unknown",
+      "why": "The city's layer lists two zones for this area; check the zoning map."
+    },
+    {
+      "match": "^P-C$",
+      "class": "planned",
+      "cite": "Carlsbad Municipal Code Title 21 (P-C planned community)"
+    },
+    {
+      "match": "^V-B$",
+      "class": "planned",
+      "cite": "Carlsbad Village and Barrio Master Plan"
+    },
+    {
+      "match": "^P-M",
+      "class": "industrial",
+      "cite": "Carlsbad Municipal Code Title 21 (P-M planned industrial)"
+    },
+    {
+      "match": "^P-U$",
+      "class": "transportation"
+    },
+    {
+      "match": "^T-C$",
+      "class": "transportation"
+    },
+    {
+      "match": "^L-C$",
+      "class": "unknown",
+      "why": "Limited control zone: an interim zone pending planning."
+    },
+    {
+      "match": "^C-T",
+      "class": "commercial",
+      "cite": "Carlsbad Municipal Code Title 21 (C-T commercial tourist)"
+    },
+    {
+      "match": "^R-P",
+      "class": "office",
+      "cite": "Carlsbad Municipal Code Title 21 (R-P residential professional)"
+    },
+    {
+      "match": "^R-T$",
+      "class": "residential"
+    },
+    {
+      "match": "^CR-A-OS$",
+      "class": "open-space"
+    }
+  ],
+  "flags": [
+    {
+      "match": "-Q",
+      "note": "Qualified development overlay (-Q): a site development plan is required before building (Carlsbad Municipal Code Ch. 21.06)."
+    }
+  ],
+  "generic": true
+}

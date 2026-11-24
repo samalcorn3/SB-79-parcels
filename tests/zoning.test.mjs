@@ -58,7 +58,12 @@ test('source choice: the city’s own layer, or the county’s for unincorporate
   assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Berkeley' }), null);
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Torrance' }), null); // city layer incomplete (see HANDOFF)
   assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: null }).id, 'sd-county');
-  assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: 'Carlsbad' }), null);
+  assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: 'Carlsbad' }).id, 'carlsbad');
+  assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Santa Clarita' }), null);
+  assert.equal(pickZoningSource(zoning, { countyId: 'sacramento', cityName: null }).id, 'sacramento-county');
+  assert.equal(pickZoningSource(zoning, { countyId: 'orange', cityName: null }).id, 'orange-county');
+  assert.equal(pickZoningSource(zoning, { countyId: 'orange', cityName: 'Anaheim' }).id, 'anaheim');
+  assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: null }), null); // only a draft layer is published
 });
 
 test('zone classification', () => {

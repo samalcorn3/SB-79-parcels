@@ -190,6 +190,13 @@
       ]
     },
     {
+      "id": "artesia",
+      "name": "City of Artesia",
+      "jurisdictions": [
+        "Artesia"
+      ]
+    },
+    {
       "id": "atherton",
       "name": "Town of Atherton",
       "jurisdictions": [
@@ -250,6 +257,13 @@
       "name": "City of Campbell",
       "jurisdictions": [
         "Campbell"
+      ]
+    },
+    {
+      "id": "carlsbad",
+      "name": "City of Carlsbad",
+      "jurisdictions": [
+        "Carlsbad"
       ]
     },
     {
@@ -379,6 +393,13 @@
       ]
     },
     {
+      "id": "foster-city",
+      "name": "City of Foster City",
+      "jurisdictions": [
+        "Foster City"
+      ]
+    },
+    {
       "id": "fremont",
       "name": "City of Fremont",
       "jurisdictions": [
@@ -414,6 +435,13 @@
       ]
     },
     {
+      "id": "hermosa-beach",
+      "name": "City of Hermosa Beach",
+      "jurisdictions": [
+        "Hermosa Beach"
+      ]
+    },
+    {
       "id": "huntington-beach",
       "name": "City of Huntington Beach",
       "jurisdictions": [
@@ -425,6 +453,13 @@
       "name": "City of Industry",
       "jurisdictions": [
         "Industry"
+      ]
+    },
+    {
+      "id": "inglewood",
+      "name": "City of Inglewood",
+      "jurisdictions": [
+        "Inglewood"
       ]
     },
     {
@@ -465,6 +500,13 @@
       "name": "City of Lakewood",
       "jurisdictions": [
         "Lakewood"
+      ]
+    },
+    {
+      "id": "lancaster",
+      "name": "City of Lancaster",
+      "jurisdictions": [
+        "Lancaster"
       ]
     },
     {
@@ -538,6 +580,13 @@
       ]
     },
     {
+      "id": "national-city",
+      "name": "City of National City",
+      "jurisdictions": [
+        "National City"
+      ]
+    },
+    {
       "id": "newport-beach",
       "name": "City of Newport Beach",
       "jurisdictions": [
@@ -557,6 +606,11 @@
       "jurisdictions": [
         "Oceanside"
       ]
+    },
+    {
+      "id": "orange-county",
+      "name": "Unincorporated Orange County",
+      "unincorporatedOf": "orange"
     },
     {
       "id": "orange",
@@ -650,6 +704,11 @@
       ]
     },
     {
+      "id": "sacramento-county",
+      "name": "Unincorporated Sacramento County",
+      "unincorporatedOf": "sacramento"
+    },
+    {
       "id": "san-bruno",
       "name": "City of San Bruno",
       "jurisdictions": [
@@ -740,6 +799,13 @@
       "id": "sd-county",
       "name": "Unincorporated San Diego County",
       "unincorporatedOf": "san-diego"
+    },
+    {
+      "id": "seal-beach",
+      "name": "City of Seal Beach",
+      "jurisdictions": [
+        "Seal Beach"
+      ]
     },
     {
       "id": "sf",

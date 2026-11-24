@@ -1,0 +1,69 @@
+{
+  "id": "lancaster",
+  "name": "City of Lancaster",
+  "jurisdictions": [
+    "Lancaster"
+  ],
+  "publisher": "City of Lancaster — Zoning designations",
+  "url": "https://utility.arcgis.com/usrsvcs/servers/a948f63a123e433493dac74dcc5d07a4/rest/services/Development_Services/FeatureServer/37",
+  "fields": {
+    "code": "Zoning",
+    "description": "ZoneDesc"
+  },
+  "codeName": "Lancaster Municipal Code, Title 17 (Zoning)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^(SP|CPD)$",
+      "class": "planned",
+      "cite": "Lancaster specific plans and commercial planned development"
+    },
+    {
+      "match": "^TOD$",
+      "class": "mixed-residential",
+      "cite": "Lancaster transit-oriented district"
+    },
+    {
+      "match": "^MU-E$",
+      "class": "mixed-residential",
+      "cite": "Lancaster zoning (MU-E mixed use employment)"
+    },
+    {
+      "match": "^MU-",
+      "class": "mixed-residential",
+      "cite": "Lancaster zoning (mixed-use districts)"
+    },
+    {
+      "match": "^C$",
+      "class": "commercial",
+      "cite": "Lancaster Municipal Code Title 17 (C commercial)"
+    },
+    {
+      "match": "^OP$",
+      "class": "office",
+      "cite": "Lancaster Municipal Code Title 17 (OP office professional)"
+    },
+    {
+      "match": "^(H|LHD)$",
+      "class": "unknown",
+      "why": "Health care district: check whether medical office uses are permitted by right."
+    },
+    {
+      "match": "^(LI|HI)$",
+      "class": "industrial"
+    },
+    {
+      "match": "^(O|PK|CE)$",
+      "class": "open-space"
+    },
+    {
+      "match": "^(P|S)$",
+      "class": "public"
+    },
+    {
+      "match": "^(R-|RR-|SRR|MDR|HDR|MHP)",
+      "class": "residential",
+      "cite": "Lancaster Municipal Code Title 17 (residential zones)"
+    }
+  ]
+}

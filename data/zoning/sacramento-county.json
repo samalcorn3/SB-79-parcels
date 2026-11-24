@@ -1,0 +1,70 @@
+{
+  "id": "sacramento-county",
+  "name": "Unincorporated Sacramento County",
+  "unincorporatedOf": "sacramento",
+  "publisher": "County of Sacramento — Zoning",
+  "url": "https://services1.arcgis.com/5NARefyPVtAeuJPU/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZONE_CODE",
+    "description": "DESCRIPTION"
+  },
+  "codeName": "Sacramento County Zoning Code",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^SPA",
+      "class": "planned",
+      "cite": "Sacramento County Zoning Code (special planning areas)"
+    },
+    {
+      "match": "^AC\\b",
+      "class": "commercial",
+      "cite": "Sacramento County Zoning Code (AC auto commercial)"
+    },
+    {
+      "match": "\\((PD|PC|PDC)\\)",
+      "class": "planned",
+      "cite": "Sacramento County Zoning Code (planned development combining zone)"
+    },
+    {
+      "match": "^(DW|DW-)",
+      "class": "open-space"
+    },
+    {
+      "match": "^(UR|IR)\\b",
+      "class": "unknown",
+      "why": "Reserve or holding zone: check the zoning code for permitted uses."
+    },
+    {
+      "match": "^BP\\b",
+      "class": "office",
+      "cite": "Sacramento County Zoning Code (BP business professional office)"
+    },
+    {
+      "match": "^MP\\b",
+      "class": "industrial",
+      "cite": "Sacramento County Zoning Code (MP industrial-office park)"
+    },
+    {
+      "match": "^(SC|LC|GC|TC|C-2)\\b",
+      "class": "commercial",
+      "cite": "Sacramento County Zoning Code (commercial zones)"
+    },
+    {
+      "match": "^C-O\\b",
+      "class": "unknown",
+      "why": "Commercial recreation zone: check whether retail or office uses are permitted by right."
+    },
+    {
+      "match": "^O\\b",
+      "class": "open-space",
+      "cite": "Sacramento County Zoning Code (O recreation)"
+    }
+  ],
+  "flags": [
+    {
+      "match": "\\(NPA\\)",
+      "note": "A neighborhood preservation area (NPA) applies, with its own use and design rules."
+    }
+  ]
+}

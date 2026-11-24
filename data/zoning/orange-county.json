@@ -1,0 +1,38 @@
+{
+  "id": "orange-county",
+  "name": "Unincorporated Orange County",
+  "unincorporatedOf": "orange",
+  "publisher": "County of Orange — Zoning (Land Management System, by parcel)",
+  "url": "https://www.ocgis.com/arcpub/rest/services/LMS/Zoning_LMS/FeatureServer/999051",
+  "fields": {
+    "code": "ZCLASS",
+    "description": "ZC_DESCR"
+  },
+  "codeName": "Orange County Zoning Code (Codified Ordinances, Title 7, Division 9)",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^(PC|S)$",
+      "class": "planned",
+      "cite": "Orange County planned communities and specific plans"
+    },
+    {
+      "match": "^MX$",
+      "class": "mixed-residential",
+      "cite": "Orange County Zoning Code (MX mixed-use)"
+    },
+    {
+      "match": "^B1$",
+      "class": "open-space"
+    },
+    {
+      "match": "^R/OSP$",
+      "class": "unknown",
+      "why": "Research/open space district: check the zoning code for permitted uses."
+    },
+    {
+      "match": "^SG$",
+      "class": "industrial"
+    }
+  ]
+}

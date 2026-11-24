@@ -1,0 +1,50 @@
+{
+  "id": "national-city",
+  "name": "City of National City",
+  "jurisdictions": [
+    "National City"
+  ],
+  "publisher": "City of National City — Zoning (by parcel)",
+  "url": "https://services7.arcgis.com/RLQtED7qlYHuT1ha/arcgis/rest/services/NC_Zoning_Web_Map_WFL1/FeatureServer/20",
+  "fields": {
+    "code": "Zoning",
+    "description": "Spec_Plan"
+  },
+  "codeName": "National City Land Use Code (Municipal Code, Title 18)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^\\d",
+      "class": "planned",
+      "cite": "National City Downtown Specific Plan districts"
+    },
+    {
+      "match": "^(MXC|MXD|MXT|MCR)",
+      "class": "mixed-residential",
+      "cite": "National City Land Use Code (mixed-use zones)"
+    },
+    {
+      "match": "^(CA|CL|CS)$",
+      "class": "commercial",
+      "cite": "National City Land Use Code (commercial zones)"
+    },
+    {
+      "match": "^(I|IC|ML|MLR|MM|MH)$",
+      "class": "industrial",
+      "cite": "National City Land Use Code (industrial and manufacturing zones)"
+    },
+    {
+      "match": "^OS",
+      "class": "open-space"
+    },
+    {
+      "match": "^Railroad$",
+      "class": "transportation"
+    },
+    {
+      "match": "^R[SM]-",
+      "class": "residential",
+      "cite": "National City Land Use Code (residential zones)"
+    }
+  ]
+}

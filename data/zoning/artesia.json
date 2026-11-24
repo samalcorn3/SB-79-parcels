@@ -1,0 +1,45 @@
+{
+  "id": "artesia",
+  "name": "City of Artesia",
+  "jurisdictions": [
+    "Artesia"
+  ],
+  "publisher": "City of Artesia — Zoning",
+  "url": "https://services3.arcgis.com/9w1icUUI61POPssw/arcgis/rest/services/Artesia_OpenGov_Mapping/FeatureServer/2",
+  "fields": {
+    "code": "ZONECLASS",
+    "description": "ZONEDESC"
+  },
+  "codeName": "Artesia Municipal Code, Title 9 (Planning and Zoning)",
+  "rules": [
+    {
+      "match": "-SP$",
+      "class": "planned",
+      "cite": "Artesia specific plans (Downtown, Artesia Boulevard Corridor, Pioneer and others)"
+    },
+    {
+      "match": "^CPD$",
+      "class": "planned"
+    },
+    {
+      "match": "^C-S-P$",
+      "class": "office",
+      "cite": "Artesia zoning (C-S-P service and professional)"
+    },
+    {
+      "match": "^C-O$",
+      "class": "residential",
+      "cite": "Artesia zoning (C-O condominium)"
+    },
+    {
+      "match": "^H-D$",
+      "class": "unknown",
+      "why": "Historic district: check the zoning code for permitted uses."
+    },
+    {
+      "match": "^M-C-R$",
+      "class": "mixed-residential"
+    }
+  ],
+  "generic": true
+}
