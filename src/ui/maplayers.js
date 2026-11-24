@@ -6,7 +6,7 @@ import { queryAllGeoJSON, queryGeoJSONInBBox, queryIntersecting, envelope } from
 import { normalizeZone, dedupeZones, zoneCode } from '../lib/zones.js';
 import { readSpec } from '../lib/spec.js';
 import { parcelsInBBox } from '../lib/parcels.js';
-import { fireStatus } from '../lib/fire.js';
+import { fireStatus, fireCriterionStatus } from '../lib/fire.js';
 import { matchCounty } from '../lib/lookup.js';
 
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -152,8 +152,8 @@ const firstContaining = (pt, polys) => polys.find((z) => pt[0] >= z.bbox[0] && p
 export function fireRuleJurisdictions(registry, instrumentInForce) {
   const out = new Map();
   for (const [name, j] of Object.entries(registry.jurisdictions)) {
-    const inst = j.instruments.find((x) => x.coverage?.type === 'criteria' && x.coverage.criteria.includes('fire-hazard') && instrumentInForce(x).inForce);
-    if (inst) out.set(name, inst);
+    const inst = j.instruments.find((x) => x.coverage?.type === 'criteria' && x.coverage.criteria.some((c) => c === 'vhfhsz' || c === 'vhfhsz-or-sra') && instrumentInForce(x).inForce);
+    if (inst) out.set(name, { ...inst, criterion: inst.coverage.criteria.find((c) => c === 'vhfhsz' || c === 'vhfhsz-or-sra') });
   }
   return out;
 }
@@ -206,13 +206,14 @@ export async function annotateParcels(parcels, { zones, fire, exclusions = [], f
       }
       if (!fireParts) continue;
       const st = fireStatus(p, fireParts);
-      if (!st.qualifies) continue;
+      if (!st.vhfhsz.hit && !st.sra.hit) continue;
       p.properties._fire = st;
       stats.fire++;
       if (p.properties._excluded || !fireCities.length) continue;
       const city = firstContaining(pt, fireCities);
       const inst = city && fireRules.get(city.properties.name);
-      if (inst) {
+      // Only a parcel wholly within the ordinance's fire zone meets "sites within" without interpretation.
+      if (inst && fireCriterionStatus(st, inst.criterion) === 'within') {
         p.properties._excluded = { jurisdiction: city.properties.name, title: inst.title };
         stats.excluded++;
       }
@@ -265,6 +266,7 @@ export function parcelLayer(L, parcels, onClick) {
         z ? `Tier ${z.tier} · ${band[z.band]}` : 'Not in a TOD zone',
       ];
       const fire = f.properties._fire;
+      if (fire?.partial) lines.push('Partly in a fire zone — local fire-zone exclusion not applied (statute silent on partial sites)');
       if (fire?.vhfhsz.hit) lines.push(`Very high fire hazard zone (${Math.round(fire.vhfhsz.share * 100)}% of parcel)`);
       if (fire?.sra.hit) lines.push(`State Responsibility Area (${Math.round(fire.sra.share * 100)}% of parcel)`);
       if (f.properties._excluded) lines.push(`<b>Excluded</b> by ${f.properties._excluded.jurisdiction}: ${f.properties._excluded.title}`);

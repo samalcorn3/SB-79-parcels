@@ -1,57 +1,240 @@
 {
   "source": "Legislative Counsel of California \u2014 leginfo database export",
   "archive": "https://downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip",
-  "archiveLastModified": "Mon, 09 Nov 2026 05:26:05 GMT",
-  "retrieved": "2026-11-15T21:56:37+00:00",
+  "archiveLastModified": "Mon, 23 Nov 2026 05:26:07 GMT",
+  "retrieved": "2026-11-24T01:02:30+00:00",
   "web": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=GOV&division=1.&title=7.&part=&chapter=4.1.5.&article=",
   "sections": {
+    "PRC-4102": {
+      "code": "PRC",
+      "section": "4102",
+      "history": "Repealed and added by Stats. 1965, Ch. 1144.",
+      "effective": "NULL",
+      "sha256": "708f6bfc2cf8f409bef9bdb4ce5d987fb8e8c302f5281ee98b24a295247ed4bc"
+    },
+    "GOV-51179": {
+      "code": "GOV",
+      "section": "51179",
+      "history": "Amended by Stats. 2022, Ch. 574, Sec. 10.   (AB 211)   Effective September 27, 2022.",
+      "effective": "2022-09-27",
+      "sha256": "0fd913b752db659f01c631a768f2f70dd22fea85b7949755b4884c8ed1cfaac3"
+    },
+    "65912.100": {
+      "code": "GOV",
+      "section": "65912.100",
+      "history": "Added by Stats. 2022, Ch. 647, Sec. 3.   (AB 2011)   Effective January 1, 2023.   Operative July 1, 2023, pursuant to Sec. 7 of Stats. 2022, Ch. 647.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2023-01-01",
+      "sha256": "0593252b6e84537f25001467c9fad18b4d2456933fe4781c1b830f4113b70883"
+    },
+    "65912.101": {
+      "code": "GOV",
+      "section": "65912.101",
+      "history": "Amended by Stats. 2025, Ch. 500, Sec. 2.   (AB 893)   Effective January 1, 2026.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2026-01-01",
+      "sha256": "c2b3836139471d1c797f061080212dc11b06c42dedd2d7fec85dae20489e29fd"
+    },
+    "65912.103.5": {
+      "code": "GOV",
+      "section": "65912.103.5",
+      "history": "Added by Stats. 2025, Ch. 500, Sec. 3.   (AB 893)   Effective January 1, 2026.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2026-01-01",
+      "sha256": "1208949f80373567d1343a80e582e32609e558ecc47a16c6e1a8ab976f972a06"
+    },
+    "65912.105": {
+      "code": "GOV",
+      "section": "65912.105",
+      "history": "Added by Stats. 2022, Ch. 647, Sec. 3.   (AB 2011)   Effective January 1, 2023.   Operative July 1, 2023, pursuant to Sec. 7 of Stats. 2022, Ch. 647.   Repealed as of January 1, 2033, by its own provisions.   Note: Repeal affects Ch. 4.1, comprising sections 65912.100 to 65912.140.",
+      "effective": "2023-01-01",
+      "sha256": "74fd5b3b4a991e21d1ef3a8b34764941e952be5721ba7e207209ed7fa3b365e8"
+    },
+    "65912.111": {
+      "code": "GOV",
+      "section": "65912.111",
+      "history": "Amended by Stats. 2024, Ch. 272, Sec. 4.   (AB 2243)   Effective January 1, 2025.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2025-01-01",
+      "sha256": "623d56be6277e1c5ea16f5e08b66f19384dcf727bdb8ffd2c830d61fc0228965"
+    },
+    "65912.113": {
+      "code": "GOV",
+      "section": "65912.113",
+      "history": "Amended by Stats. 2024, Ch. 272, Sec. 6.   (AB 2243)   Effective January 1, 2025.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2025-01-01",
+      "sha256": "1ee5b271067eaadc7a493d501935f9f5a309910ba10ef0549f0ea2a86d48f4c5"
+    },
+    "65912.114": {
+      "code": "GOV",
+      "section": "65912.114",
+      "history": "Amended by Stats. 2025, Ch. 500, Sec. 5.   (AB 893)   Effective January 1, 2026.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2026-01-01",
+      "sha256": "ee9bb1ec4d2bb89582742a9234e0aa56a4ffccbaa9c5f809dd7914aa8f354fca"
+    },
+    "65912.120": {
+      "code": "GOV",
+      "section": "65912.120",
+      "history": "Added by Stats. 2022, Ch. 647, Sec. 3.   (AB 2011)   Effective January 1, 2023.   Operative July 1, 2023, pursuant to Sec. 7 of Stats. 2022, Ch. 647.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2023-01-01",
+      "sha256": "ff2be49c2e61f80d8f7a4e5042ae927dd8b0b46caf00a80ee7e6a01a0dd01393"
+    },
+    "65912.121": {
+      "code": "GOV",
+      "section": "65912.121",
+      "history": "Amended by Stats. 2025, Ch. 500, Sec. 6.   (AB 893)   Effective January 1, 2026.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2026-01-01",
+      "sha256": "5457b2aa7f7a6a135cc919e24e74db1f957806f5f005bfebb34fa1db40e738c2"
+    },
+    "65912.122": {
+      "code": "GOV",
+      "section": "65912.122",
+      "history": "Amended by Stats. 2025, Ch. 500, Sec. 7.   (AB 893)   Effective January 1, 2026.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2026-01-01",
+      "sha256": "d5e86d9103038b051f9cb50e3f250a19a71647f6809bdb61b906e5ae00ca4ec2"
+    },
+    "65912.123": {
+      "code": "GOV",
+      "section": "65912.123",
+      "history": "Amended by Stats. 2025, Ch. 500, Sec. 8.   (AB 893)   Effective January 1, 2026.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2026-01-01",
+      "sha256": "e57d65bd998a971b8b82b8b6424ad7b82658d319d2062b7b510623783bb5c18a"
+    },
+    "65912.124": {
+      "code": "GOV",
+      "section": "65912.124",
+      "history": "Amended by Stats. 2025, Ch. 500, Sec. 9.   (AB 893)   Effective January 1, 2026.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2026-01-01",
+      "sha256": "aff5a37886633f1d94ec9e9d19050de761cd423b144be991aa150d0408ca934f"
+    },
+    "65912.130": {
+      "code": "GOV",
+      "section": "65912.130",
+      "history": "Amended by Stats. 2023, Ch. 39, Sec. 20.   (AB 130)   Effective July 10, 2023.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2023-07-10",
+      "sha256": "c618674414b5923c520019381b1bc204239fe6927b5cba5508a325fe21c8a9c0"
+    },
+    "65912.131": {
+      "code": "GOV",
+      "section": "65912.131",
+      "history": "Amended by Stats. 2025, Ch. 774, Sec. 1.   (SB 597)   Effective January 1, 2026.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2026-01-01",
+      "sha256": "37e156dbc34bbeab9552204dd348dc5209e57a95e9f050d1c14ff570e9fa3092"
+    },
     "65912.156": {
+      "code": "GOV",
       "section": "65912.156",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "b660f847b52775952deec57dbdce768901921ae9417e6c1d1e508413b33519a8"
     },
     "65912.157": {
+      "code": "GOV",
       "section": "65912.157",
       "history": "Amended (as added by Stats. 2025, Ch. 512, Sec. 1) by Stats. 2026, Ch. 100, Sec. 2.   (SB 722)   Effective July 16, 2026.",
       "effective": "2026-07-16",
       "sha256": "135406b2d0beb27cb868f99cbf1e2b09252feeeb2637a7d2fc01da962b66ea2b"
     },
     "65912.158": {
+      "code": "GOV",
       "section": "65912.158",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "85e7c0a871978acc231da7c95e00026e134ffd67f6b659cf5721b924a2c39aa1"
     },
     "65912.160": {
+      "code": "GOV",
       "section": "65912.160",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "fd91d58edc6302740da97e0049ccbf78eaffde919f4bef0c6923cfe25ceb181d"
     },
     "65912.161": {
+      "code": "GOV",
       "section": "65912.161",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "b6247e2dcdfc4f2d5a0def810ff2c3af7d5bc799230eeba1d1bc4522255889a2"
     },
     "65912.162": {
+      "code": "GOV",
       "section": "65912.162",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "5d48500385f51d05887f2c25fa8478edb95b48af819b5c3cd213727ffa6f9fd8"
     },
+    "GOV-65913.4": {
+      "code": "GOV",
+      "section": "65913.4",
+      "history": "Amended by Stats. 2025, Ch. 774, Sec. 2.   (SB 597)   Effective January 1, 2026.   Repealed as of January 1, 2036, by its own provisions.",
+      "effective": "2026-01-01",
+      "sha256": "47f7c75e02db07ae742c940a3846ad17e2e3b869dc35d8ec5cde97d7f54b3fd5"
+    },
+    "GOV-51178": {
+      "code": "GOV",
+      "section": "51178",
+      "history": "Amended by Stats. 2021, Ch. 382, Sec. 2.5.   (SB 63)   Effective January 1, 2022.",
+      "effective": "2022-01-01",
+      "sha256": "85aca8390d37936d308f069dd8800aa452721e5ef0318193b3f3595add97e89a"
+    },
     "65912.155": {
+      "code": "GOV",
       "section": "65912.155",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "e078bf2ef17de5c1ae49de26a20d0d0d7c4927ec7554c8b0a036376787ebde6d"
     },
+    "65912.112": {
+      "code": "GOV",
+      "section": "65912.112",
+      "history": "Amended by Stats. 2024, Ch. 272, Sec. 5.   (AB 2243)   Effective January 1, 2025.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2025-01-01",
+      "sha256": "3c06444ee911caf92b3b3148c38b5d3048d13dc2ceb8abf878e843aabc3ca142"
+    },
+    "65912.140": {
+      "code": "GOV",
+      "section": "65912.140",
+      "history": "Added by Stats. 2022, Ch. 647, Sec. 3.   (AB 2011)   Effective January 1, 2023.   Operative July 1, 2023, pursuant to Sec. 7 of Stats. 2022, Ch. 647.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2023-01-01",
+      "sha256": "75902a1e048c8517c355a1d224c8812d098b2ab3a32a45a11296769b639bb78f"
+    },
     "65912.159": {
+      "code": "GOV",
       "section": "65912.159",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "5fa131bce2acc4a2c421b1f61d33fa979ae4442330a37eaaa4e20b17294e1b0c"
+    },
+    "65912.102": {
+      "code": "GOV",
+      "section": "65912.102",
+      "history": "Added by Stats. 2022, Ch. 647, Sec. 3.   (AB 2011)   Effective January 1, 2023.   Operative July 1, 2023, pursuant to Sec. 7 of Stats. 2022, Ch. 647.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2023-01-01",
+      "sha256": "a3076634a7ad65b2efa6efb806ec49d3c4f0b2a115f319213ad0fb2f3c24b5f2"
+    },
+    "65912.103": {
+      "code": "GOV",
+      "section": "65912.103",
+      "history": "Added by Stats. 2022, Ch. 647, Sec. 3.   (AB 2011)   Effective January 1, 2023.   Operative July 1, 2023, pursuant to Sec. 7 of Stats. 2022, Ch. 647.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2023-01-01",
+      "sha256": "537d1481feb70a3cc1ff124694236f0237acc2cb0f079d11ecb131157e9645be"
+    },
+    "65912.104": {
+      "code": "GOV",
+      "section": "65912.104",
+      "history": "Amended by Stats. 2025, Ch. 500, Sec. 4.   (AB 893)   Effective January 1, 2026.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2026-01-01",
+      "sha256": "f975e9938ebe406c737722eff7a8b3125e28f30d6b42ccb6635e595ad7fc0d43"
+    },
+    "65912.106": {
+      "code": "GOV",
+      "section": "65912.106",
+      "history": "Added by Stats. 2024, Ch. 272, Sec. 3.   (AB 2243)   Effective January 1, 2025.",
+      "effective": "2025-01-01",
+      "sha256": "5f85d3728ed5d43da94b27212f405f17745cc6c0b7e610aa92b76ea0107dca1e"
+    },
+    "65912.110": {
+      "code": "GOV",
+      "section": "65912.110",
+      "history": "Added by Stats. 2022, Ch. 647, Sec. 3.   (AB 2011)   Effective January 1, 2023.   Operative July 1, 2023, pursuant to Sec. 7 of Stats. 2022, Ch. 647.   Repealed as of January 1, 2033, pursuant to Sec. 65912.105.",
+      "effective": "2023-01-01",
+      "sha256": "1fdaa53e0534786a9f8b1cc885ebf44a2622f733c27d920a66ab2d3311b18a75"
     }
   }
 }

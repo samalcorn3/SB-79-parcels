@@ -38,7 +38,10 @@ function instrumentAnswer(title, a) {
     const date = inst.hcd?.date ? ` (${esc(inst.hcd.date)})` : '';
     const letter = inst.hcd?.letterUrl ? ` · ${link(inst.hcd.letterUrl, 'HCD letter')}` : '';
     const local = inst.local?.url ? ` · ${link(inst.local.url, inst.local.reference || 'adopted text')}` : inst.local?.reference ? ` · ${esc(inst.local.reference)}` : '';
-    const verif = inst.verification === 'secondary' ? ' · <span class="fine">status from secondary reporting — confirm on HCD’s dashboard</span>' : '';
+    const verif = '';
+    const docs = (inst.documents || [])
+      .map((d) => `<li>${link(d.url, d.title)}${d.unread ? ` <span class="fine">— ${esc(d.unread)}</span>` : ''}</li>`)
+      .join('');
     hcd = `<div class="hcd">
       <div><b>${esc(inst.title)}</b></div>
       <div>Local: ${esc(inst.local?.status || 'unknown')}${inst.local?.date ? ` ${esc(inst.local.date)}` : ''}${local}</div>
@@ -48,6 +51,7 @@ function instrumentAnswer(title, a) {
       ${inst.coverageReason ? `<div class="fine">Why this parcel: ${esc(inst.coverageReason)}</div>` : ''}
       ${inst.covered !== true && inst.coverage?.note ? `<div class="fine">${esc(inst.coverage.note)}</div>` : ''}
       ${inst.coverage?.publisher && inst.covered != null ? `<div class="fine">Parcel coverage checked live against: ${link(inst.coverage.url, inst.coverage.publisher)}</div>` : ''}
+      ${docs ? `<div class="fine">Primary sources:</div><ul class="plain fine">${docs}</ul>` : ''}
     </div>`;
   }
   return `<div class="qa-row"><div class="qa-q">${esc(title)}</div><span class="badge ${esc(a.subject)}">${esc(a.text)}</span>${hcd}</div>`;
@@ -105,11 +109,11 @@ function fireCard(r) {
     `<li>Very High Fire Hazard Severity Zone: <b>${f.vhfhsz.hit ? `yes — ${pctTxt(f.vhfhsz.share)} of parcel` : 'no'}</b></li>`,
     `<li>State Responsibility Area: <b>${f.sra.hit ? `yes — ${pctTxt(f.sra.share)} of parcel` : 'no'}</b></li>`,
   ];
-  const effects = f.qualifies
-    ? `<ul class="plain">
+  const effects = f.vhfhsz.hit || f.sra.hit
+    ? `${f.partial ? '<p class="warn">Only part of this parcel is in a fire zone. SB 79 and § 65913.4 refer to “sites within” a zone and do not say how a partly covered site is treated.</p>' : ''}<ul class="plain">
         <li>SB 79 still applies unless the city has adopted an ordinance excluding fire-zone sites. A city <i>may</i> temporarily exclude “sites within a very high fire hazard severity zone … or within the state responsibility area” until one year after its 7th-cycle housing element. <span class="cite">§ 65912.161(b)(1)(D)</span></li>
         <li>A TOD Alternative Plan may reduce density on this site by more than 50%. <span class="cite">§ 65912.161(a)(2)(A)</span></li>
-        ${f.vhfhsz.hit ? '<li>Streamlined ministerial approval under § 65913.4 is <b>not available</b> on a site in a very high fire hazard severity zone; the project goes through the local review process. <span class="cite">§ 65912.159(a)(3), (b)</span></li>' : ''}
+        <li>Streamlined ministerial approval: § 65913.4(a)(6)(D) excludes sites in a VHFHSZ or the State Responsibility Area, but “does not apply to sites that have adopted fire hazard mitigation measures pursuant to existing building standards or state fire mitigation measures applicable to the development” (Pub. Res. Code §§ 4290, 4291; Gov. Code § 51182; Building Code ch. 7A). <span class="cite">§ 65912.159(a)(3); § 65913.4(a)(6)(D)</span></li>
         <li>Objective fire-safety standards (Building, Fire, and Wildland-Urban Interface Codes) apply. <span class="cite">§ 65912.157(j)</span></li>
       </ul>`
     : '<p class="fine">Not in a very high fire hazard severity zone or the State Responsibility Area, so the fire-zone exclusion in § 65912.161(b)(1)(D) cannot apply.</p>';

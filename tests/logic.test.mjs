@@ -115,13 +115,20 @@ test('regime: HCD-rejected TODAP falls back to the statute', () => {
 });
 
 test('regime: ordinance with unpublished coverage is flagged, not assumed', () => {
-  const oak = findJurisdiction(registry, 'Oakland');
-  assert.equal(determineRegime({ zones: T1Q, county: county('alameda'), jurisdiction: oak, cityName: 'Oakland' }).regime, 'statute-unless-excluded');
+  const sj = findJurisdiction(registry, 'San Jose');
+  assert.equal(determineRegime({ zones: T1Q, county: county('santa-clara'), jurisdiction: sj, cityName: 'San Jose' }).regime, 'statute-unless-excluded');
+});
+
+test('coverage reasons: numeric flags and text values', async () => {
+  const { coverageReasons } = await import('../src/lib/lookup.js');
+  const oak = findJurisdiction(registry, 'Oakland').instruments[0].coverage.reasonFields;
+  assert.equal(coverageReasons({ EXCL50PC: '50pc', EXCL40PC: null, HISTRES: 'historic', AVAIL: 'Excluded' }, oak), 'High existing capacity (current zoning allows ≥ 50% of SB 79 capacity); Local historic resource');
+  assert.equal(coverageReasons({ DE5_VHFHSZ_Final: 1, DE7_Historic: 0 }, { DE5_VHFHSZ_Final: 'Fire', DE7_Historic: 'Historic' }), 'Fire');
 });
 
 test('regime: draft TODAP is reported as pending, not as covering', () => {
-  const sd = findJurisdiction(registry, 'San Diego');
-  const r = determineRegime({ zones: T1Q, county: county('san-diego'), jurisdiction: sd, cityName: 'San Diego' });
+  const draft = { name: 'Test', instruments: [{ id: 'x', kind: 'todap', title: 'Draft plan', local: { status: 'draft' }, hcd: { status: 'not-submitted' }, coverage: { type: 'jurisdiction-wide' } }] };
+  const r = determineRegime({ zones: T1Q, county: county('san-diego'), jurisdiction: draft, cityName: 'Test' });
   assert.equal(summarizeInstruments(r).todap.subject, 'pending');
 });
 
@@ -131,18 +138,26 @@ test('GeoJSON -> Esri geometry', () => {
   assert.equal(mp.geometry.rings.length, 2);
 });
 
-test('registry entries are well-formed', () => {
+test('registry entries are well-formed and first-hand', () => {
   const kinds = new Set(['todap', 'exclusion-ordinance', 'implementing-ordinance']);
   const hcd = new Set(['compliant', 'noncompliant', 'pending', 'technical-assistance', 'not-submitted', 'unknown']);
+  const docKinds = new Set(['hcd-letter', 'ordinance', 'city-page', 'city-gis']);
   const countyIds = new Set(sources.counties.map((c) => c.id));
   for (const [name, j] of Object.entries(registry.jurisdictions)) {
     assert.ok(countyIds.has(j.county), `${name}: unknown county ${j.county}`);
     for (const i of j.instruments) {
       assert.ok(kinds.has(i.kind), `${i.id}: kind`);
       assert.ok(hcd.has(i.hcd?.status), `${i.id}: hcd.status`);
-      assert.ok(['primary', 'secondary'].includes(i.verification), `${i.id}: verification`);
+      assert.ok(['primary', 'located'].includes(i.verification), `${i.id}: only first-hand sources allowed`);
       assert.ok(['jurisdiction-wide', 'arcgis', 'criteria', 'unknown'].includes(i.coverage?.type), `${i.id}: coverage`);
-      if (i.verification === 'secondary') assert.ok(i.sources?.length, `${i.id}: secondary entries must cite sources`);
+      assert.ok(i.documents?.length, `${i.id}: must list its primary documents`);
+      for (const d of i.documents) {
+        assert.ok(docKinds.has(d.kind), `${i.id}: document kind ${d.kind}`);
+        assert.match(d.url, /^https:\/\//, `${i.id}: document url`);
+        assert.doesNotMatch(d.url, /hklaw|cp-dr|s3da|houseberry|natlawreview|allenmatkins|coxcastle|github\.com|wikipedia|streetsblog|urbanize|laist/i, `${i.id}: not a primary source`);
+      }
+      if (i.hcd.status !== 'unknown' && i.hcd.status !== 'not-submitted') assert.ok(i.documents.some((d) => d.kind === 'hcd-letter'), `${i.id}: an HCD status needs HCD's letter`);
+      if (i.verification === 'located') assert.ok(i.documents.some((d) => d.unread), `${i.id}: "located" must say which document is unread`);
     }
   }
 });

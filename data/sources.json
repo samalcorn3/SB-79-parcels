@@ -363,7 +363,7 @@
       ],
       "mpo": "scag",
       "sb79Status": "pending",
-      "statusNote": "Not yet an urban transit county. Per SCAG (SB 79 FAQ, Aug. 2026) it becomes one when the OC Streetcar opens for revenue service; zones will appear here automatically once SCAG maps them.",
+      "statusNote": "Not yet an urban transit county (a county with more than 15 passenger rail stations, § 65912.156(q)). HCD counts only stations “in active operation” (SB 79 Advisory, Mar. 20, 2026), and SCAG states Orange County becomes an urban transit county “when the OC Streetcar opens for revenue service” (SB 79 TOD Map FAQs, Aug. 2026). OCTA: “Service starting early 2027.” Until then no Orange County stop can be a Tier 1 or Tier 2 TOD stop (§ 65912.156(n)–(o)); once it qualifies, bus stops remain ineligible because it qualified after July 1, 2026 (§ 65912.156(p)). Zones will appear here automatically when SCAG maps them.",
       "parcels": {
         "type": "arcgis",
         "publisher": "OC Public Works / OC Survey",
@@ -376,7 +376,21 @@
             "SITE_ADDRESS"
           ]
         }
-      }
+      },
+      "statusSources": [
+        {
+          "title": "SCAG, SB 79 TOD Map FAQs (Aug. 2026)",
+          "url": "https://scag.ca.gov/sites/default/files/2026-08/26-417-MMI-0395_SB79_TOD_Map_FAQs.pdf"
+        },
+        {
+          "title": "HCD, SB 79 Advisory Clarifications on Definitions for MPOs (Mar. 20, 2026)",
+          "url": "https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/sb-79-mpo-advisory.pdf"
+        },
+        {
+          "title": "OCTA, OC Streetcar overview",
+          "url": "https://octa.net/programs-projects/projects/rail-projects/oc-streetcar/overview"
+        }
+      ]
     },
     {
       "id": "san-diego",

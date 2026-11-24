@@ -1,12 +1,12 @@
 {
-  "schemaVersion": 1,
-  "lastReviewed": "2026-11-15",
-  "about": "Curated registry of local SB 79 instruments (implementing / exemption / temporary-exclusion ordinances and TOD alternative plans) and HCD's review of each. HCD publishes its letters only as PDFs on a Power BI dashboard, so this file is maintained by hand and checked daily by .github/workflows/monitor.yml. Each entry cites its sources; `verification: primary` means the HCD letter or the adopted ordinance itself was read; `secondary` means the status comes from news or law-firm reporting and must be confirmed against HCD's dashboard.",
+  "schemaVersion": 2,
+  "lastReviewed": "2026-11-24",
+  "about": "Registry of local SB 79 instruments (implementing / exemption / temporary-exclusion ordinances and TOD alternative plans) and HCD's review of each. Every entry rests on first-hand documents only: HCD's own letters, the jurisdiction's adopted ordinance or official web page, or the jurisdiction's own GIS layer. Each document listed was read for this registry. An entry marked `verification: \"located\"` cites a primary document that exists but could not be downloaded by script; confirm it by hand. Jurisdictions known from news or third-party trackers to have instruments, but without a primary document yet, are deliberately left out (see README).",
   "hcdDashboard": "https://www.hcd.ca.gov/hau/enforcement-letters",
   "hcdSb79Page": "https://www.hcd.ca.gov/planning-and-research/sb79-tod",
   "rules": {
-    "todap": "A TOD alternative plan governs only if HCD has approved it (Gov. Code § 65912.161(d)). Otherwise § 65912.157 (or a local ordinance) governs.",
-    "ordinance": "An implementing, exemption, or temporary-exclusion ordinance governs unless HCD has found it out of compliance (HCD SB 79 page, 'TOD Project Compliance')."
+    "todap": "A TOD alternative plan governs only if HCD has approved it (Gov. Code § 65912.161(d)).",
+    "ordinance": "An implementing, exemption, or temporary-exclusion ordinance governs unless HCD has found it out of compliance (HCD SB 79 page, 'TOD Project Compliance'). Statutory process: Gov. Code § 65912.160(d)(3)–(6)."
   },
   "jurisdictions": {
     "San Francisco": {
@@ -16,46 +16,138 @@
           "id": "sf-todap-2026",
           "kind": "todap",
           "title": "Citywide TOD Alternative Plan (Ordinance 082-26, Planning Code § 207.11)",
-          "local": {
-            "status": "enacted",
-            "date": "2026-05-19",
-            "reference": "Ordinance 082-26",
-            "url": "https://media.api.sf.gov/documents/o0082-26.pdf"
-          },
+          "local": { "status": "enacted", "date": "2026-05-19", "reference": "Ordinance 082-26", "url": "https://media.api.sf.gov/documents/o0082-26.pdf" },
           "hcd": {
             "status": "compliant",
             "date": "2026-07-01",
             "letterUrl": "https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/HAU/san-francisco-sb79-in-070126.pdf",
             "conditions": "Compliance is contingent on the City not enforcing Planning Code § 207.11(b)(5), which barred State Density Bonus Law on alternative-plan sites."
           },
-          "coverage": {
-            "type": "jurisdiction-wide",
-            "note": "The plan redistributes SB 79 capacity across the City's TOD zones; § 65912.157 does not apply to sites covered by the plan until the next housing element."
-          },
+          "coverage": { "type": "jurisdiction-wide", "note": "Per HCD's letter, the plan redistributes SB 79 capacity across the City's TOD zones; § 65912.157 does not apply to sites covered by the plan until the next housing element." },
+          "documents": [
+            { "kind": "hcd-letter", "title": "HCD, City of San Francisco – Enacted SB 79 Ordinance – Review Letter (July 1, 2026)", "url": "https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/HAU/san-francisco-sb79-in-070126.pdf" },
+            { "kind": "ordinance", "title": "San Francisco Ordinance No. 082-26", "url": "https://media.api.sf.gov/documents/o0082-26.pdf" }
+          ],
           "verification": "primary"
         },
         {
           "id": "sf-exclusions-2026",
           "kind": "exclusion-ordinance",
           "title": "Industrial employment hub exemptions and low-resource temporary exclusions (Ordinance 082-26)",
-          "local": {
-            "status": "enacted",
-            "date": "2026-05-19",
-            "reference": "Ordinance 082-26",
-            "url": "https://media.api.sf.gov/documents/o0082-26.pdf"
-          },
+          "local": { "status": "enacted", "date": "2026-05-19", "reference": "Ordinance 082-26", "url": "https://media.api.sf.gov/documents/o0082-26.pdf" },
           "hcd": {
             "status": "compliant",
             "date": "2026-07-01",
             "letterUrl": "https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/HAU/san-francisco-sb79-in-070126.pdf"
           },
-          "effectiveUntil": "One year after adoption of the 7th-cycle housing element (temporary exclusions); exemptions are permanent.",
+          "effectiveUntil": "Temporary exclusions: until one year after adoption of the 7th-cycle housing element (§ 65912.161(b)(1)). Industrial-hub exemptions: § 65912.160(e)(2).",
           "coverage": {
             "type": "arcgis",
             "url": "https://services.arcgis.com/Zs2aNLFN00jrS4gG/arcgis/rest/services/San_Francisco_SB79_Exclusions_for_HCD_review_June_2026/FeatureServer/2",
             "reasonField": "Exclusions_June122026",
             "publisher": "SF Planning — exclusion parcels submitted to HCD (June 17, 2026)"
           },
+          "documents": [
+            { "kind": "hcd-letter", "title": "HCD, City of San Francisco – Enacted SB 79 Ordinance – Review Letter (July 1, 2026)", "url": "https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/HAU/san-francisco-sb79-in-070126.pdf" },
+            { "kind": "city-gis", "title": "SF Planning, San Francisco SB79 Exclusions for HCD review (June 2026)", "url": "https://services.arcgis.com/Zs2aNLFN00jrS4gG/arcgis/rest/services/San_Francisco_SB79_Exclusions_for_HCD_review_June_2026/FeatureServer/2" }
+          ],
+          "verification": "primary"
+        }
+      ]
+    },
+    "San Jose": {
+      "county": "santa-clara",
+      "instruments": [
+        {
+          "id": "sj-ord-31316",
+          "kind": "exclusion-ordinance",
+          "title": "Ordinance No. 31316 — Municipal Code ch. 20.197, Part 2: industrial employment hubs exempt from SB 79",
+          "local": { "status": "enacted", "reference": "Ordinance No. 31316" },
+          "hcd": {
+            "status": "compliant",
+            "date": "2026-06-04",
+            "letterUrl": "https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/HAU/san-jose-sb-79-in-060426.pdf",
+            "note": "HCD's written findings under § 65912.160(d)(3)(A): the ordinance is in substantial compliance."
+          },
+          "coverage": { "type": "unknown", "note": "Applies to the industrial employment hubs mapped in the ordinance's Exhibits B–C; the City has not published them as a queryable layer." },
+          "documents": [
+            { "kind": "hcd-letter", "title": "HCD, City of San José – Enacted SB 79 Ordinance to Exempt Sites in Industrial Employment Hubs – Review Letter (June 4, 2026)", "url": "https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/HAU/san-jose-sb-79-in-060426.pdf" }
+          ],
+          "verification": "primary"
+        }
+      ]
+    },
+    "Beverly Hills": {
+      "county": "los-angeles",
+      "instruments": [
+        {
+          "id": "bh-todap-2026",
+          "kind": "todap",
+          "title": "SB 79 Transit-Oriented Development Alternative Plan",
+          "local": { "status": "enacted", "note": "HCD reviewed the City's enacted plan, received February 11, 2026." },
+          "hcd": {
+            "status": "noncompliant",
+            "date": "2026-05-08",
+            "letterUrl": "https://beverlyhills.org/DocumentCenter/View/15917/HCD---SB-79-Comment-Letter?bidId=",
+            "note": "HCD: “revisions will be necessary to substantially comply.” The City had until July 7, 2026 to amend the plan or re-enact it with findings (§ 65912.160(d)(5)). Whatever the City did after that has not been confirmed from a primary document."
+          },
+          "coverage": { "type": "jurisdiction-wide" },
+          "documents": [
+            { "kind": "hcd-letter", "title": "HCD, Review of the City of Beverly Hills Enacted SB 79 TOD Alternative Plan (May 8, 2026), as posted by the City", "url": "https://beverlyhills.org/DocumentCenter/View/15917/HCD---SB-79-Comment-Letter?bidId=" }
+          ],
+          "verification": "primary"
+        }
+      ]
+    },
+    "San Diego": {
+      "county": "san-diego",
+      "instruments": [
+        {
+          "id": "sd-o22099",
+          "kind": "exclusion-ordinance",
+          "title": "Ordinance O-22099 — phasing the implementation of SB 79, including exemptions",
+          "local": { "status": "enacted", "date": "2026-05-21", "reference": "O-22099 (passed May 20, 2026; final passage May 21, 2026; effective 30 days after final passage)", "url": "https://docs.sandiego.gov/council_reso_ordinance/rao2026/O-22099.pdf" },
+          "hcd": { "status": "unknown", "note": "No HCD findings letter on O-22099 has been located. Under § 65912.160(d)(3)(C), if HCD issues no written findings within its review period, the ordinance is deemed compliant for penalty purposes." },
+          "effectiveUntil": "Fire, historic, and sea-level-rise sites: until a TOD alternative plan deemed compliant by HCD, or one year after the 7th-cycle housing element, whichever is first (§§ 4–6). Low-resource areas: no later than one year after the 7th-cycle housing element (§ 3).",
+          "coverage": {
+            "type": "criteria",
+            "criteria": ["vhfhsz"],
+            "complete": false,
+            "note": "§ 4 phases in “all areas identified as being within a Very High Fire Severity Zone as determined by [CAL FIRE] pursuant to section 51178”, computed live from the State Fire Marshal's map. Not computed: § 2 (>1-mile walk; the City's map is not yet published), § 3 (low-resource areas), § 5 (historic resources), § 6 (one-foot sea-level rise)."
+          },
+          "documents": [
+            { "kind": "ordinance", "title": "City of San Diego Ordinance O-22099", "url": "https://docs.sandiego.gov/council_reso_ordinance/rao2026/O-22099.pdf" }
+          ],
+          "verification": "primary"
+        }
+      ]
+    },
+    "Oakland": {
+      "county": "alameda",
+      "instruments": [
+        {
+          "id": "oak-s8-2026",
+          "kind": "exclusion-ordinance",
+          "title": "S-8 Combining District (Planning Code ch. 17.86) — SB 79 eligibility and temporary exclusions",
+          "local": { "status": "enacted", "note": "The City states that § 17.86.050 is being amended to reflect comments received from HCD." },
+          "hcd": { "status": "unknown", "note": "The City reports receiving HCD comments; no HCD findings letter has been located." },
+          "effectiveUntil": "Until the City adopts a TOD alternative plan or completes its next housing element (2031), per the City.",
+          "coverage": {
+            "type": "arcgis",
+            "url": "https://services.arcgis.com/9tC74aDHuml0x5Yz/arcgis/rest/services/publish/FeatureServer/0",
+            "where": "AVAIL IN ('Excluded', 'Ineligible')",
+            "reasonFields": {
+              "EXCL50PC": { "equals": "50pc", "label": "High existing capacity (current zoning allows ≥ 50% of SB 79 capacity)" },
+              "EXCL40PC": { "equals": "40pc", "label": "Low-resource area (≥ 40% of SB 79 capacity)" },
+              "HISTRES": { "equals": "historic", "label": "Local historic resource" },
+              "AVAIL": { "equals": "Ineligible", "label": "Ineligible under § 17.86.050" }
+            },
+            "publisher": "City of Oakland — Combining Zone S-8 (amended 10/20/2026)"
+          },
+          "documents": [
+            { "kind": "city-page", "title": "City of Oakland, SB-79: Transit-Oriented Housing in Oakland", "url": "https://www.oaklandca.gov/Planning-Building/Your-Commercial-Projects-Permits/SB-79-Transit-Oriented-Housing-in-Oakland" },
+            { "kind": "city-gis", "title": "City of Oakland, Combining Zone S-8 (amended 10/20/2026)", "url": "https://services.arcgis.com/9tC74aDHuml0x5Yz/arcgis/rest/services/publish/FeatureServer/0" }
+          ],
           "verification": "primary"
         }
       ]
@@ -64,22 +156,17 @@
       "county": "los-angeles",
       "instruments": [
         {
-          "id": "la-delayed-effectuation-2026",
+          "id": "la-ord-188968",
           "kind": "exclusion-ordinance",
-          "title": "SB 79 Delayed Effectuation Ordinance (exemptions + temporary exclusions; CF 25-1083)",
-          "local": {
-            "status": "enacted",
-            "date": "2026-06-30",
-            "reference": "Council File 25-1083",
-            "url": "https://cityclerk.lacity.org/lacityclerkconnect/index.cfm?fa=ccfi.viewrecord&cfnumber=25-1083"
-          },
+          "title": "Ordinance No. 188968 — Phased Implementation Ordinance locally implementing SB 79 (CF 25-1083-S4)",
+          "local": { "status": "enacted", "date": "2026-06-30", "reference": "Ordinance No. 188968", "url": "https://cityclerk.lacity.org/onlinedocs/2025/25-1083-S4_ord_188968_06-30-26.pdf" },
           "hcd": {
             "status": "unknown",
             "date": "2026-06-22",
             "letterUrl": "https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/HAU/los-angeles-sb-79-ta-hau-2738-062226.pdf",
-            "note": "HCD issued a technical-assistance letter on the draft (June 22, 2026). No HCD compliance finding on the enacted ordinance is recorded here yet. Under HCD's rules the ordinance governs unless HCD finds it out of compliance."
+            "note": "HCD's only located letter is technical assistance on the draft (June 22, 2026). No HCD findings on the enacted ordinance have been located."
           },
-          "effectiveUntil": "Approximately 2030 (one year after adoption of the 7th-cycle housing element) for temporary exclusions.",
+          "effectiveUntil": "Temporary exclusions: until one year after adoption of the 7th-cycle housing element (§ 65912.161(b)(1)).",
           "coverage": {
             "type": "arcgis",
             "url": "https://services1.arcgis.com/tzwalEyxl2rpamKs/arcgis/rest/services/SB79_SiteInformation/FeatureServer/5",
@@ -99,292 +186,12 @@
             },
             "publisher": "LA City Planning — SB79_SiteInformation layer (field definitions are the layer's own aliases; last edited May 13, 2026, before final adoption)"
           },
-          "sources": [
-            "https://www.laconservancy.org/save-places/issues/city-of-los-angeles-sb-79-implementation/",
-            "https://www.allenmatkins.com/real-ideas/the-city-of-los-angeles-seeks-to-delay-implementation-of-senate-bill-79-sb-79-until-2030.html"
+          "documents": [
+            { "kind": "hcd-letter", "title": "HCD, City of Los Angeles – SB 79 Ordinance to Exempt and Temporarily Exclude Sites – Letter of Technical Assistance (June 22, 2026)", "url": "https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/HAU/los-angeles-sb-79-ta-hau-2738-062226.pdf" },
+            { "kind": "city-gis", "title": "LA City Planning, SB79_SiteInformation", "url": "https://services1.arcgis.com/tzwalEyxl2rpamKs/arcgis/rest/services/SB79_SiteInformation/FeatureServer/5" },
+            { "kind": "ordinance", "title": "City of Los Angeles Ordinance No. 188968 (City Clerk)", "url": "https://cityclerk.lacity.org/onlinedocs/2025/25-1083-S4_ord_188968_06-30-26.pdf", "unread": "The City Clerk's server redirects scripted downloads; open the link in a browser to confirm." }
           ],
-          "verification": "secondary"
-        }
-      ]
-    },
-    "San Jose": {
-      "county": "santa-clara",
-      "instruments": [
-        {
-          "id": "sj-exemption-2026",
-          "kind": "exclusion-ordinance",
-          "title": "SB 79 implementing ordinance — industrial employment hub exemption",
-          "local": {
-            "status": "enacted"
-          },
-          "hcd": {
-            "status": "compliant",
-            "date": "2026-06-04",
-            "note": "HCD found the industrial-employment-hub exclusion in substantial compliance (reported June 2026). Letter PDF not yet linked here."
-          },
-          "coverage": {
-            "type": "unknown"
-          },
-          "sources": [
-            "https://www.hklaw.com/en/insights/publications/2026/06/tracking-sb-79-implementation-before-the-train-leaves-the-station"
-          ],
-          "verification": "secondary"
-        }
-      ]
-    },
-    "Beverly Hills": {
-      "county": "los-angeles",
-      "instruments": [
-        {
-          "id": "bh-todap-2026",
-          "kind": "todap",
-          "title": "TOD Alternative Plan",
-          "local": {
-            "status": "enacted"
-          },
-          "hcd": {
-            "status": "noncompliant",
-            "date": "2026-05-08",
-            "letterUrl": "https://beverlyhills.org/DocumentCenter/View/15917/HCD---SB-79-Comment-Letter?bidId=",
-            "note": "HCD found the plan does not substantially comply (density capacity and rent-stabilized sites). The City was reported to be rescinding the plan."
-          },
-          "coverage": {
-            "type": "jurisdiction-wide"
-          },
-          "sources": [
-            "https://www.hklaw.com/en/insights/publications/2026/06/tracking-sb-79-implementation-before-the-train-leaves-the-station",
-            "https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation"
-          ],
-          "verification": "secondary"
-        }
-      ]
-    },
-    "Pasadena": {
-      "county": "los-angeles",
-      "instruments": [
-        {
-          "id": "pas-ordinance-2026",
-          "kind": "exclusion-ordinance",
-          "title": "SB 79 implementing / exclusion ordinance",
-          "local": {
-            "status": "enacted"
-          },
-          "hcd": {
-            "status": "noncompliant",
-            "date": "2026-09-25",
-            "note": "HCD non-compliance letter reported Sept. 25, 2026; the City's response deadline was late November 2026."
-          },
-          "coverage": {
-            "type": "unknown"
-          },
-          "sources": [
-            "https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation"
-          ],
-          "verification": "secondary"
-        }
-      ]
-    },
-    "Burlingame": {
-      "county": "san-mateo",
-      "instruments": [
-        {
-          "id": "bur-ordinance-2026",
-          "kind": "exclusion-ordinance",
-          "title": "SB 79 ordinance",
-          "local": {
-            "status": "enacted"
-          },
-          "hcd": {
-            "status": "noncompliant",
-            "note": "HCD non-compliance letter reported in 2026 (date not confirmed)."
-          },
-          "coverage": {
-            "type": "unknown"
-          },
-          "sources": [
-            "https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation"
-          ],
-          "verification": "secondary"
-        }
-      ]
-    },
-    "Oceanside": {
-      "county": "san-diego",
-      "instruments": [
-        {
-          "id": "ocn-ordinance-2026",
-          "kind": "exclusion-ordinance",
-          "title": "SB 79 ordinance",
-          "local": {
-            "status": "enacted"
-          },
-          "hcd": {
-            "status": "noncompliant",
-            "note": "HCD non-compliance letter reported in 2026; City response deadline reported as mid-December 2026."
-          },
-          "coverage": {
-            "type": "unknown"
-          },
-          "sources": [
-            "https://www.cp-dr.com/post/cities-tussle-with-hcd-over-sb-79-implementation",
-            "https://www.coxcastle.com/publication-how-are-the-cities-of-san-diego-oceanside-and-solana-beach-implementing-sb-79s-transit-oriented-development-strategy-its-complicated"
-          ],
-          "verification": "secondary"
-        }
-      ]
-    },
-    "Glendale": {
-      "county": "los-angeles",
-      "instruments": [
-        {
-          "id": "gle-urgency-2026",
-          "kind": "exclusion-ordinance",
-          "title": "Urgency ordinance — temporary exclusion of VHFHSZ and locally designated historic sites",
-          "local": {
-            "status": "enacted",
-            "date": "2026-06-23"
-          },
-          "hcd": {
-            "status": "unknown"
-          },
-          "coverage": {
-            "type": "criteria",
-            "criteria": [
-              "fire-hazard"
-            ],
-            "complete": false,
-            "note": "Applies to sites in a very high fire hazard severity zone (computed live from the State Fire Marshal's maps) and to sites containing a locally designated historic resource (no public parcel list; not computed)."
-          },
-          "sources": [
-            "https://www.glendaleca.gov/government/departments/office-of-the-city-manager/fact-page/understanding-sb-79-in-glendale-california"
-          ],
-          "verification": "secondary"
-        }
-      ]
-    },
-    "Oakland": {
-      "county": "alameda",
-      "instruments": [
-        {
-          "id": "oak-exclusions-2026",
-          "kind": "exclusion-ordinance",
-          "title": "Temporary exclusion ordinance",
-          "local": {
-            "status": "enacted"
-          },
-          "hcd": {
-            "status": "unknown"
-          },
-          "effectiveUntil": "Until an alternative plan is adopted or the next housing element update (2031).",
-          "coverage": {
-            "type": "unknown"
-          },
-          "sources": [
-            "https://www.oaklandca.gov/Planning-Building/Your-Commercial-Projects-Permits/SB-79-Transit-Oriented-Housing-in-Oakland"
-          ],
-          "verification": "secondary"
-        }
-      ]
-    },
-    "San Diego": {
-      "county": "san-diego",
-      "instruments": [
-        {
-          "id": "sd-phasing-o22099",
-          "kind": "exclusion-ordinance",
-          "title": "SB 79 phasing ordinance (O-22099): exemptions (>1 mile walk) and temporary exclusions (fire, low-resource, historic, sea-level rise)",
-          "local": {
-            "status": "enacted",
-            "date": "2026-05-21",
-            "reference": "O-22099",
-            "url": "https://docs.sandiego.gov/council_reso_ordinance/rao2026/O-22099.pdf"
-          },
-          "hcd": {
-            "status": "unknown",
-            "note": "HCD has up to 120 days after submittal to review. No finding recorded here yet."
-          },
-          "coverage": {
-            "type": "criteria",
-            "criteria": [
-              "fire-hazard"
-            ],
-            "complete": false,
-            "note": "Fire-hazard exclusion computed live from the State Fire Marshal's maps. The ordinance's other criteria (>1 mile walk, low-resource, historic, sea-level rise) have no public parcel list and are not computed."
-          },
-          "sources": [
-            "https://www.sandiego.gov/planning/work/senate-bill-79",
-            "https://www.coxcastle.com/publication-how-are-the-cities-of-san-diego-oceanside-and-solana-beach-implementing-sb-79s-transit-oriented-development-strategy-its-complicated"
-          ],
-          "verification": "secondary"
-        },
-        {
-          "id": "sd-transit-village-plan",
-          "kind": "todap",
-          "title": "Transit Village Plan (TOD alternative plan) — in preparation",
-          "local": {
-            "status": "draft",
-            "note": "Expected before City Council in early/spring 2027."
-          },
-          "hcd": {
-            "status": "not-submitted"
-          },
-          "coverage": {
-            "type": "jurisdiction-wide"
-          },
-          "sources": [
-            "https://www.sandiego.gov/planning/work/senate-bill-79"
-          ],
-          "verification": "secondary"
-        }
-      ]
-    },
-    "Santa Monica": {
-      "county": "los-angeles",
-      "instruments": [
-        {
-          "id": "smo-ordinance-2026",
-          "kind": "exclusion-ordinance",
-          "title": "SB 79 implementing / temporary exclusion approach",
-          "local": {
-            "status": "enacted"
-          },
-          "hcd": {
-            "status": "unknown",
-            "note": "A further HCD findings letter dated Nov. 4, 2026 has been reported but is not yet confirmed here."
-          },
-          "coverage": {
-            "type": "unknown"
-          },
-          "sources": [
-            "https://santamonicanext.org/2026/04/council-adopts-approaches-to-implement-new-state-housing-law/",
-            "https://s3da-design.com/sb-79-compliance-hcd-cities/"
-          ],
-          "verification": "secondary"
-        }
-      ]
-    },
-    "South Pasadena": {
-      "county": "los-angeles",
-      "instruments": [
-        {
-          "id": "spas-ordinance-2026",
-          "kind": "exclusion-ordinance",
-          "title": "SB 79 exclusion ordinance and TOD alternative plan",
-          "local": {
-            "status": "enacted"
-          },
-          "hcd": {
-            "status": "unknown",
-            "note": "A further HCD findings letter dated Nov. 4, 2026 has been reported but is not yet confirmed here."
-          },
-          "coverage": {
-            "type": "unknown"
-          },
-          "sources": [
-            "https://www.hklaw.com/en/insights/publications/2026/06/tracking-sb-79-implementation-before-the-train-leaves-the-station",
-            "https://s3da-design.com/sb-79-compliance-hcd-cities/"
-          ],
-          "verification": "secondary"
+          "verification": "located"
         }
       ]
     }

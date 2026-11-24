@@ -8,7 +8,7 @@ import { normalizeZone, dedupeZones, applyPopulationRule } from './zones.js';
 import { computeStandards, projectRequirements } from './standards.js';
 import { findJurisdiction, determineRegime, summarizeInstruments } from './policy.js';
 import { parcelsAtPoint } from './parcels.js';
-import { fireForParcel } from './fire.js';
+import { fireForParcel, fireCriterionStatus } from './fire.js';
 
 const SQFT_PER_SQM = 10.7639;
 const FEET_PER_MILE = 5280;
@@ -132,17 +132,38 @@ function pct(x) {
   return `${Math.round(x * 100)}%`;
 }
 
+export const FIRE_CRITERIA = ['vhfhsz', 'vhfhsz-or-sra'];
+
 /** Coverage for instruments defined by statutory criteria we can compute (fire hazard). */
 export function criteriaCoverage(inst, fire) {
   const c = inst.coverage;
-  if (c.criteria.includes('fire-hazard') && fire?.qualifies) {
-    const parts = [];
-    if (fire.vhfhsz.hit) parts.push(`${pct(fire.vhfhsz.share)} of parcel in a Very High Fire Hazard Severity Zone`);
-    if (fire.sra.hit) parts.push(`${pct(fire.sra.share)} of parcel in the State Responsibility Area`);
-    return { covered: true, reason: `${parts.join('; ')} (State Fire Marshal maps)` };
+  const criterion = c.criteria.find((x) => FIRE_CRITERIA.includes(x));
+  if (!criterion) return { covered: c.complete ? false : null };
+  if (fire == null) return { covered: null, reason: 'Fire-hazard check unavailable' };
+  const parts = [];
+  if (fire.vhfhsz.hit) parts.push(`${pct(fire.vhfhsz.share)} of parcel in a Very High Fire Hazard Severity Zone`);
+  if (fire.sra.hit && criterion === 'vhfhsz-or-sra') parts.push(`${pct(fire.sra.share)} of parcel in the State Responsibility Area`);
+  const st = fireCriterionStatus(fire, criterion);
+  if (st === 'within') return { covered: true, reason: `${parts.join('; ')} (State Fire Marshal maps)` };
+  if (st === 'partial') {
+    return {
+      covered: null,
+      reason: `Parcel is only partly in a fire zone (${parts.join('; ')}). Neither the statute nor this ordinance says whether a partly covered site is “within” the zone.`,
+    };
   }
-  if (c.criteria.includes('fire-hazard') && fire == null) return { covered: null, reason: 'Fire-hazard check unavailable' };
   return { covered: c.complete ? false : null };
+}
+
+/** Which reason fields are set on a coverage-layer row. Values: label (field == 1) or { equals, label }. */
+export function coverageReasons(row, reasonFields) {
+  return Object.entries(reasonFields)
+    .filter(([field, spec]) => {
+      const v = getField(row, field);
+      return typeof spec === 'string' ? Number(v) === 1 : v != null && String(v) === String(spec.equals);
+    })
+    .map(([, spec]) => (typeof spec === 'string' ? spec : spec.label))
+    .filter((v, i, a) => a.indexOf(v) === i)
+    .join('; ');
 }
 
 async function coverageFor(jurisdiction, interiorPoint, fire) {
@@ -164,13 +185,7 @@ async function coverageFor(jurisdiction, interiorPoint, fire) {
           }
           const r = rows[0];
           let reason = c.reasonField ? getField(r, c.reasonField) : undefined;
-          if (c.reasonFields) {
-            reason = Object.entries(c.reasonFields)
-              .filter(([field]) => Number(getField(r, field)) === 1)
-              .map(([, label]) => label)
-              .filter((v, i, a) => a.indexOf(v) === i)
-              .join('; ');
-          }
+          if (c.reasonFields) reason = coverageReasons(r, c.reasonFields);
           out[inst.id] = { covered: true, reason: reason || undefined };
         } catch (err) {
           out[inst.id] = { covered: null, error: err.message };
