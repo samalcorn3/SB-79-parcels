@@ -248,9 +248,21 @@ async function run(promise, label) {
     }
     reportEl.innerHTML = renderReport(r, { standardsDoc: data.standards });
     showParcel(r.parcel.geometry);
+    showFrontages(r.ab2011?.frontages || []);
   } catch (e) {
     reportEl.innerHTML = renderError(`A live source did not respond: ${e.message}${e.url ? ` (${new URL(e.url).host})` : ''}. Try again in a moment.`);
   }
+}
+
+let frontageGroup = null;
+/** AB 2011: measured street frontages — green where the right-of-way is 70–150 ft. */
+function showFrontages(frontages) {
+  if (frontageGroup) map.removeLayer(frontageGroup);
+  frontageGroup = L.layerGroup(frontages.filter((f) => f.line.length > 1).map((f) => {
+    const ok = f.corridor?.qualifies && f.freeway !== 'freeway';
+    return L.polyline(f.line.map(([lon, lat]) => [lat, lon]), { color: ok ? '#1f9d55' : '#9aa0a6', weight: 6, opacity: 0.85 })
+      .bindTooltip(`Street frontage ${f.lengthFt} ft · right-of-way ${f.widthFt ? `${f.widthFt.median} ft` : 'not measurable'}${ok ? ' · AB 2011 commercial corridor' : ''}`);
+  })).addTo(map);
 }
 
 function showParcel(geometry) {

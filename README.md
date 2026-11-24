@@ -119,6 +119,25 @@ npm run serve                  # then open http://localhost:8080
 
 The site is static: `index.html`, `assets/`, `src/`, and `data/`. [`.github/workflows/pages.yml`](.github/workflows/pages.yml) runs the tests and publishes to GitHub Pages on every push to `main`. One-time setup: **Settings → Pages → Source: GitHub Actions**.
 
+## AB 2011 (preview branch)
+
+Each parcel report also checks **AB 2011**, the Affordable Housing and High Road Jobs Act (Gov. Code §§ 65912.100–65912.140, as amended by AB 2243 and AB 893). It covers both paths: 100% affordable (§ 65912.111) and mixed-income (§ 65912.121). Each requirement is marked:
+
+| Mark | Meaning |
+|---|---|
+| ✓ / ✗ | Decided from authoritative data |
+| ? | Depends on facts no public layer holds; confirm with the city |
+| – | Authoritative data exists but isn't wired in yet |
+
+What it computes:
+- **Commercial corridor (§ 65912.101(c), § 65912.121(c)).** The right-of-way is measured property line to property line from the county assessor's parcels: perpendicular to each street frontage, sampled every 10 ft, ignoring samples near corners ([`src/lib/row.js`](src/lib/row.js)). Per HCD's draft AB 2011 guidelines (May 5, 2026), a site qualifies if any portion of the right-of-way fronting it is 70–150 ft wide. At least two adjacent samples must be in range, and the frontage must be at least 50 ft. Measured frontages are drawn on the map, green where they qualify.
+- **Not a freeway (§ 65912.101(g); Veh. Code § 332).** Uses Caltrans's Public Road Functional Classification. Class 1 (Interstate) is a freeway. Class 2 ("other freeway or expressway") is flagged to confirm, since expressways aren't freeways. Caltrans publishes no live layer of access control; its State Highway Network lines carry only route type.
+- **Urbanized area (§ 65912.121(b)).** Uses Census Bureau 2020 Urban Areas (TIGERweb).
+- **Site size (§ 65912.121(d))** and **fire zones (§ 65913.4(a)(6)(D))**, using the State Fire Marshal maps already used for SB 79.
+- **Density and height (§ 65912.123).** Shown from the measured corridor width and whether the parcel is within ½ mile of an SB 79 TOD stop. Every TOD stop is a major transit stop (§ 65912.156(p)).
+
+`tests/ab2011.test.mjs` checks every AB 2011 figure against the statute text.
+
 ## Previews, merging, and undoing
 
 - **The live site is always the `main` branch.** Nothing on another branch changes it.

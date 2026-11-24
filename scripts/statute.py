@@ -30,7 +30,8 @@ SECTIONS = [f"65912.{n}" for n in range(155, 163)]
 #   § 65913.4  streamlined ministerial approval (SB 79 § 65912.159 points to it)
 #   § 51178 / § 51179  very high fire hazard severity zones (cited in § 65912.161)
 #   Pub. Resources Code § 4102  state responsibility area (cited in § 65912.161)
-RELATED = [("GOV", "65913.4"), ("GOV", "51178"), ("GOV", "51179"), ("PRC", "4102")]
+#   § 65583.2  "metropolitan jurisdiction" (cited in AB 2011 § 65912.123)
+RELATED = [("GOV", "65913.4"), ("GOV", "51178"), ("GOV", "51179"), ("PRC", "4102"), ("GOV", "65583.2")]
 WANTED = {("GOV", s) for s in SECTIONS} | set(RELATED)
 
 
@@ -106,6 +107,11 @@ def fetch():
         if len(cols) < 15 or not wanted(cols[1], cols[2].rstrip(".")):
             continue
         code, sec = cols[1], cols[2].rstrip(".")
+        # Some sections have two versions in force on different dates (e.g. one
+        # "operative December 31, 2028"). Keep the version operative today.
+        op = re.search(r"operative ([A-Z][a-z]+ \d{1,2}, \d{4})", cols[13])
+        if op and datetime.strptime(op.group(1), "%B %d, %Y").date() > datetime.now(timezone.utc).date():
+            continue
         text = lob_to_text(zf.read(cols[14]))
         out[key(code, sec)] = {
             "code": code,

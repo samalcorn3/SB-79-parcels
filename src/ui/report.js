@@ -121,6 +121,31 @@ function fireCard(r) {
     <p class="fine">Source: ${esc(f.publisher)} — Fire Hazard Severity Zone maps (LRA 2025, SRA v23.3), queried live.</p></div>`;
 }
 
+
+const AB_STATUS = { meets: ['✓', 'Meets'], fails: ['✗', 'Fails'], confirm: ['?', 'Confirm locally'], 'not-evaluated': ['–', 'Not yet evaluated'] };
+
+function ab2011Card(r) {
+  const a = r.ab2011;
+  if (!a) return '';
+  if (a.error) return `<div class="card"><h2>AB 2011</h2><div class="err">${esc(a.error)}</div></div>`;
+  const path = (p) => `
+    <details class="ab-path" ${p.status === 'fails' ? '' : 'open'}>
+      <summary><span class="ab-badge ${esc(p.status)}">${p.status === 'fails' ? 'Not eligible' : p.status === 'meets' ? 'Eligible' : 'Possibly eligible'}</span> ${esc(p.title)}</summary>
+      <ul class="ab-list">${p.criteria.map((c) => `<li class="ab-${esc(c.status)}"><span class="ab-mark" title="${esc(AB_STATUS[c.status][1])}">${AB_STATUS[c.status][0]}</span><div><b>${esc(c.text)}</b> <span class="cite">${esc(c.cite)}</span><div class="fine">${esc(c.detail)}</div></div></li>`).join('')}</ul>
+    </details>`;
+  const st = a.standards;
+  const std = st ? `<table class="std"><tr><th>Density (metropolitan / other)<div class="from">${esc(st.density.basis)} — ${esc(st.density.cite)}</div></th><td class="num">${st.density.metropolitan} / ${st.density.other} du/ac</td></tr>
+      <tr><th>Height<div class="from">corridor ${st.corridorWidthFt >= 100 ? '≥' : '<'} 100 ft — ${esc(st.heightFt.cite)}</div></th><td class="num">${st.heightFt.value}${st.heightFt.transitValue ? ` / ${st.heightFt.transitValue}` : ''} ft</td></tr></table>
+      <p class="fine">${esc(st.density.note)} ${esc(st.heightFt.note)}</p>
+      ${st.freewayWithin500Ft === 'yes' ? '<p class="warn">Within 500 ft of a freeway: air filtration (MERV 16), air intakes facing away from the freeway, and no balconies facing it (§ 65912.123(f)).</p>' : st.freewayWithin500Ft === 'possibly' ? '<p class="warn">Within 500 ft of a road Caltrans classes as “other freeway or expressway”; if it is a freeway, § 65912.123(f) ventilation and balcony rules apply.</p>' : ''}` : '';
+  return `<div class="card"><h2>AB 2011 — housing on commercial land</h2>
+    <p class="fine">${esc(a.statute)}. Statuses: ✓ decided from authoritative data · ✗ fails · ? depends on facts no public layer holds · – not yet evaluated.</p>
+    ${path(a.paths.mixed)}${path(a.paths.affordable)}
+    ${std ? `<h2 style="margin-top:12px">If eligible: mixed-income standards</h2>${std}` : ''}
+    ${a.errors?.length ? `<div class="err">${a.errors.map(esc).join('<br>')}</div>` : ''}
+  </div>`;
+}
+
 export function renderReport(r, { standardsDoc } = {}) {
   const p = r.parcel;
   const regime = r.regime;
@@ -172,6 +197,8 @@ export function renderReport(r, { standardsDoc } = {}) {
   </div>
 
   ${fireCard(r)}
+
+  ${ab2011Card(r)}
 
   ${standardsCard(r, standardsDoc)}
 

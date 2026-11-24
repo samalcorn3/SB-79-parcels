@@ -41,6 +41,27 @@
       ]
     }
   },
+  "caltrans": {
+    "functionalClass": {
+      "publisher": "Caltrans — Public Road Functional Classification (exported from the Caltrans Linear Reference System, July 3, 2024)",
+      "url": "https://caltrans-gis.dot.ca.gov/arcgis/rest/services/CHhighway/CRS_Functional_Classification/FeatureServer/0",
+      "fields": [
+        "RouteID",
+        "F_System"
+      ],
+      "note": "F_System 1 = Interstate (a freeway under Veh. Code § 332); 2 = other freeway or expressway (expressways are not freeways); 3–7 = not freeways."
+    }
+  },
+  "census": {
+    "urbanAreas": {
+      "publisher": "U.S. Census Bureau — TIGERweb, 2020 Urban Areas (corrected)",
+      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/88",
+      "fields": [
+        "NAME",
+        "GEOID"
+      ]
+    }
+  },
   "geocoder": {
     "publisher": "Esri World Geocoding Service (non-stored geocoding)",
     "url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"

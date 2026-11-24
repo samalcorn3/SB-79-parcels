@@ -96,6 +96,9 @@ const chips = await page.$$eval('.chip', (els) => els.map((e) => e.textContent))
 await page.setViewportSize({ width: 1400, height: 2600 });
 await check('address lookup (San Francisco)', '?q=1%20Embarcadero%20Center%2C%20San%20Francisco', () => document.querySelector('.verdict h3'), 'lookup-sf.png');
 await check('point lookup (LA City Hall)', '?pt=-118.2428,34.0537', () => document.querySelector('.verdict h3'), 'lookup-la.png');
+await check('AB 2011 card (3600 Wilshire Blvd)', '?q=3600%20Wilshire%20Blvd%2C%20Los%20Angeles%2C%20CA', () => document.querySelector('.ab-path summary'), 'ab2011-wilshire.png');
+const abText = await page.$$eval('.ab-path summary', (els) => els.map((e) => e.textContent.trim())).catch(() => []);
+results.push({ name: 'AB 2011: mixed-income path possibly eligible on Wilshire', ok: abText.some((t) => /Possibly eligible\s+Mixed-income/.test(t)), abText });
 await page.setViewportSize({ width: 1400, height: 900 });
 await check('parcel layer (downtown LA, z17)', '#17/34.04870/-118.25860', () => /(in a TOD zone|Parcels:|parcels: )/.test(document.getElementById('map-status')?.textContent || ''), 'parcels-la.png');
 const parcelStatus = await page.textContent('#map-status').catch(() => null);

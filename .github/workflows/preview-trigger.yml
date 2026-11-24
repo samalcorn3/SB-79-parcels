@@ -1,0 +1,16 @@
+name: Refresh branch preview
+# This branch is published as a preview at /preview/ab2011/ by the Pages
+# workflow on `main`. Pushing here asks that workflow to rebuild; the live
+# site itself still comes only from `main`.
+on:
+  push:
+    branches: [claude/ab2011]
+permissions:
+  actions: write
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main --repo "${{ github.repository }}"
