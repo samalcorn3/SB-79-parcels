@@ -8,7 +8,7 @@ import { loadData } from './load-data.mjs';
 import { getJSON } from '../src/lib/arcgis.js';
 import { latestFarmlandLayer } from '../src/lib/exclusions.js';
 
-const { sources, registry } = await loadData();
+const { sources, registry, zoning } = await loadData();
 const rows = [];
 
 function specFields(spec) {
@@ -72,6 +72,9 @@ for (const k of ['vhfhsz', 'sra']) tasks.push(checkArcgis(`State Fire Marshal ${
     .then((f) => checkArcgis(`Site exclusions: farmland (${f.year} survey)`, f.url, x.farmland.fields, x.farmland.where))
     .catch((e) => rows.push({ name: 'Site exclusions: farmland', url: x.farmland.folder, ok: false, detail: e.message, edited: '—', ms: 0 })));
 }
+for (const z of zoning.sources) {
+  if (z.url) tasks.push(checkArcgis(`Zoning: ${z.name}`, z.url, Object.values(z.fields)));
+}
 for (const m of sources.mpos) {
   m.zoneLayers.forEach((l, i) => tasks.push(checkArcgis(`${m.id} zones[${i}]`, l.url, [...(l.outFields || []), ...specFields(l.tier), ...specFields(l.band)])));
   tasks.push(checkArcgis(`${m.id} stops`, m.stops.url, [...specFields(m.stops.name), ...specFields(m.stops.tier)]));
@@ -83,7 +86,7 @@ for (const c of sources.counties) {
     const fields = Object.values(src.fields).flat();
     tasks.push(src.type === 'socrata' ? checkSocrata(`${c.id} ${label}`, src, fields) : checkArcgis(`${c.id} ${label}`, src.url, fields, src.where));
   }
-  if (c.zoning) tasks.push(checkArcgis(`${c.id} zoning`, c.zoning.url, Object.values(c.zoning.fields)));
+
 }
 for (const [name, j] of Object.entries(registry.jurisdictions)) {
   for (const inst of j.instruments) {

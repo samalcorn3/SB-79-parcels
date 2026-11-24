@@ -492,15 +492,6 @@
             "Served behind a bot filter; heavy scripted use may be throttled."
           ]
         }
-      },
-      "zoning": {
-        "publisher": "LA County DRP (unincorporated areas only)",
-        "url": "https://arcgis.gis.lacounty.gov/arcgis/rest/services/DRP/ZNET_Public/MapServer/4",
-        "fields": {
-          "code": "ZONE",
-          "description": "Z_DESC"
-        },
-        "appliesTo": "unincorporated"
       }
     },
     {
@@ -568,14 +559,6 @@
           ],
           "use": "asr_landuse"
         }
-      },
-      "zoning": {
-        "publisher": "City of San Diego zoning (via SANDAG)",
-        "url": "https://geo.sandag.org/server/rest/services/Hosted/Zoning_Base_SD/FeatureServer/0",
-        "fields": {
-          "code": "zone_name"
-        },
-        "appliesTo": "San Diego"
       }
     },
     {

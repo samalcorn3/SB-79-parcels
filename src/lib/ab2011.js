@@ -36,6 +36,30 @@ export const AB2011 = {
 
 const C = (id, cite, text, status, detail) => ({ id, cite, text, status, detail });
 
+/**
+ * § 65912.111(a) / § 65912.121(a): "located in a zone where office, retail, or parking are a principally
+ * permitted use", decided from the jurisdiction's zoning layer and the rules in data/zoning.json.
+ */
+export function zoningCriterion(zoning) {
+  const cite = '§ 65912.111(a); § 65912.121(a)';
+  const text = 'In a zone where office, retail, or parking is a principally permitted use';
+  if (!zoning || !zoning.zones?.length) {
+    return { ...C('zoning', cite, text, 'not-evaluated', `${zoning?.reason || 'No zoning layer for this jurisdiction.'} “Principally permitted” means the use may occupy more than one-third of the square footage without a conditional use permit; parking counts even with one (§ 65912.101(u)).`), links: [] };
+  }
+  const src = zoning.source;
+  const parts = zoning.zones.map((z) => {
+    const name = `${z.code}${z.description && z.description !== z.code ? ` (${z.description})` : z.category && !/^\d+$/.test(z.category) ? ` (${z.category})` : ''}`;
+    return `${name}: ${z.label}. ${z.why}${z.cite ? ` [${z.cite}]` : ''}${z.notes?.length ? ` ${z.notes.join(' ')}` : ''}`;
+  });
+  const split = zoning.zones.length > 1 ? 'The parcel is split between zones. ' : '';
+  const detail = `${split}${parts.join(' ')}${src.regional ? ` Source is a regional compilation: ${src.caveat}` : ''}`;
+  return {
+    ...C('zoning', cite, text, zoning.status, detail),
+    source: { name: src.publisher, url: src.url },
+    links: src.codeUrl ? [{ label: src.codeName || 'Zoning code', url: src.codeUrl }] : [],
+  };
+}
+
 /** Caltrans federal functional class (F_System) of roads near a point: 1 Interstate, 2 other freeway/expressway, 3+ not a freeway. */
 async function roadClassesNear(sources, [lon, lat], radiusFt) {
   const rows = await queryIntersecting(sources.caltrans.functionalClass.url, toEsriGeometry({ type: 'Point', coordinates: [lon, lat] }), {
@@ -124,10 +148,8 @@ export async function ab2011ForParcel(data, ctx) {
   const width = corridorFrontages.length ? Math.max(...corridorFrontages.map((f) => f.widthFt.median)) : null;
 
   // ---- criteria shared by both paths ----
-  const zoneText = zoning?.code ? `Local zone: ${zoning.code}${zoning.description ? ` (${zoning.description})` : ''}.` : 'This jurisdiction does not publish parcel zoning as a queryable layer.';
   const shared = [
-    C('zoning', '§ 65912.111(a); § 65912.121(a)', 'In a zone where office, retail, or parking is a principally permitted use', 'confirm',
-      `${zoneText} Whether office, retail, or parking is principally permitted (may occupy more than one-third of the square footage without a conditional use permit, § 65912.101(u)) depends on the local zoning code.`),
+    zoningCriterion(zoning),
     (() => {
       if (city) {
         return cityUa

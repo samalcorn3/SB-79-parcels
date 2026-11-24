@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 1,
+  "notes": [
+    "Zoning layers, queried live, and how each jurisdiction's zones answer AB 2011's first site test: is the site 'in a zone where office, retail, or parking are a principally permitted use' (Gov. Code §§ 65912.111(a), 65912.121(a))?",
+    "'Principally permitted use' = a use that may occupy more than one-third of the square footage on the site without a conditional use permit; parking uses count whether or not they need a CUP (§ 65912.101(u)).",
+    "Each source lists rules, tried in order: a regular expression on the zone code (or on the city's own zone category) and the class of zone it denotes. Classes carry the status; a rule may override it. A city's own layer is used before a regional compilation."
+  ],
+  "classes": {
+    "commercial": { "status": "meets", "label": "Commercial zone", "why": "Retail and office uses are permitted by right in this jurisdiction's commercial zones." },
+    "office": { "status": "meets", "label": "Office zone", "why": "Office uses are permitted by right in this zone." },
+    "parking": { "status": "meets", "label": "Parking zone", "why": "Parking is the zone's purpose, and parking uses are principally permitted even where a conditional use permit is required (§ 65912.101(u))." },
+    "mixed-commercial": { "status": "meets", "label": "Commercial or employment mixed-use zone", "why": "Retail and office uses are permitted by right without a floor-area cap." },
+    "mixed-residential": { "status": "confirm", "label": "Residential-led mixed-use zone", "why": "Commercial uses are permitted, but often only on the ground floor or as a share of floor area; whether office or retail may exceed one-third of the square footage depends on the zone's standards." },
+    "industrial": { "status": "confirm", "label": "Industrial zone", "why": "Industrial zones often permit office or parking uses (parking counts even with a conditional use permit); check the zone's use table. Note AB 2011's separate industrial-use tests (§§ 65912.111(d), 65912.121(f))." },
+    "residential": { "status": "fails", "label": "Residential zone", "why": "Residential zones do not permit office or retail uses, and parking is allowed only as accessory to the homes. If this jurisdiction's code permits a parking use in this zone, even with a conditional use permit, the site would qualify (§ 65912.101(u))." },
+    "public": { "status": "confirm", "label": "Public or institutional zone", "why": "Public facility zones sometimes permit public parking or offices; check the zone's use table." },
+    "planned": { "status": "confirm", "label": "Planned development or specific plan district", "why": "Permitted uses are set by the district's own ordinance or plan, not the base zoning code." },
+    "open-space": { "status": "fails", "label": "Open space or park zone", "why": "Open space zones do not permit office, retail, or parking uses." },
+    "agriculture": { "status": "fails", "label": "Agricultural zone", "why": "Agricultural zones do not permit office or retail uses." },
+    "transportation": { "status": "fails", "label": "Transportation or right-of-way zone", "why": "Freeway, railroad, and right-of-way zones are not development sites." },
+    "unknown": { "status": "confirm", "label": "Zone not classified", "why": "This zone code is not in the site's rule table; check the jurisdiction's zoning code." }
+  },
+  "sources": [
+    {
+      "id": "la-city",
+      "name": "City of Los Angeles",
+      "jurisdictions": ["Los Angeles"],
+      "publisher": "Los Angeles City Planning — Zoning (with the city's own zone categories)",
+      "url": "https://services5.arcgis.com/7nsPwEMP38bSkCjy/arcgis/rest/services/Zoning/FeatureServer/15",
+      "fields": { "code": "Zoning", "category": "CATEGORY" },
+      "codeUrl": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lamc/0-0-0-107541",
+      "codeName": "Los Angeles Municipal Code, Chapter 1, Article 2",
+      "rules": [
+        { "on": "category", "match": "^(Commercial|Commercial-Mixed)$", "class": "commercial", "cite": "LAMC §§ 12.12.2–12.17 (CR, C1, C1.5, C2, C4, C5 zones); Chapter 1A for downtown zones" },
+        { "on": "category", "match": "^Parking$", "class": "parking", "cite": "LAMC § 12.12 (P zone)" },
+        { "on": "code", "match": "(^|[\\]\\)])(CM|M1|M2|M3)-", "class": "industrial", "status": "meets", "why": "LA's CM zone permits the uses of the C2 zone, and the M1–M3 zones build on it, so retail and office are permitted by right.", "cite": "LAMC §§ 12.17.1, 12.17.6, 12.18, 12.19" },
+        { "on": "category", "match": "^(Manufacturing|Industrial|Industrial-Mixed|Hybrid Industrial)$", "class": "industrial", "cite": "LAMC §§ 12.17.5 (MR zones); Chapter 1A (downtown industrial and hybrid industrial districts)" },
+        { "on": "category", "match": "^Residential-Mixed$", "class": "mixed-residential", "cite": "LAMC § 12.10.5 (RAS zones); Chapter 1A" },
+        { "on": "category", "match": "^(Single Family Residential|Multiple Family Residential|Residential|Suburban)$", "class": "residential", "cite": "LAMC §§ 12.07–12.12 (R and RA zones)" },
+        { "on": "category", "match": "^(Public|Public Facilities)$", "class": "public", "cite": "LAMC § 12.04.09 (PF zone)" },
+        { "on": "category", "match": "^Open Space$", "class": "open-space", "cite": "LAMC § 12.04.05 (OS zone)" },
+        { "on": "category", "match": "^Agricultural$", "class": "agriculture", "cite": "LAMC §§ 12.05–12.06 (A1, A2 zones)" },
+        { "on": "category", "match": "^Freeway$", "class": "transportation" }
+      ],
+      "flags": [
+        { "match": "\\[Q\\]|\\(Q\\)|^Q", "status": "confirm", "note": "The zone carries [Q] qualified conditions, which can restrict permitted uses; check the zone change ordinance." },
+        { "match": "\\(T\\)|\\[T\\]", "note": "(T) tentative classification: the zone takes effect only when its conditions are met." }
+      ]
+    },
+    {
+      "id": "sf",
+      "name": "City and County of San Francisco",
+      "jurisdictions": ["San Francisco"],
+      "fromParcel": true,
+      "publisher": "San Francisco Planning — zoning district on the assessor parcel record",
+      "codeUrl": "https://codelibrary.amlegal.com/codes/san_francisco/latest/sf_planning/0-0-0-17636",
+      "codeName": "San Francisco Planning Code",
+      "rules": [
+        { "match": "^(NC-[123S]|NCT(-[123])?|NCD|C-2|C-3-[GORS]|C-3-O\\(SD\\)|CCB|CVR|CRNC|RCD)$", "class": "commercial", "cite": "SF Planning Code Art. 7 (Neighborhood Commercial), Art. 2 (C districts) and Art. 8 (Chinatown)" },
+        { "match": "^(MUO|MUG|MUR|UMU|CMUO|SALI|BR-MU|MR-MU|P70-MU|PPS-MU|S-MU)$", "class": "mixed-commercial", "cite": "SF Planning Code Art. 8 (Eastern Neighborhoods mixed use) and special use districts" },
+        { "match": "^(RC-[34]|RED-MX)$", "class": "mixed-residential", "cite": "SF Planning Code §§ 209.3, 847" },
+        { "match": "^(PDR-|M-[12]$)", "class": "industrial", "cite": "SF Planning Code §§ 210.3 (PDR), 210.4 (M districts)" },
+        { "match": "^(RH|RM|RTO|RED$|RH DTR|SB-DTR|TB DTR)", "class": "residential", "cite": "SF Planning Code §§ 209.1–209.4" },
+        { "match": "^P$", "class": "public", "cite": "SF Planning Code § 211 (P district)" },
+        { "match": "^(PM-|HP-RA|MB-|TI-|YBI-|Job Corps)", "class": "planned", "cite": "SF Planning Code redevelopment and special area plans (Parkmerced, Hunters Point, Mission Bay, Treasure Island)" }
+      ]
+    },
+    {
+      "id": "sd-city",
+      "name": "City of San Diego",
+      "jurisdictions": ["San Diego"],
+      "publisher": "City of San Diego base zoning (published by SANDAG)",
+      "url": "https://geo.sandag.org/server/rest/services/Hosted/Zoning_Base_SD/FeatureServer/0",
+      "fields": { "code": "zone_name" },
+      "codeUrl": "https://www.sandiego.gov/city-clerk/officialdocs/municipal-code/chapter-13",
+      "codeName": "San Diego Municipal Code, Chapter 13",
+      "rules": [
+        { "match": "^CP-", "class": "parking", "cite": "SDMC § 131.0502 (CP, commercial parking zone)" },
+        { "match": "^(CC|CN|CR|CV|CO)-", "class": "commercial", "cite": "SDMC § 131.0522, Table 131-05B (commercial use regulations)" },
+        { "match": "^EMX-", "class": "mixed-commercial", "cite": "SDMC § 131.0722, Table 131-07B (EMX employment mixed-use)" },
+        { "match": "^RMX-", "class": "mixed-residential", "cite": "SDMC § 131.0722, Table 131-07B (RMX residential mixed-use)" },
+        { "match": "^(IL|IP|IH|IS|IBT)-", "class": "industrial", "cite": "SDMC § 131.0622, Table 131-06B (industrial use regulations)" },
+        { "match": "^(RS|RM|RT|RX|RE)-", "class": "residential", "cite": "SDMC §§ 131.0422, 131.0322 (residential use regulations)" },
+        { "match": "^(AG|AR)-", "class": "agriculture", "cite": "SDMC § 131.0322 (agricultural use regulations)" },
+        { "match": "^(OC|OF|OP|OR)-", "class": "open-space", "cite": "SDMC § 131.0222 (open space use regulations)" },
+        { "match": "PD-|^MPD-|^LJSPD-|^OT", "class": "planned", "cite": "SDMC Chapter 15 (planned district ordinances)" }
+      ]
+    },
+    {
+      "id": "sd-county",
+      "name": "Unincorporated San Diego County",
+      "unincorporatedOf": "san-diego",
+      "publisher": "County of San Diego zoning use regulations (published by SANDAG)",
+      "url": "https://geo.sandag.org/server/rest/services/Hosted/Zoning_Unincorporated/FeatureServer/0",
+      "fields": { "code": "usereg" },
+      "codeUrl": "https://www.sandiegocounty.gov/content/sdc/pds/zoning/ordinance.html",
+      "codeName": "San Diego County Zoning Ordinance",
+      "rules": [
+        { "match": "^C3[0-8]$|^C4[0-6]$|^CL-", "class": "commercial", "cite": "County Zoning Ordinance §§ 2300–2468 (C30–C46 commercial use regulations)" },
+        { "match": "^M5", "class": "industrial", "cite": "County Zoning Ordinance §§ 2500–2588 (M50–M58 industrial use regulations)" },
+        { "match": "^(RS|RU|RV|RM|RR|RC|RMH|RMV|RRO|RRx|RMCD)", "class": "residential", "cite": "County Zoning Ordinance §§ 2100–2188 (residential use regulations)" },
+        { "match": "^A7", "class": "agriculture", "cite": "County Zoning Ordinance §§ 2700–2728 (A70, A72)" },
+        { "match": "^S8[0-8]$|^S9", "class": "open-space", "cite": "County Zoning Ordinance §§ 2800–2948 (special purpose use regulations)" },
+        { "match": "^(FBV|ALV|ALCD)", "class": "planned", "cite": "Form-based village and community plan districts" }
+      ]
+    },
+    {
+      "id": "sj-city",
+      "name": "City of San José",
+      "jurisdictions": ["San Jose", "San José"],
+      "publisher": "City of San José — Zoning Districts",
+      "url": "https://geo.sanjoseca.gov/server/rest/services/OPN/OPN_OpenDataService/MapServer/401",
+      "fields": { "code": "ZONINGABBREV", "description": "ZONING" },
+      "codeUrl": "https://library.municode.com/ca/san_jose/codes/code_of_ordinances?nodeId=TIT20ZO",
+      "codeName": "San José Municipal Code, Title 20",
+      "rules": [
+        { "match": "\\(PD\\)", "class": "planned", "cite": "SJMC Ch. 20.60 (planned development zoning: uses set by the PD permit)" },
+        { "match": "^(CG|CN|CP|CO)$", "class": "commercial", "cite": "SJMC § 20.40.100, Table 20-90 (commercial districts)" },
+        { "match": "^(DC|DC-NT1)$", "class": "commercial", "cite": "SJMC § 20.70.100, Table 20-140 (downtown districts)" },
+        { "match": "^(MUC|MS-C|MS-G|UV|UVC|CIC)$", "class": "mixed-commercial", "cite": "SJMC §§ 20.40.100, 20.55 (mixed-use commercial, main street, urban village districts)" },
+        { "match": "^(MUN|UR|TR)$", "class": "mixed-residential", "cite": "SJMC § 20.30.100 (residential mixed-use districts)" },
+        { "match": "^(IP|LI|HI|TEC)$", "class": "industrial", "cite": "SJMC § 20.50.100, Table 20-110 (industrial districts)" },
+        { "match": "^R-", "class": "residential", "cite": "SJMC § 20.30.100, Table 20-50 (residential districts)" },
+        { "match": "^PQP$", "class": "public", "cite": "SJMC Ch. 20.40 (public/quasi-public district)" },
+        { "match": "^OS$", "class": "open-space", "cite": "SJMC Ch. 20.20 (open space district)" },
+        { "match": "^A$", "class": "agriculture", "cite": "SJMC Ch. 20.20 (agriculture district)" },
+        { "match": "^WATER$", "class": "transportation" }
+      ]
+    },
+    {
+      "id": "oak-city",
+      "name": "City of Oakland",
+      "jurisdictions": ["Oakland"],
+      "publisher": "City of Oakland Planning — Base Zones (effective Oct 20, 2026, Ord. 13901)",
+      "url": "https://services.arcgis.com/9tC74aDHuml0x5Yz/arcgis/rest/services/Zoning_Group_Layers_Eff20261020_Ord13901/FeatureServer/0",
+      "fields": { "code": "BASEZONE" },
+      "codeUrl": "https://library.municode.com/ca/oakland/codes/planning_code?nodeId=TIT17PL",
+      "codeName": "Oakland Planning Code, Title 17",
+      "rules": [
+        { "match": "^(CN|CC|CR)-", "class": "commercial", "cite": "Oakland Planning Code § 17.33.040 (CN), § 17.35.040 (CC), § 17.37.040 (CR)" },
+        { "match": "^D-DT-(C|CX|CW|CPW|P|PM)$", "class": "commercial", "cite": "Oakland Planning Code Ch. 17.58 (Central Business District zones)" },
+        { "match": "^(CIX|IG|IO|M-)", "class": "industrial", "cite": "Oakland Planning Code Chs. 17.73 (CIX, IG, IO)" },
+        { "match": "^HBX-", "class": "mixed-residential", "cite": "Oakland Planning Code Ch. 17.65 (Housing and Business Mix)" },
+        { "match": "^RU-[45]$", "class": "mixed-residential", "cite": "Oakland Planning Code Ch. 17.17 (Urban Residential, commercial facilities permitted on the ground floor)" },
+        { "match": "^(RD|RH|RM|RU)-", "class": "residential", "cite": "Oakland Planning Code Chs. 17.11–17.17 (residential zones)" },
+        { "match": "^D-", "class": "planned", "cite": "Oakland Planning Code district zones (specific plan areas: Broadway Valley, Lake Merritt, Central Estuary, Coliseum, West Oakland, Downtown)" },
+        { "match": "^S-", "class": "planned", "cite": "Oakland Planning Code special zones" },
+        { "match": "^OS", "class": "open-space", "cite": "Oakland Planning Code Ch. 17.11 (open space zone)" }
+      ]
+    },
+    {
+      "id": "sac-city",
+      "name": "City of Sacramento",
+      "jurisdictions": ["Sacramento"],
+      "publisher": "City of Sacramento — Zoning",
+      "url": "https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/Zoning/FeatureServer/0",
+      "fields": { "code": "BASE_ZONE", "description": "DESCRIPTION", "planName": "SPDNAME", "pudName": "PUDNAME" },
+      "codeUrl": "https://library.qcode.us/lib/sacramento_ca/pub/city_code/item/title_17",
+      "codeName": "Sacramento City Code, Title 17",
+      "rules": [
+        { "match": "^(C-[1-4]|SC|HC)$", "class": "commercial", "cite": "Sacramento City Code §§ 17.216.200–.500 (commercial zones), Table 17.216 use regulations" },
+        { "match": "^(OB|EC)$", "class": "office", "cite": "Sacramento City Code §§ 17.212.300 (OB), 17.220.200 (EC)" },
+        { "match": "^(RO|RMX|TC)$", "class": "mixed-residential", "cite": "Sacramento City Code §§ 17.208.700 (RO), 17.208.600 (RMX), 17.216.800 (TC)" },
+        { "match": "^(M-1|M-2|M-T|MIP|MRD)$", "class": "industrial", "cite": "Sacramento City Code Ch. 17.220 (industrial zones)" },
+        { "match": "^(R-|RE$)", "class": "residential", "cite": "Sacramento City Code Ch. 17.208 (residential zones)" },
+        { "match": "^H$", "class": "public", "cite": "Sacramento City Code § 17.212.200 (H, hospital zone)" },
+        { "match": "^(A|A-OS|F|ARP-F)$", "class": "agriculture", "cite": "Sacramento City Code Ch. 17.204 (agriculture and open space zones)" }
+      ]
+    },
+    {
+      "id": "lb-city",
+      "name": "City of Long Beach",
+      "jurisdictions": ["Long Beach"],
+      "publisher": "City of Long Beach — Zoning",
+      "url": "https://services6.arcgis.com/yCArG7wGXGyWLqav/arcgis/rest/services/Zoning/FeatureServer/0",
+      "fields": { "code": "ZONING_SYMBOL" },
+      "codeUrl": "https://library.municode.com/ca/long_beach/codes/municipal_code?nodeId=TIT21ZO",
+      "codeName": "Long Beach Municipal Code, Title 21",
+      "rules": [
+        { "match": "^(C3|C3-A|C-M|CCA|CCN|CCP|CCR|CHW|CMW|CNA|CNP|CNR|CO|CS)\\b", "class": "commercial", "cite": "LBMC Ch. 21.32, Table 32-1 (commercial districts)" },
+        { "match": "^MU-[123M]", "class": "mixed-commercial", "cite": "LBMC Ch. 21.33 (mixed-use districts)" },
+        { "match": "^RMU", "class": "mixed-residential", "cite": "LBMC Ch. 21.33 (residential mixed-use districts)" },
+        { "match": "^(I|IG|IL|IM|IP|NI-)\\b", "class": "industrial", "cite": "LBMC Ch. 21.33 (industrial districts)" },
+        { "match": "^(R-|RM|MFR|RP-)", "class": "residential", "cite": "LBMC Ch. 21.31 (residential districts)" },
+        { "match": "^(PD-|SP-)", "class": "planned", "cite": "LBMC Ch. 21.37 (planned development districts) and specific plans" },
+        { "match": "^P\\b", "class": "open-space", "cite": "LBMC Ch. 21.35 (park district)" },
+        { "match": "^PR\\b", "class": "public", "cite": "LBMC Ch. 21.35 (public right-of-way district)" }
+      ]
+    },
+    {
+      "id": "la-county",
+      "name": "Unincorporated Los Angeles County",
+      "unincorporatedOf": "los-angeles",
+      "publisher": "LA County Department of Regional Planning — zoning (unincorporated areas)",
+      "url": "https://arcgis.gis.lacounty.gov/arcgis/rest/services/DRP/ZNET_Public/MapServer/4",
+      "fields": { "code": "ZONE", "description": "Z_DESC" },
+      "codeUrl": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances?nodeId=TIT22PLZO",
+      "codeName": "Los Angeles County Code, Title 22",
+      "rules": [
+        { "match": "^(C-1|C-2|C-3|C-H|C-M|C-R|CPD|C-MJ)", "class": "commercial", "cite": "LACC Ch. 22.20, Table 22.20.030-B (commercial zones)" },
+        { "match": "^(MXD|MU)", "class": "mixed-commercial", "cite": "LACC Ch. 22.26 (mixed use zones)" },
+        { "match": "^(M-1|M-1.5|M-2|M-3|M-4|MPD)", "class": "industrial", "cite": "LACC Ch. 22.22 (industrial zones)" },
+        { "match": "^P-R", "class": "parking", "cite": "LACC Ch. 22.24 (P-R restricted parking zone)" },
+        { "match": "^(R-|RPD)", "class": "residential", "cite": "LACC Ch. 22.18 (residential zones)" },
+        { "match": "^(A-|R-R)", "class": "agriculture", "cite": "LACC Ch. 22.16 (agricultural zones)" },
+        { "match": "^(O-S|W)", "class": "open-space", "cite": "LACC Ch. 22.24 (open space and watershed zones)" },
+        { "match": "^SP", "class": "planned", "cite": "LACC Ch. 22.46 (specific plans)" }
+      ]
+    },
+    {
+      "id": "mtc-2023",
+      "name": "Bay Area (MTC/ABAG regional compilation)",
+      "regionalFor": ["alameda", "san-francisco", "san-mateo", "santa-clara"],
+      "regional": true,
+      "publisher": "MTC/ABAG — San Francisco Bay Region Zoning (2023, draft compilation of city and county zoning)",
+      "url": "https://services3.arcgis.com/i2dkYWmb4wHvYPda/arcgis/rest/services/Draft_Bay_Area_Zoning_2023/FeatureServer/0",
+      "fields": { "code": "zn_code", "description": "zn_description", "category": "zn_regional_description", "jurisdiction": "zn_jurisdiction", "codeUrl": "zn_code_basis_url" },
+      "caveat": "MTC's compilation is labelled a draft (2023); the city's current zoning map controls.",
+      "rules": [
+        { "on": "category", "match": "^Commercial$", "class": "commercial", "cite": "MTC regional zoning category “Commercial”" },
+        { "on": "category", "match": "^Mixed Use Residential$", "class": "mixed-residential", "cite": "MTC regional zoning category “Mixed Use Residential”" },
+        { "on": "category", "match": "^Industrial$", "class": "industrial", "cite": "MTC regional zoning category “Industrial”" },
+        { "on": "category", "match": "Residential$", "class": "residential", "cite": "MTC regional zoning category" },
+        { "on": "category", "match": "^Public and Institutional$", "class": "public", "cite": "MTC regional zoning category" },
+        { "on": "category", "match": "^Parks and Open Space$", "class": "open-space", "cite": "MTC regional zoning category" },
+        { "on": "category", "match": "^Agriculture$", "class": "agriculture", "cite": "MTC regional zoning category" },
+        { "on": "category", "match": "^Transportation$", "class": "transportation", "cite": "MTC regional zoning category" }
+      ]
+    },
+    {
+      "id": "scag-2019",
+      "name": "Southern California (SCAG regional compilation)",
+      "regionalFor": ["los-angeles"],
+      "regional": true,
+      "publisher": "SCAG — 2019 Regional Land Use Information for Los Angeles County (city zoning, standardized)",
+      "url": "https://services5.arcgis.com/vYSHcRQuTn4O8o35/arcgis/rest/services/2019_Regional_Land_Use_Information_for_Los_Angeles_County/FeatureServer/0",
+      "fields": { "code": "ZN19_CITY", "category": "ZN19_SCAG" },
+      "caveat": "SCAG's compilation reflects zoning as of 2019; rezonings since then (including housing element rezonings) are not shown. The city's current zoning map controls.",
+      "rules": [
+        { "on": "category", "match": "^(1200|121\\d|122\\d|1230|1233)$", "class": "commercial", "cite": "SCAG standardized zoning class 1200 (commercial and services)" },
+        { "on": "category", "match": "^1247$", "class": "parking", "cite": "SCAG standardized zoning class 1247 (public parking)" },
+        { "on": "category", "match": "^(1500|1620)$", "class": "mixed-commercial", "cite": "SCAG standardized zoning class 1500/1620" },
+        { "on": "category", "match": "^(1600|1610)$", "class": "mixed-residential", "cite": "SCAG standardized zoning class 1600/1610" },
+        { "on": "category", "match": "^13\\d\\d$", "class": "industrial", "cite": "SCAG standardized zoning class 1300 (industrial)" },
+        { "on": "category", "match": "^11\\d\\d$", "class": "residential", "cite": "SCAG standardized zoning class 1100 (residential)" },
+        { "on": "category", "match": "^(124\\d|125\\d|126\\d|127\\d)$", "class": "public", "cite": "SCAG standardized zoning class 1240–1270 (public and institutional)" },
+        { "on": "category", "match": "^18\\d\\d$", "class": "open-space", "cite": "SCAG standardized zoning class 1800 (open space)" },
+        { "on": "category", "match": "^2\\d\\d\\d$", "class": "agriculture", "cite": "SCAG standardized zoning class 2000 (agriculture)" },
+        { "on": "category", "match": "^14\\d\\d$", "class": "transportation", "cite": "SCAG standardized zoning class 1400 (transportation and utilities)" },
+        { "on": "category", "match": "^7777$", "class": "planned", "cite": "SCAG standardized zoning class 7777 (specific plan)" }
+      ]
+    }
+  ]
+}

@@ -23,8 +23,8 @@ async function loadData() {
     if (!r.ok) throw new Error(`Could not load data/${n}`);
     return r.json();
   });
-  const [sources, standards, registry] = await Promise.all([get('sources.json'), get('standards.json'), get('jurisdictions.json')]);
-  return { sources, standards, registry };
+  const [sources, standards, registry, zoning] = await Promise.all([get('sources.json'), get('standards.json'), get('jurisdictions.json'), get('zoning.json')]);
+  return { sources, standards, registry, zoning };
 }
 
 const statusParts = { zones: '', parcels: '' };

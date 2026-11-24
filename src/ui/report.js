@@ -171,7 +171,7 @@ export function ab2011Card(r) {
   const path = (p) => `
     <details class="ab-path" ${p.status === 'fails' ? '' : 'open'}>
       <summary><span class="ab-badge ${esc(p.status)}">${p.status === 'fails' ? 'Not eligible' : p.status === 'meets' ? 'Eligible' : 'Possibly eligible'}</span> ${esc(p.title)}</summary>
-      <ul class="ab-list">${p.criteria.filter((c) => !c.id.startsWith('a6-')).map((c) => criterionLi(c)).join('')}${a6Row(p.criteria.filter((c) => c.id.startsWith('a6-')))}</ul>
+      <ul class="ab-list">${p.criteria.filter((c) => !c.id.startsWith('a6-')).map((c) => criterionLi(c, c.source || c.links?.length ? `<div class="fine src">${srcLinks(c)}</div>` : '')).join('')}${a6Row(p.criteria.filter((c) => c.id.startsWith('a6-')))}</ul>
     </details>`;
   const st = a.standards;
   const std = st ? `<table class="std"><tr><th>Density (metropolitan / other)<div class="from">${esc(st.density.basis)} — ${esc(st.density.cite)}</div></th><td class="num">${st.density.metropolitan} / ${st.density.other} du/ac</td></tr>
@@ -189,7 +189,9 @@ export function ab2011Card(r) {
 export function renderReport(r, { standardsDoc } = {}) {
   const p = r.parcel;
   const regime = r.regime;
-  const zoning = r.zoning ? `<dt>Local zoning</dt><dd>${esc(r.zoning.code)}${r.zoning.description ? ` — ${esc(r.zoning.description)}` : ''}</dd>` : '';
+  const zoning = r.zoning?.code
+    ? `<dt>Local zoning</dt><dd>${esc(r.zoning.code)}${r.zoning.description && r.zoning.description !== r.zoning.code ? ` — ${esc(r.zoning.description)}` : ''}${r.zoning.source ? `<div class="fine">${link(r.zoning.source.url, r.zoning.source.publisher)}${r.zoning.source.regional ? ' (regional compilation)' : ''}</div>` : ''}</dd>`
+    : '';
   const warnings = [
     ...(p.stale ? p.sourceNotes : []),
     ...(r.mpo.draft ? [`${r.mpo.name} labels its SB 79 map as DRAFT.`] : []),
