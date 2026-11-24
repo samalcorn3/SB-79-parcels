@@ -1,0 +1,41 @@
+{
+  "id": "beverly-hills",
+  "name": "City of Beverly Hills",
+  "jurisdictions": [
+    "Beverly Hills"
+  ],
+  "publisher": "City of Beverly Hills — Zoning",
+  "url": "https://gis.beverlyhills.org/arcgis/rest/services/Zoning/FeatureServer/2",
+  "fields": {
+    "code": "ZONE"
+  },
+  "generic": false,
+  "updatedField": "last_edited_date",
+  "codeName": "Beverly Hills Municipal Code, Title 10",
+  "rules": [
+    {
+      "match": "SP$",
+      "class": "planned",
+      "cite": "Beverly Hills specific plans"
+    },
+    {
+      "match": "^M-PD",
+      "class": "planned",
+      "cite": "Beverly Hills municipal planned development"
+    },
+    {
+      "match": "^(C-3|C-5|C-Z)",
+      "class": "commercial",
+      "cite": "Beverly Hills Municipal Code Title 10, Ch. 3 (commercial zones)"
+    },
+    {
+      "match": "^(R-|RMCP)",
+      "class": "residential",
+      "cite": "Beverly Hills Municipal Code Title 10, Ch. 3 (residential zones)"
+    },
+    {
+      "match": "^T-1$",
+      "class": "transportation"
+    }
+  ]
+}

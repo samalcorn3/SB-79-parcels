@@ -1,0 +1,51 @@
+{
+  "id": "santa-clara-city",
+  "name": "City of Santa Clara",
+  "jurisdictions": [
+    "Santa Clara"
+  ],
+  "publisher": "City of Santa Clara — Zoning Codes",
+  "url": "https://map.santaclaraca.gov/maps/rest/services/OPENDATA/RegionalZoningOpenData/MapServer/0",
+  "fields": {
+    "code": "ZONGDSGN"
+  },
+  "codeUrl": "https://www.codepublishing.com/CA/SantaClara/#!/SantaClara18/SantaClara18.html",
+  "codeName": "Santa Clara City Code, Title 18",
+  "rules": [
+    {
+      "match": "^C",
+      "class": "commercial",
+      "cite": "SCCC Title 18 (commercial zones)"
+    },
+    {
+      "match": "^MU",
+      "class": "mixed-residential",
+      "cite": "SCCC Title 18 (mixed-use zones)"
+    },
+    {
+      "match": "^(HI|LI|ML|MH|IP)",
+      "class": "industrial",
+      "cite": "SCCC Title 18 (industrial zones)"
+    },
+    {
+      "match": "^R",
+      "class": "residential",
+      "cite": "SCCC Title 18 (residential zones)"
+    },
+    {
+      "match": "^PQP$",
+      "class": "public",
+      "cite": "SCCC Title 18 (public/quasi-public)"
+    },
+    {
+      "match": "^OS$",
+      "class": "open-space",
+      "cite": "SCCC Title 18 (open space)"
+    },
+    {
+      "match": "^PD",
+      "class": "planned",
+      "cite": "SCCC Title 18 (planned development)"
+    }
+  ]
+}

@@ -4,11 +4,11 @@
 // returns rows. Prints a Markdown report (also written to $GITHUB_STEP_SUMMARY
 // when run in Actions). Exits 1 if any source is broken.
 import { appendFile, writeFile } from 'node:fs/promises';
-import { loadData } from './load-data.mjs';
+import { loadData, loadZoningSources } from './load-data.mjs';
 import { getJSON } from '../src/lib/arcgis.js';
 import { latestFarmlandLayer } from '../src/lib/exclusions.js';
 
-const { sources, registry, zoning } = await loadData();
+const { sources, registry } = await loadData();
 const rows = [];
 
 function specFields(spec) {
@@ -71,7 +71,7 @@ for (const k of ['vhfhsz', 'sra']) tasks.push(checkArcgis(`State Fire Marshal ${
     .then((f) => checkArcgis(`Site exclusions: farmland (${f.year} survey)`, f.url, x.farmland.fields, x.farmland.where))
     .catch((e) => rows.push({ name: 'Site exclusions: farmland', url: x.farmland.folder, ok: false, detail: e.message, edited: '—', ms: 0 })));
 }
-for (const z of zoning.sources) {
+for (const z of await loadZoningSources()) {
   if (z.url) tasks.push(checkArcgis(`Zoning: ${z.name}`, z.url, Object.values(z.fields)));
 }
 for (const m of sources.mpos) {

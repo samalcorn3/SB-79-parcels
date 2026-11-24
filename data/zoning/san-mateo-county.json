@@ -1,0 +1,54 @@
+{
+  "id": "san-mateo-county",
+  "name": "Unincorporated San Mateo County",
+  "publisher": "County of San Mateo Planning — Zoning Districts",
+  "url": "https://services.arcgis.com/yq3FgOI44hYHAFVZ/arcgis/rest/services/Zoning_Districts/FeatureServer/0",
+  "fields": {
+    "code": "Zone"
+  },
+  "rules": [
+    {
+      "match": "^(PUD|PC)",
+      "class": "planned",
+      "cite": "San Mateo County planned unit and planned community districts"
+    },
+    {
+      "match": "^(C-1|C-2|CCR)",
+      "class": "commercial",
+      "cite": "San Mateo County Zoning Regulations (C-1, C-2, CCR commercial districts)"
+    },
+    {
+      "match": "^CMU-",
+      "class": "mixed-commercial",
+      "cite": "San Mateo County Zoning Regulations, North Fair Oaks commercial mixed-use districts"
+    },
+    {
+      "match": "^(NMU|TS-MU)",
+      "class": "mixed-residential",
+      "cite": "San Mateo County Zoning Regulations (neighborhood and transit mixed-use districts)"
+    },
+    {
+      "match": "^(M-1|M-2|I/)",
+      "class": "industrial",
+      "cite": "San Mateo County Zoning Regulations (industrial districts)"
+    },
+    {
+      "match": "^(R-1|R-2|R-3|R-E|RH|MH)",
+      "class": "residential",
+      "cite": "San Mateo County Zoning Regulations (residential districts)"
+    },
+    {
+      "match": "^(PAD|A-1)",
+      "class": "agriculture",
+      "cite": "San Mateo County Zoning Regulations (agricultural districts)"
+    },
+    {
+      "match": "^(COSC|TPZ|RM)",
+      "class": "open-space",
+      "cite": "San Mateo County Zoning Regulations (open space, timberland, resource management)"
+    }
+  ],
+  "generic": false,
+  "unincorporatedOf": "san-mateo",
+  "codeName": "San Mateo County Zoning Regulations"
+}

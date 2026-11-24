@@ -1,0 +1,80 @@
+{
+  "id": "fremont",
+  "name": "City of Fremont",
+  "publisher": "City of Fremont GIS — Zoning (with the city's zoning classes)",
+  "url": "https://services2.arcgis.com/AVso4yDITKsybTJg/arcgis/rest/services/Zoning_Class/FeatureServer/0",
+  "fields": {
+    "code": "ZP_DIST",
+    "category": "ZN_CLASS"
+  },
+  "rules": [
+    {
+      "match": "^P-\\d",
+      "class": "planned",
+      "cite": "Fremont planned districts (Fremont Municipal Code Ch. 18.110)"
+    },
+    {
+      "match": "^C-O",
+      "class": "office",
+      "cite": "Fremont Municipal Code Ch. 18.40 (commercial office)"
+    },
+    {
+      "match": "^CC-UO",
+      "class": "office",
+      "cite": "Fremont Municipal Code Ch. 18.45 (City Center urban office)"
+    },
+    {
+      "match": "^TC-",
+      "class": "commercial",
+      "cite": "Fremont Municipal Code Ch. 18.45 (Town Center districts)"
+    },
+    {
+      "match": "^(CC-|MX)",
+      "class": "mixed-residential",
+      "cite": "Fremont Municipal Code Ch. 18.45 (City Center and mixed-use districts)"
+    },
+    {
+      "match": "^(D-|WSI)",
+      "class": "planned",
+      "cite": "Fremont Downtown and Warm Springs Innovation districts"
+    },
+    {
+      "on": "category",
+      "match": "^C$",
+      "class": "commercial",
+      "cite": "Fremont Municipal Code Ch. 18.40 (commercial districts)"
+    },
+    {
+      "on": "category",
+      "match": "^I$",
+      "class": "industrial",
+      "cite": "Fremont Municipal Code Ch. 18.50 (industrial districts)"
+    },
+    {
+      "on": "category",
+      "match": "^R$",
+      "class": "residential",
+      "cite": "Fremont Municipal Code Ch. 18.25–18.35 (residential districts)"
+    },
+    {
+      "on": "category",
+      "match": "^OS$",
+      "class": "open-space"
+    },
+    {
+      "on": "category",
+      "match": "^PF$",
+      "class": "public"
+    },
+    {
+      "on": "category",
+      "match": "^(ROW|RR)$",
+      "class": "transportation"
+    }
+  ],
+  "generic": false,
+  "jurisdictions": [
+    "Fremont"
+  ],
+  "codeName": "Fremont Municipal Code, Title 18"
+}

@@ -101,8 +101,17 @@ await check('address lookup (San Francisco)', '?q=1%20Embarcadero%20Center%2C%20
 await check('point lookup (LA City Hall)', '?pt=-118.2428,34.0537', () => document.querySelector('.verdict h3'), 'lookup-la.png');
 await page.goto(base).catch(() => null);
 await page.evaluate(() => { try { localStorage.removeItem('lawTab'); } catch { /* */ } });
+// Zoning rules load per jurisdiction: a lookup fetches only its own city's file.
+const zoningFiles = [];
+const countZoning = (r) => {
+  const m = r.url().match(/data\/zoning\/([^/?]+)\.json/);
+  if (m) zoningFiles.push(m[1]);
+};
+page.on('request', countZoning);
 await check('AB 2011 card (3600 Wilshire Blvd)', '?q=3600%20Wilshire%20Blvd%2C%20Los%20Angeles%2C%20CA', () => document.querySelector('.ab-path summary') && document.querySelector('.card.exclusions'), 'sb79-wilshire.png');
 // The two laws are separate tabs: SB 79 shows first; AB 2011 on its own tab.
+page.off('request', countZoning);
+results.push({ name: 'zoning: only the looked-up jurisdiction’s rules load', ok: zoningFiles.length === 1 && zoningFiles[0] === 'la-city', zoningFiles });
 const tabsBefore = await page.evaluate(() => [...document.querySelectorAll('section.law')].map((s) => `${s.dataset.law}:${s.hidden ? 'hidden' : 'shown'}`).join(' '));
 await page.click('.lawtabs [data-law="ab2011"]').catch(() => null);
 const tabsAfter = await page.evaluate(() => [...document.querySelectorAll('section.law')].map((s) => `${s.dataset.law}:${s.hidden ? 'hidden' : 'shown'}`).join(' '));

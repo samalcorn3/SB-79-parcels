@@ -1,0 +1,46 @@
+{
+  "id": "alameda-city",
+  "name": "City of Alameda",
+  "jurisdictions": [
+    "Alameda"
+  ],
+  "publisher": "City of Alameda — Zoning",
+  "url": "https://services9.arcgis.com/ucDLsG1EwPnOGY4c/arcgis/rest/services/Zoning_v03/FeatureServer/0",
+  "fields": {
+    "code": "zone",
+    "description": "description"
+  },
+  "rules": [
+    {
+      "match": "^(AP-|NP-)",
+      "class": "planned",
+      "cite": "Alameda Point and North Park Street districts"
+    },
+    {
+      "match": "^(C-1|C-2|C-C|C-M)",
+      "class": "commercial",
+      "cite": "Alameda Municipal Code Ch. 30-4 (commercial districts)"
+    },
+    {
+      "match": "^A-P",
+      "class": "office",
+      "cite": "Alameda Municipal Code Ch. 30-4 (administrative-professional)"
+    },
+    {
+      "match": "^M-X",
+      "class": "mixed-residential"
+    },
+    {
+      "match": "^M-[12]",
+      "class": "industrial",
+      "cite": "Alameda Municipal Code Ch. 30-4 (industrial districts)"
+    },
+    {
+      "match": "^(R-\\d|E)",
+      "class": "residential",
+      "cite": "Alameda Municipal Code Ch. 30-4 (residential districts)"
+    }
+  ],
+  "generic": true,
+  "codeName": "Alameda Municipal Code, Ch. 30"
+}

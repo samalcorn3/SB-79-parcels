@@ -11,7 +11,7 @@
 // Prints a Markdown report (and writes it to argv[2] if given). Exits 3 if a
 // newer zoning layer was found or a layer could not be read.
 import { writeFile } from 'node:fs/promises';
-import { loadData } from './load-data.mjs';
+import { loadZoningSources } from './load-data.mjs';
 import { getJSON } from '../src/lib/arcgis.js';
 import { layerUpdated } from '../src/lib/zoning.js';
 
@@ -42,11 +42,11 @@ async function serviceEdited(svcUrl) {
   return best;
 }
 
-const { zoning } = await loadData();
+const zoningSources = await loadZoningSources();
 const rows = [];
 let attention = false;
 const only = process.env.ZONING_ONLY ? process.env.ZONING_ONLY.split(',') : null;
-for (const s of zoning.sources) {
+for (const s of zoningSources) {
   if (only && !only.includes(s.id)) continue;
   if (!s.url) { rows.push({ s, updated: 'from parcel record', note: 'Read from the parcel dataset itself.' }); continue; }
   let updated = null;
@@ -88,7 +88,7 @@ for (const s of zoning.sources) {
 const out = [
   '## Zoning layer freshness',
   '',
-  'Each layer is queried live, so edits a jurisdiction makes to it appear immediately. This report flags a jurisdiction that has published a newer zoning layer elsewhere, which the site would not pick up until `data/zoning.json` points to it.',
+  'Each layer is queried live, so edits a jurisdiction makes to it appear immediately. This report flags a jurisdiction that has published a newer zoning layer elsewhere, which the site would not pick up until that jurisdiction’s file in `data/zoning/` points to it.',
   '',
   '| Jurisdiction | Layer last updated | Notes |',
   '|---|---|---|',

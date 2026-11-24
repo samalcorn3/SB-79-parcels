@@ -2,9 +2,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { pickZoningSource, classifyZone, combineZoneStatuses } from '../src/lib/zoning.js';
+import { pickZoningSource, classifyZone, combineZoneStatuses, loadZoningSource } from '../src/lib/zoning.js';
+import { loadData, loadZoningSources } from '../scripts/load-data.mjs';
 
-const zoning = JSON.parse(await readFile(new URL('../data/zoning.json', import.meta.url), 'utf8'));
+const { zoning } = await loadData();
+zoning.sources = await loadZoningSources();
 const s101 = await readFile(new URL('../data/statute/65912.101.txt', import.meta.url), 'utf8');
 const src = (id) => zoning.sources.find((s) => s.id === id);
 const cls = (id, z) => classifyZone(zoning, src(id), z);
@@ -29,6 +31,22 @@ test('registry is well formed', () => {
     }
     assert.ok(!s.regional && !s.regionalFor, `${s.id}: regional compilations are not allowed`);
   }
+});
+
+test('index lists every jurisdiction file, and files load only on request', async () => {
+  assert.deepEqual(zoning.index.map((e) => e.id), zoning.sources.map((s) => s.id));
+  for (const e of zoning.index) {
+    const s = src(e.id);
+    assert.deepEqual(e.jurisdictions, s.jurisdictions, e.id);
+    assert.equal(e.unincorporatedOf, s.unincorporatedOf, e.id);
+    assert.ok(!('url' in e) && !('rules' in e), `${e.id}: the index carries no layer or rules`);
+  }
+  const requested = [];
+  const lazy = { ...zoning, loadSource: async (id) => { requested.push(id); return src(id); } };
+  const a = await loadZoningSource(lazy, 'pasadena');
+  await loadZoningSource(lazy, 'pasadena');
+  assert.equal(a.url, src('pasadena').url);
+  assert.deepEqual(requested, ['pasadena']); // fetched once, and nothing else
 });
 
 test('source choice: the city’s own layer, or the county’s for unincorporated land; nothing else', () => {

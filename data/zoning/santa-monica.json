@@ -1,0 +1,37 @@
+{
+  "id": "santa-monica",
+  "name": "City of Santa Monica",
+  "jurisdictions": [
+    "Santa Monica"
+  ],
+  "publisher": "City of Santa Monica — Zoning",
+  "url": "https://gis.santamonica.gov/server/rest/services/Zoning/MapServer/2",
+  "fields": {
+    "code": "zoning",
+    "description": "zonedesc"
+  },
+  "rules": [
+    {
+      "match": "^(GC|NC)$",
+      "class": "commercial",
+      "cite": "Santa Monica Municipal Code Ch. 9.11 (commercial districts)"
+    },
+    {
+      "match": "^OC$",
+      "class": "office",
+      "cite": "SMMC Ch. 9.12 (office campus)"
+    },
+    {
+      "match": "^IC$",
+      "class": "industrial",
+      "cite": "SMMC Ch. 9.12 (industrial conservation)"
+    },
+    {
+      "match": "^(BC|TA|WT|LT|NV|OT|OF|BTV|CAC|CCS|CC)$",
+      "class": "planned",
+      "cite": "Downtown Community Plan, Bergamot Area Plan, and special districts"
+    }
+  ],
+  "generic": true,
+  "codeName": "Santa Monica Municipal Code, Article 9"
+}

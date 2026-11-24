@@ -1,0 +1,62 @@
+{
+  "id": "sd-city",
+  "name": "City of San Diego",
+  "jurisdictions": [
+    "San Diego"
+  ],
+  "publisher": "City of San Diego Development Services — Official Zoning Map",
+  "url": "https://webmaps.sandiego.gov/arcgis/rest/services/DSD/Zoning_Base/MapServer/0",
+  "fields": {
+    "code": "ZONE_NAME"
+  },
+  "codeUrl": "https://www.sandiego.gov/city-clerk/officialdocs/municipal-code/chapter-13",
+  "codeName": "San Diego Municipal Code, Chapter 13",
+  "rules": [
+    {
+      "match": "^CP-",
+      "class": "parking",
+      "cite": "SDMC § 131.0502 (CP, commercial parking zone)"
+    },
+    {
+      "match": "^(CC|CN|CR|CV|CO)-",
+      "class": "commercial",
+      "cite": "SDMC § 131.0522, Table 131-05B (commercial use regulations)"
+    },
+    {
+      "match": "^EMX-",
+      "class": "mixed-commercial",
+      "cite": "SDMC § 131.0722, Table 131-07B (EMX employment mixed-use)"
+    },
+    {
+      "match": "^RMX-",
+      "class": "mixed-residential",
+      "cite": "SDMC § 131.0722, Table 131-07B (RMX residential mixed-use)"
+    },
+    {
+      "match": "^(IL|IP|IH|IS|IBT)-",
+      "class": "industrial",
+      "cite": "SDMC § 131.0622, Table 131-06B (industrial use regulations)"
+    },
+    {
+      "match": "^(RS|RM|RT|RX|RE)-",
+      "class": "residential",
+      "cite": "SDMC §§ 131.0422, 131.0322 (residential use regulations)"
+    },
+    {
+      "match": "^(AG|AR)-",
+      "class": "agriculture",
+      "cite": "SDMC § 131.0322 (agricultural use regulations)"
+    },
+    {
+      "match": "^(OC|OF|OP|OR)-",
+      "class": "open-space",
+      "cite": "SDMC § 131.0222 (open space use regulations)"
+    },
+    {
+      "match": "PD-|^MPD-|^LJSPD-|^OT",
+      "class": "planned",
+      "cite": "SDMC Chapter 15 (planned district ordinances)"
+    }
+  ],
+  "updatedField": "IMP_DATE"
+}

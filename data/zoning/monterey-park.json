@@ -1,0 +1,22 @@
+{
+  "id": "monterey-park",
+  "name": "City of Monterey Park",
+  "jurisdictions": [
+    "Monterey Park"
+  ],
+  "publisher": "City of Monterey Park — Zoning (master version)",
+  "url": "https://services9.arcgis.com/ivAMP6vRMPA12GAA/arcgis/rest/services/MPK_Zoning/FeatureServer/0",
+  "fields": {
+    "code": "zone",
+    "description": "zone"
+  },
+  "rules": [
+    {
+      "match": "\\(R-S\\)",
+      "class": "commercial",
+      "cite": "Monterey Park Municipal Code Title 21 (regional specialty center)"
+    }
+  ],
+  "generic": true,
+  "codeName": "Monterey Park Municipal Code, Title 21"
+}

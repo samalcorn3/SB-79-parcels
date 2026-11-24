@@ -1,0 +1,61 @@
+{
+  "id": "hayward",
+  "name": "City of Hayward",
+  "jurisdictions": [
+    "Hayward"
+  ],
+  "publisher": "City of Hayward — Zoning",
+  "url": "https://services3.arcgis.com/VRO5V8PH7DzSE6AU/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZONING_"
+  },
+  "codeUrl": "https://library.municode.com/ca/hayward/codes/municipal_code?nodeId=HAYWARD_MUNICIPAL_CODE_CH10PLZOSU_ART1ZOOR",
+  "codeName": "Hayward Municipal Code, Ch. 10, Art. 1",
+  "rules": [
+    {
+      "match": "^(CN|CG|CB|CC-C|DT-MS)",
+      "class": "commercial",
+      "cite": "HMC §§ 10-1.1000–1.1500 (commercial districts); Downtown Hayward Code"
+    },
+    {
+      "match": "^CO$",
+      "class": "office",
+      "cite": "HMC § 10-1.1700 (commercial office)"
+    },
+    {
+      "match": "^(CN-R|CC-R|RO|SMU)",
+      "class": "mixed-residential",
+      "cite": "HMC (residential–commercial and sustainable mixed-use districts)"
+    },
+    {
+      "match": "^(IG|IL|IP)",
+      "class": "industrial",
+      "cite": "HMC § 10-1.1600 (industrial districts)"
+    },
+    {
+      "match": "^(RH|RL|RM|RN|RS|MH)",
+      "class": "residential",
+      "cite": "HMC §§ 10-1.200–1.800 (residential districts)"
+    },
+    {
+      "match": "^PF$",
+      "class": "public",
+      "cite": "HMC (public facilities district)"
+    },
+    {
+      "match": "^(OS|FP)$",
+      "class": "open-space",
+      "cite": "HMC (open space and flood plain districts)"
+    },
+    {
+      "match": "^A",
+      "class": "agriculture",
+      "cite": "HMC (agricultural district)"
+    },
+    {
+      "match": "^(PD|AT-|MB-|UN|UNL|NE|NG|UC)",
+      "class": "planned",
+      "cite": "Planned development and form-based code districts (Mission Boulevard, Airport Terminal, South Hayward)"
+    }
+  ]
+}

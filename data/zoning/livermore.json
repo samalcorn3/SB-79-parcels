@@ -1,0 +1,49 @@
+{
+  "id": "livermore",
+  "name": "City of Livermore",
+  "jurisdictions": [
+    "Livermore"
+  ],
+  "publisher": "City of Livermore — Zoning Districts",
+  "url": "https://services7.arcgis.com/BJisQXdgVScP0JMy/arcgis/rest/services/ZoningDistricts/FeatureServer/0",
+  "fields": {
+    "code": "ZoningDistrict",
+    "category": "ZoningCategory",
+    "description": "ZoningDescription"
+  },
+  "codeName": "Livermore Development Code",
+  "codeUrl": "https://ecode360.com/LI2656",
+  "generic": true,
+  "rules": [
+    {
+      "on": "category",
+      "match": "^(PD|PDC|PDI|PDR|PUD|PD-|PDOS|PDR ?\\d)",
+      "class": "planned",
+      "cite": "Livermore Development Code (planned development districts)"
+    },
+    {
+      "on": "category",
+      "match": "^DSP$",
+      "class": "planned",
+      "cite": "Livermore Downtown Specific Plan"
+    },
+    {
+      "on": "category",
+      "match": "^T\\d",
+      "class": "mixed-residential",
+      "cite": "Livermore Development Code (form-based transect districts)"
+    },
+    {
+      "on": "category",
+      "match": "^AIR",
+      "class": "public",
+      "cite": "Livermore Development Code (airport districts)"
+    },
+    {
+      "on": "category",
+      "match": "^CO$",
+      "class": "office",
+      "cite": "Livermore Development Code (CO commercial office district)"
+    }
+  ]
+}

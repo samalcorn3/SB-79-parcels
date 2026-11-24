@@ -38,7 +38,7 @@ Last updated 2026-11-24 (second session). Read this first, then README.md and do
 | SB 79 | `data/sources.json` (MPOs, county parcels, boundaries, fire); `data/standards.json`; `data/jurisdictions.json` (first-hand registry of ordinances, TODAPs, HCD letters); `src/lib/{lookup,policy,standards,zones,fire}.js` |
 | Site exclusions, § 65913.4(a)(6) | `src/lib/exclusions.js`; `sources.json` → `siteExclusions`. Applies to SB 79 streamlined approval, and to AB 2011 except clause (A)(iv). |
 | AB 2011 | `src/lib/ab2011.js`; `src/lib/row.js` (right-of-way width from parcels); Caltrans functional class; Census urban areas |
-| Zoning | `data/zoning.json` (56 sources, plus rules per jurisdiction and shared description rules); `src/lib/zoning.js`; `scripts/check-zoning.mjs` (daily newer-layer watch; `reviewedAlternatives` records reviewed non-replacements) |
+| Zoning | `data/zoning/<id>.json` (one file per jurisdiction: layer, fields, rules); `data/zoning.json` (shared classes and description rules, plus the index built by `npm run zoning:index`; 56 jurisdictions); `src/lib/zoning.js`; `scripts/check-zoning.mjs` (daily newer-layer watch; `reviewedAlternatives` records reviewed non-replacements) |
 | Assessor land use (75% urban perimeter, industrial neighbours, 1–4 units) | `src/lib/landuse.js`; `sources.json` → `counties[].parcels.landUse`. Los Angeles and Sacramento counties only, since San Diego and Alameda publish numeric codes with no legend. |
 | UI | `src/ui/{app,report,maplayers}.js`, `assets/app.css` |
 | Tests | `npm test` (56 pass); `scripts/browser-smoke.mjs` (Playwright; set `SMOKE_BASE=<url>` to test the published preview); `scripts/check-sources.mjs` |

@@ -1,7 +1,7 @@
 name: Monitor live sources & HCD
 # Daily: (1) verify every MPO / county / city endpoint and field mapping still
 # works, (1b) flag a city that has published a newer zoning layer than the one
-# data/zoning.json reads, (2) detect amendments to Gov. Code §§ 65912.155–.162 in the Legislative
+# data/zoning/<id>.json reads, (2) detect amendments to Gov. Code §§ 65912.155–.162 in the Legislative
 # Counsel's leginfo database, and (3) watch HCD's SB 79 pages and registry links.
 # Opens (or comments on) an issue when something needs a human.
 on:
@@ -64,7 +64,7 @@ jobs:
           fi
           if [ "$ZONING_ATTENTION" = "true" ]; then
             [ -s zoning-report.md ] || echo "Zoning freshness check failed to run; see the workflow log." > zoning-report.md
-            file_issue "Newer zoning layer published: review data/zoning.json" zoning-report.md zoning-watch
+            file_issue "Newer zoning layer published: review data/zoning/" zoning-report.md zoning-watch
           fi
           if [ "$HCD_ATTENTION" = "true" ]; then
             file_issue "HCD SB 79 review needed: update data/jurisdictions.json" hcd-report.md hcd-watch

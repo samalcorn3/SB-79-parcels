@@ -1,0 +1,21 @@
+{
+  "id": "industry",
+  "name": "City of Industry",
+  "jurisdictions": [
+    "Industry"
+  ],
+  "publisher": "City of Industry — Zoning Designation",
+  "url": "https://services6.arcgis.com/xHZOIuVPW78WpOFQ/arcgis/rest/services/Zoning_Designation/FeatureServer/27",
+  "fields": {
+    "code": "zoning",
+    "description": "zoning"
+  },
+  "rules": [
+    {
+      "match": "Automobile",
+      "class": "unknown"
+    }
+  ],
+  "generic": true,
+  "codeName": "City of Industry Municipal Code, Title 17"
+}

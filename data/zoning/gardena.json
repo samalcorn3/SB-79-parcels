@@ -1,0 +1,25 @@
+{
+  "id": "gardena",
+  "name": "City of Gardena",
+  "jurisdictions": [
+    "Gardena"
+  ],
+  "publisher": "City of Gardena — Zoning",
+  "url": "https://services6.arcgis.com/0LYnC2LP950VYCyM/arcgis/rest/services/Zoning_2021_PUBLIC/FeatureServer/0",
+  "fields": {
+    "code": "Zoning",
+    "description": "Description"
+  },
+  "rules": [
+    {
+      "match": "^O$",
+      "class": "unknown"
+    },
+    {
+      "match": "^HB$",
+      "class": "unknown"
+    }
+  ],
+  "generic": true,
+  "codeName": "Gardena Municipal Code, Title 18"
+}

@@ -1,0 +1,66 @@
+{
+  "id": "oak-city",
+  "name": "City of Oakland",
+  "jurisdictions": [
+    "Oakland"
+  ],
+  "publisher": "City of Oakland Planning — Base Zones (effective Oct 20, 2026, Ord. 13901)",
+  "url": "https://services.arcgis.com/9tC74aDHuml0x5Yz/arcgis/rest/services/Zoning_Group_Layers_Eff20261020_Ord13901/FeatureServer/0",
+  "fields": {
+    "code": "BASEZONE"
+  },
+  "codeUrl": "https://library.municode.com/ca/oakland/codes/planning_code?nodeId=TIT17PL",
+  "codeName": "Oakland Planning Code, Title 17",
+  "rules": [
+    {
+      "match": "^RD$",
+      "class": "residential",
+      "cite": "Oakland Planning Code Ch. 17.13 (detached residential)"
+    },
+    {
+      "match": "^(CN|CC|CR)-",
+      "class": "commercial",
+      "cite": "Oakland Planning Code § 17.33.040 (CN), § 17.35.040 (CC), § 17.37.040 (CR)"
+    },
+    {
+      "match": "^D-DT-(C|CX|CW|CPW|P|PM)$",
+      "class": "commercial",
+      "cite": "Oakland Planning Code Ch. 17.58 (Central Business District zones)"
+    },
+    {
+      "match": "^(CIX|IG|IO|M-)",
+      "class": "industrial",
+      "cite": "Oakland Planning Code Chs. 17.73 (CIX, IG, IO)"
+    },
+    {
+      "match": "^HBX-",
+      "class": "mixed-residential",
+      "cite": "Oakland Planning Code Ch. 17.65 (Housing and Business Mix)"
+    },
+    {
+      "match": "^RU-[45]$",
+      "class": "mixed-residential",
+      "cite": "Oakland Planning Code Ch. 17.17 (Urban Residential, commercial facilities permitted on the ground floor)"
+    },
+    {
+      "match": "^(RD|RH|RM|RU)-",
+      "class": "residential",
+      "cite": "Oakland Planning Code Chs. 17.11–17.17 (residential zones)"
+    },
+    {
+      "match": "^D-",
+      "class": "planned",
+      "cite": "Oakland Planning Code district zones (specific plan areas: Broadway Valley, Lake Merritt, Central Estuary, Coliseum, West Oakland, Downtown)"
+    },
+    {
+      "match": "^S-",
+      "class": "planned",
+      "cite": "Oakland Planning Code special zones"
+    },
+    {
+      "match": "^OS",
+      "class": "open-space",
+      "cite": "Oakland Planning Code Ch. 17.11 (open space zone)"
+    }
+  ]
+}

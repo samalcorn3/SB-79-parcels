@@ -1,0 +1,17 @@
+{
+  "id": "la-mesa",
+  "name": "City of La Mesa",
+  "jurisdictions": [
+    "La Mesa"
+  ],
+  "publisher": "City of La Mesa — Zoning",
+  "url": "https://utility.arcgis.com/usrsvcs/servers/f239405db9554f8e9e154ffcae0f3798/rest/services/CommDev/Zoning_AGO/MapServer/1",
+  "fields": {
+    "code": "ZONING",
+    "description": "DESCR"
+  },
+  "rules": [],
+  "generic": true,
+  "updatedField": "last_edited_date",
+  "codeName": "La Mesa Municipal Code, Title 24"
+}

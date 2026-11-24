@@ -1,0 +1,33 @@
+{
+  "id": "whittier",
+  "name": "City of Whittier",
+  "jurisdictions": [
+    "Whittier"
+  ],
+  "publisher": "City of Whittier — Zoning (2024)",
+  "url": "https://services6.arcgis.com/ep2P4aOWGVVBct0i/arcgis/rest/services/Zoning_2024/FeatureServer/0",
+  "fields": {
+    "code": "Zone22",
+    "description": "Zoning_APO"
+  },
+  "rules": [
+    {
+      "match": "^C-3$",
+      "class": "commercial",
+      "cite": "Whittier Municipal Code Title 18 (C-3 commercial manufacturing)"
+    },
+    {
+      "match": "^(Innovation|Medical)$",
+      "class": "unknown"
+    }
+  ],
+  "generic": true,
+  "codeName": "Whittier Municipal Code, Title 18",
+  "reviewedAlternatives": [
+    {
+      "service": "ZoningLandUse_Web",
+      "asOf": "2026-11-24",
+      "note": "Display layer; lacks the MU-1 to MU-3 districts in Zoning_2024, so it does not supersede it."
+    }
+  ]
+}

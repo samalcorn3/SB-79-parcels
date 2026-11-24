@@ -1,0 +1,44 @@
+{
+  "id": "south-san-francisco",
+  "name": "City of South San Francisco",
+  "jurisdictions": [
+    "South San Francisco"
+  ],
+  "publisher": "City of South San Francisco — Zoning",
+  "url": "https://services5.arcgis.com/inY93B27l4TSbT7h/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "Zonecode",
+    "description": "Zone"
+  },
+  "rules": [
+    {
+      "match": "^T\\d",
+      "class": "planned",
+      "cite": "Lindenville and El Camino form-based transect zones"
+    },
+    {
+      "match": "^(DTC|ETC|GAC|LNC)$",
+      "class": "commercial",
+      "cite": "South San Francisco Municipal Code Title 20 (downtown and core districts)"
+    }
+  ],
+  "generic": true,
+  "codeName": "South San Francisco Municipal Code, Title 20",
+  "reviewedAlternatives": [
+    {
+      "service": "new_zoning_parcel_service_FGDB",
+      "asOf": "2026-11-24",
+      "note": "Parcel subset (13 districts), not a replacement."
+    },
+    {
+      "service": "ZoningParcelsView_NoOwner",
+      "asOf": "2026-11-24",
+      "note": "Parcel view, not a replacement."
+    },
+    {
+      "service": "NewZoningParcels_NoOwner_View",
+      "asOf": "2026-11-24",
+      "note": "Parcel view, not a replacement."
+    }
+  ]
+}

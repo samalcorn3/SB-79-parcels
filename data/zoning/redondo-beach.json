@@ -1,0 +1,46 @@
+{
+  "id": "redondo-beach",
+  "name": "City of Redondo Beach",
+  "jurisdictions": [
+    "Redondo Beach"
+  ],
+  "publisher": "City of Redondo Beach — Zoning",
+  "url": "https://services6.arcgis.com/4Y3DUWGj4Rq1ajvv/arcgis/rest/services/Zoning/FeatureServer/2",
+  "fields": {
+    "code": "ZoningCode"
+  },
+  "rules": [
+    {
+      "match": "^(C-\\d|C-\\dA|C-\\dB|CC-\\d|CR)",
+      "class": "commercial",
+      "cite": "Redondo Beach Municipal Code Title 10, Ch. 2 (commercial zones)"
+    },
+    {
+      "match": "^(I-\\d|IC-)",
+      "class": "industrial",
+      "cite": "Redondo Beach Municipal Code Title 10, Ch. 2 (industrial zones)"
+    },
+    {
+      "match": "^MU-",
+      "class": "mixed-residential",
+      "cite": "Redondo Beach Municipal Code (mixed-use zones)"
+    },
+    {
+      "match": "^(R-|RH-|RMD)",
+      "class": "residential",
+      "cite": "Redondo Beach Municipal Code (residential zones)"
+    },
+    {
+      "match": "^P-ROW$",
+      "class": "transportation"
+    },
+    {
+      "match": "^P-",
+      "class": "public",
+      "cite": "Redondo Beach Municipal Code (public and institutional zones)"
+    }
+  ],
+  "generic": false,
+  "updatedField": "LASTUPDATE",
+  "codeName": "Redondo Beach Municipal Code, Title 10"
+}

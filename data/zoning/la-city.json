@@ -1,0 +1,89 @@
+{
+  "id": "la-city",
+  "name": "City of Los Angeles",
+  "jurisdictions": [
+    "Los Angeles"
+  ],
+  "publisher": "Los Angeles City Planning — Zoning (with the city's own zone categories)",
+  "url": "https://services5.arcgis.com/7nsPwEMP38bSkCjy/arcgis/rest/services/Zoning/FeatureServer/15",
+  "fields": {
+    "code": "Zoning",
+    "category": "CATEGORY"
+  },
+  "codeUrl": "https://codelibrary.amlegal.com/codes/los_angeles/latest/lamc/0-0-0-107541",
+  "codeName": "Los Angeles Municipal Code, Chapter 1, Article 2",
+  "rules": [
+    {
+      "on": "category",
+      "match": "^(Commercial|Commercial-Mixed)$",
+      "class": "commercial",
+      "cite": "LAMC §§ 12.12.2–12.17 (CR, C1, C1.5, C2, C4, C5 zones); Chapter 1A for downtown zones"
+    },
+    {
+      "on": "category",
+      "match": "^Parking$",
+      "class": "parking",
+      "cite": "LAMC § 12.12 (P zone)"
+    },
+    {
+      "on": "code",
+      "match": "(^|[\\]\\)])(CM|M1|M2|M3)-",
+      "class": "industrial",
+      "status": "meets",
+      "why": "LA's CM zone permits the uses of the C2 zone, and the M1–M3 zones build on it, so retail and office are permitted by right.",
+      "cite": "LAMC §§ 12.17.1, 12.17.6, 12.18, 12.19"
+    },
+    {
+      "on": "category",
+      "match": "^(Manufacturing|Industrial|Industrial-Mixed|Hybrid Industrial)$",
+      "class": "industrial",
+      "cite": "LAMC §§ 12.17.5 (MR zones); Chapter 1A (downtown industrial and hybrid industrial districts)"
+    },
+    {
+      "on": "category",
+      "match": "^Residential-Mixed$",
+      "class": "mixed-residential",
+      "cite": "LAMC § 12.10.5 (RAS zones); Chapter 1A"
+    },
+    {
+      "on": "category",
+      "match": "^(Single Family Residential|Multiple Family Residential|Residential|Suburban)$",
+      "class": "residential",
+      "cite": "LAMC §§ 12.07–12.12 (R and RA zones)"
+    },
+    {
+      "on": "category",
+      "match": "^(Public|Public Facilities)$",
+      "class": "public",
+      "cite": "LAMC § 12.04.09 (PF zone)"
+    },
+    {
+      "on": "category",
+      "match": "^Open Space$",
+      "class": "open-space",
+      "cite": "LAMC § 12.04.05 (OS zone)"
+    },
+    {
+      "on": "category",
+      "match": "^Agricultural$",
+      "class": "agriculture",
+      "cite": "LAMC §§ 12.05–12.06 (A1, A2 zones)"
+    },
+    {
+      "on": "category",
+      "match": "^Freeway$",
+      "class": "transportation"
+    }
+  ],
+  "flags": [
+    {
+      "match": "\\[Q\\]|\\(Q\\)|^Q",
+      "status": "confirm",
+      "note": "The zone carries [Q] qualified conditions, which can restrict permitted uses; check the zone change ordinance."
+    },
+    {
+      "match": "\\(T\\)|\\[T\\]",
+      "note": "(T) tentative classification: the zone takes effect only when its conditions are met."
+    }
+  ]
+}

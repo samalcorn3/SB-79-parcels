@@ -1,0 +1,35 @@
+{
+  "id": "west-hollywood",
+  "name": "City of West Hollywood",
+  "jurisdictions": [
+    "West Hollywood"
+  ],
+  "publisher": "City of West Hollywood Planning — Zoning (by parcel)",
+  "url": "https://gis.weho.org/arcgis/rest/services/Planning/WeHo_Zoning/MapServer/0",
+  "fields": {
+    "code": "CITY_ZN_CO"
+  },
+  "generic": false,
+  "codeName": "West Hollywood Municipal Code, Title 19",
+  "rules": [
+    {
+      "match": "^(CC|CN)\\d",
+      "class": "commercial",
+      "cite": "West Hollywood Municipal Code Ch. 19.10 (commercial zoning districts)"
+    },
+    {
+      "match": "^(PDCSP|SSP)$",
+      "class": "planned",
+      "cite": "Pacific Design Center and Sunset specific plans"
+    },
+    {
+      "match": "^PF$",
+      "class": "public"
+    },
+    {
+      "match": "^R\\d",
+      "class": "residential",
+      "cite": "West Hollywood Municipal Code Ch. 19.06 (residential zoning districts)"
+    }
+  ]
+}

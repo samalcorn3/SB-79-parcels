@@ -24,6 +24,8 @@ async function loadData() {
     return r.json();
   });
   const [sources, standards, registry, zoning] = await Promise.all([get('sources.json'), get('standards.json'), get('jurisdictions.json'), get('zoning.json')]);
+  // Each jurisdiction's zoning layer and rules are fetched only when a parcel there is looked up.
+  zoning.loadSource = (id) => get(`zoning/${encodeURIComponent(id)}.json`);
   return { sources, standards, registry, zoning };
 }
 

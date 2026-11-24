@@ -1,0 +1,57 @@
+{
+  "id": "lb-city",
+  "name": "City of Long Beach",
+  "jurisdictions": [
+    "Long Beach"
+  ],
+  "publisher": "City of Long Beach — Zoning",
+  "url": "https://services6.arcgis.com/yCArG7wGXGyWLqav/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZONING_SYMBOL"
+  },
+  "codeUrl": "https://library.municode.com/ca/long_beach/codes/municipal_code?nodeId=TIT21ZO",
+  "codeName": "Long Beach Municipal Code, Title 21",
+  "rules": [
+    {
+      "match": "^(C3|C3-A|C-M|CCA|CCN|CCP|CCR|CHW|CMW|CNA|CNP|CNR|CO|CS)\\b",
+      "class": "commercial",
+      "cite": "LBMC Ch. 21.32, Table 32-1 (commercial districts)"
+    },
+    {
+      "match": "^MU-[123M]",
+      "class": "mixed-commercial",
+      "cite": "LBMC Ch. 21.33 (mixed-use districts)"
+    },
+    {
+      "match": "^RMU",
+      "class": "mixed-residential",
+      "cite": "LBMC Ch. 21.33 (residential mixed-use districts)"
+    },
+    {
+      "match": "^(I|IG|IL|IM|IP|NI-)\\b",
+      "class": "industrial",
+      "cite": "LBMC Ch. 21.33 (industrial districts)"
+    },
+    {
+      "match": "^(R-|RM|MFR|RP-)",
+      "class": "residential",
+      "cite": "LBMC Ch. 21.31 (residential districts)"
+    },
+    {
+      "match": "^(PD-|SP-)",
+      "class": "planned",
+      "cite": "LBMC Ch. 21.37 (planned development districts) and specific plans"
+    },
+    {
+      "match": "^P\\b",
+      "class": "open-space",
+      "cite": "LBMC Ch. 21.35 (park district)"
+    },
+    {
+      "match": "^PR\\b",
+      "class": "public",
+      "cite": "LBMC Ch. 21.35 (public right-of-way district)"
+    }
+  ],
+  "updatedField": "RECORD_DATE"
+}

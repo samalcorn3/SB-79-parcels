@@ -1,0 +1,49 @@
+{
+  "id": "escondido",
+  "name": "City of Escondido",
+  "jurisdictions": [
+    "Escondido"
+  ],
+  "publisher": "City of Escondido — Zoning",
+  "url": "https://services2.arcgis.com/eJcVbjTyyZIzZ5Ye/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZONING"
+  },
+  "rules": [
+    {
+      "match": "^C-G$",
+      "class": "commercial",
+      "cite": "Escondido Zoning Code Art. 16 (general commercial)"
+    },
+    {
+      "match": "^C-P$",
+      "class": "office",
+      "cite": "Escondido Zoning Code Art. 16 (commercial professional)"
+    },
+    {
+      "match": "^(M-1|M-2|I-P)$",
+      "class": "industrial",
+      "cite": "Escondido Zoning Code Art. 26 (industrial zones)"
+    },
+    {
+      "match": "^(PD|PZ-PD|S-P|FCC)",
+      "class": "planned",
+      "cite": "Escondido planned development and specific plan zones"
+    },
+    {
+      "match": "^(PZ-)?(R|RE|RA)",
+      "class": "residential",
+      "cite": "Escondido Zoning Code (residential zones)"
+    },
+    {
+      "match": "^OS",
+      "class": "open-space"
+    },
+    {
+      "match": "^COUNTY$",
+      "class": "unknown"
+    }
+  ],
+  "generic": false,
+  "codeName": "Escondido Zoning Code"
+}

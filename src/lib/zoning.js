@@ -3,19 +3,22 @@
 // permitted use" (Gov. Code §§ 65912.111(a), 65912.121(a); definition in
 // § 65912.101(u)).
 //
-// data/zoning.json lists, per jurisdiction, the live zoning layer and rules
+// data/zoning/<id>.json holds, per jurisdiction, the live zoning layer and rules
 // mapping zone codes (or the city's own zone categories) to a class of zone
-// with a status. Only the jurisdiction's own current layer is used: the city's,
-// or the county's for unincorporated land. No regional compilations.
+// with a status. data/zoning.json holds the shared classes and rules and an
+// index of which file serves which city; a jurisdiction's file is fetched only
+// when a parcel there is looked up, so the site never loads zoning it doesn't
+// need. Only the jurisdiction's own current layer is used: the city's, or the
+// county's for unincorporated land. No regional compilations.
 import * as turf from '@turf/turf';
 import { queryIntersecting, toEsriGeometry, getJSON } from './arcgis.js';
 import { getField } from './spec.js';
 
 const fold = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
 
-/** The zoning source for a parcel: the city's own, or the county's for unincorporated land. */
+/** The index entry for a parcel's zoning: the city's own, or the county's for unincorporated land. */
 export function pickZoningSource(zoning, { countyId, cityName }) {
-  const s = zoning.sources;
+  const s = zoning.index;
   if (cityName) {
     const own = s.find((x) => (x.jurisdictions || []).some((j) => fold(j) === fold(cityName)));
     if (own) return own;
@@ -54,6 +57,24 @@ export function combineZoneStatuses(statuses) {
   if (statuses.every((s) => s === 'meets')) return 'meets';
   if (statuses.every((s) => s === 'fails')) return 'fails';
   return 'confirm';
+}
+
+const sourceCache = new WeakMap();
+/**
+ * One jurisdiction's layer and rules (data/zoning/<id>.json), fetched once.
+ * The data loader supplies `zoning.loadSource(id)` (fetch in the browser, a file read in Node).
+ */
+export function loadZoningSource(zoning, id) {
+  if (!sourceCache.has(zoning)) sourceCache.set(zoning, new Map());
+  const cache = sourceCache.get(zoning);
+  if (!cache.has(id)) {
+    if (typeof zoning.loadSource !== 'function') return Promise.reject(new Error('No zoning source loader configured.'));
+    cache.set(id, Promise.resolve(zoning.loadSource(id)).catch((e) => {
+      cache.delete(id);
+      throw e;
+    }));
+  }
+  return cache.get(id);
 }
 
 const updatedCache = new Map();
@@ -98,8 +119,9 @@ function innerGeometry(parcel) {
 export async function zoningForParcel(data, { countyId, cityName, parcel }) {
   const zoning = data.zoning;
   if (!zoning) return { status: 'not-evaluated', reason: 'Zoning rules not loaded.' };
-  const source = pickZoningSource(zoning, { countyId, cityName });
-  if (!source) return { status: 'not-evaluated', reason: `${cityName || 'This county'}’s own zoning layer is not wired in yet, so this test is not evaluated. (Regional compilations are not used: they lag the city’s current zoning.)` };
+  const entry = pickZoningSource(zoning, { countyId, cityName });
+  if (!entry) return { status: 'not-evaluated', reason: `${cityName || 'This county'}’s own zoning layer is not wired in yet, so this test is not evaluated. (Regional compilations are not used: they lag the city’s current zoning.)` };
+  const source = await loadZoningSource(zoning, entry.id);
 
   let raw;
   if (source.fromParcel) {

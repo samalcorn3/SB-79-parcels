@@ -1,0 +1,63 @@
+{
+  "id": "rancho-cordova",
+  "name": "City of Rancho Cordova",
+  "jurisdictions": [
+    "Rancho Cordova"
+  ],
+  "publisher": "City of Rancho Cordova — Zoning",
+  "url": "https://services1.arcgis.com/kSSEfQQl69HmZZw6/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "Zone"
+  },
+  "rules": [
+    {
+      "match": "\\((RDOSP|SCSP|SDSP|FBSP|SPA|ZSPA|SSSPA|ASPA|CVSPA|MFSPA|WRSPA)\\)|^SPA|^COMMERCIAL \\(SPA\\)|^RANCH",
+      "class": "planned",
+      "cite": "Rancho Cordova specific and special planning areas"
+    },
+    {
+      "match": "^(GC|CS)$",
+      "class": "commercial",
+      "cite": "Rancho Cordova Municipal Code Title 23 (commercial zones)"
+    },
+    {
+      "match": "^CMU$",
+      "class": "mixed-commercial",
+      "cite": "Rancho Cordova Municipal Code Title 23 (commercial mixed use)"
+    },
+    {
+      "match": "^(OIMU|OPMU)$",
+      "class": "office",
+      "cite": "Rancho Cordova Municipal Code Title 23 (office mixed-use zones)"
+    },
+    {
+      "match": "^(RMU|VCMU)$",
+      "class": "mixed-residential"
+    },
+    {
+      "match": "^(M-1|M-2|LIBP|IR)$",
+      "class": "industrial",
+      "cite": "Rancho Cordova Municipal Code Title 23 (industrial zones)"
+    },
+    {
+      "match": "^(HDR|MDR|LDR|RD ?\\d+|RMH)$",
+      "class": "residential",
+      "cite": "Rancho Cordova Municipal Code Title 23 (residential zones)"
+    },
+    {
+      "match": "^(POS|P/OS)",
+      "class": "open-space"
+    },
+    {
+      "match": "^AG",
+      "class": "agriculture"
+    },
+    {
+      "match": "^T$",
+      "class": "transportation"
+    }
+  ],
+  "generic": false,
+  "updatedField": "EDIT_DATE",
+  "codeName": "Rancho Cordova Municipal Code, Title 23"
+}

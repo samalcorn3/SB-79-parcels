@@ -1,0 +1,51 @@
+{
+  "id": "sunnyvale",
+  "name": "City of Sunnyvale",
+  "jurisdictions": [
+    "Sunnyvale"
+  ],
+  "publisher": "City of Sunnyvale — Zoning Districts",
+  "url": "https://services.arcgis.com/IBwZaktrBtZuqQmg/arcgis/rest/services/Zoning/FeatureServer/4",
+  "fields": {
+    "code": "Zoning"
+  },
+  "codeUrl": "https://library.municode.com/ca/sunnyvale/codes/code_of_ordinances?nodeId=TIT19ZO",
+  "codeName": "Sunnyvale Municipal Code, Title 19",
+  "rules": [
+    {
+      "match": "^(C1|C2|C4|VCC)$",
+      "class": "commercial",
+      "cite": "SMC Ch. 19.20, Table 19.20.030 (commercial zoning districts)"
+    },
+    {
+      "match": "^(O|VCO)$",
+      "class": "office",
+      "cite": "SMC Ch. 19.20 (office district)"
+    },
+    {
+      "match": "^(MXD|VCMU)",
+      "class": "mixed-residential",
+      "cite": "SMC (mixed-use districts)"
+    },
+    {
+      "match": "^(M3|MS)$",
+      "class": "industrial",
+      "cite": "SMC Ch. 19.22 (industrial districts)"
+    },
+    {
+      "match": "^(R|RMH)",
+      "class": "residential",
+      "cite": "SMC Ch. 19.18 (residential districts)"
+    },
+    {
+      "match": "^PF$",
+      "class": "public",
+      "cite": "SMC Ch. 19.24 (public facilities)"
+    },
+    {
+      "match": "^(MP-|DSP|LSP|PPSP|ECR)",
+      "class": "planned",
+      "cite": "Specific plan districts (Moffett Park, Downtown, Lawrence Station, Peery Park, El Camino Real)"
+    }
+  ]
+}

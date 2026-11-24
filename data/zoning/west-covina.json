@@ -1,0 +1,71 @@
+{
+  "id": "west-covina",
+  "name": "City of West Covina",
+  "jurisdictions": [
+    "West Covina"
+  ],
+  "publisher": "City of West Covina Planning — Citywide zoning by parcel (2024 zoning)",
+  "url": "https://services8.arcgis.com/WV8ogNubjFL2BKPt/arcgis/rest/services/COMPLETE_CIty_Zoning_Parcels_20260917/FeatureServer/2",
+  "fields": {
+    "code": "Zoning2024",
+    "description": "FullZone24"
+  },
+  "codeName": "West Covina Municipal Code, Chapter 26 (Zoning)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^SP$",
+      "class": "planned",
+      "cite": "West Covina specific plans"
+    },
+    {
+      "match": "^PCD",
+      "class": "planned",
+      "cite": "West Covina Municipal Code Ch. 26 (PCD planned community development)"
+    },
+    {
+      "match": "^C-2$",
+      "class": "commercial",
+      "cite": "West Covina Municipal Code Ch. 26 (C-2 commercial zone)"
+    },
+    {
+      "match": "^O-P$",
+      "class": "office",
+      "cite": "West Covina Municipal Code Ch. 26 (O-P office professional zone)"
+    },
+    {
+      "match": "^(NMU|SMU|RMU|OPMU)$",
+      "class": "mixed-residential",
+      "cite": "West Covina Municipal Code Ch. 26 (NMU, SMU, RMU, OPMU commercial and office mixed-use zones)"
+    },
+    {
+      "match": "^M-1$",
+      "class": "industrial",
+      "cite": "West Covina Municipal Code Ch. 26 (M-1 manufacturing zone)"
+    },
+    {
+      "match": "^O-S$",
+      "class": "open-space",
+      "cite": "West Covina Municipal Code Ch. 26 (O-S open space zone)"
+    },
+    {
+      "match": "^(R-A|R-1|MF-\\d+)",
+      "class": "residential",
+      "cite": "West Covina Municipal Code Ch. 26 (R-A, R-1 and MF residential zones)"
+    }
+  ],
+  "reviewedAlternatives": [
+    {
+      "service": "COMPLETE_CIty_Zoning_Parcels_20260625",
+      "asOf": "2026-11-24",
+      "note": "Earlier copy of the same parcel zoning layer; the 20260917 service is the later publication."
+    }
+  ],
+  "flags": [
+    {
+      "match": "^O-P$",
+      "note": "The city's layer gives the older O-P code here with the newer OPMU (office professional mixed-use) description; confirm the current zone with West Covina Planning.",
+      "status": "confirm"
+    }
+  ]
+}

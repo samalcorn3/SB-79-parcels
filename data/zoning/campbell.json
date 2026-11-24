@@ -1,0 +1,28 @@
+{
+  "id": "campbell",
+  "name": "City of Campbell",
+  "jurisdictions": [
+    "Campbell"
+  ],
+  "publisher": "City of Campbell Planning — Zoning Districts (2024)",
+  "url": "https://gis.campbellca.gov/arcgis/rest/services/Planning/Zoning/MapServer/3",
+  "fields": {
+    "code": "ZONING",
+    "description": "ZoningDescription",
+    "category": "ZoningDistrict"
+  },
+  "rules": [
+    {
+      "match": "^(C-PD|P-D)$",
+      "class": "planned",
+      "cite": "Campbell Municipal Code Title 21 (planned development)"
+    },
+    {
+      "match": "^ROW$",
+      "class": "transportation"
+    }
+  ],
+  "generic": true,
+  "updatedField": "RevDate",
+  "codeName": "Campbell Municipal Code, Title 21"
+}

@@ -41,7 +41,7 @@ const SLOW_OK = { timeoutMs: 8000, retries: 1 };
 
 /**
  * § 65912.111(a) / § 65912.121(a): "located in a zone where office, retail, or parking are a principally
- * permitted use", decided from the jurisdiction's zoning layer and the rules in data/zoning.json.
+ * permitted use", decided from the jurisdiction's zoning layer and the rules in data/zoning/<id>.json.
  */
 export function zoningCriterion(zoning) {
   const cite = '§ 65912.111(a); § 65912.121(a)';

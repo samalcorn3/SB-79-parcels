@@ -1,0 +1,46 @@
+{
+  "id": "encinitas",
+  "name": "City of Encinitas",
+  "jurisdictions": [
+    "Encinitas"
+  ],
+  "publisher": "City of Encinitas — Base Zoning",
+  "url": "https://coemapservices.encinitasca.gov/hypegis/rest/services/PublicServices/Encinitas_Base_Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZoneDesignation",
+    "description": "PlanName"
+  },
+  "rules": [
+    {
+      "match": "^(D|N|ER)-|^ER/|^SPA$",
+      "class": "planned",
+      "cite": "Downtown, North 101, and Encinitas Ranch specific plans"
+    },
+    {
+      "match": "^(GC|GC-PCD|LC|VSC|LVSC|TC|C-GC\\d|C-R11)$",
+      "class": "commercial",
+      "cite": "Encinitas Municipal Code Ch. 30.09 (commercial zones)"
+    },
+    {
+      "match": "^(OP|C-OP)$",
+      "class": "office",
+      "cite": "Encinitas Municipal Code Ch. 30.09 (office professional)"
+    },
+    {
+      "match": "^(BP|LI)$",
+      "class": "industrial",
+      "cite": "Encinitas Municipal Code Ch. 30.09 (business park, light industrial)"
+    },
+    {
+      "match": "^(R\\d+|RR\\d?|RRFP|RS\\d+|MHP|R30 OL)$",
+      "class": "residential",
+      "cite": "Encinitas Municipal Code Ch. 30.09 (residential zones)"
+    },
+    {
+      "match": "^P/SP$",
+      "class": "public"
+    }
+  ],
+  "generic": false,
+  "codeName": "Encinitas Municipal Code, Title 30"
+}

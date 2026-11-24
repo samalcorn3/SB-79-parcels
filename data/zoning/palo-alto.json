@@ -1,0 +1,61 @@
+{
+  "id": "palo-alto",
+  "name": "City of Palo Alto",
+  "jurisdictions": [
+    "Palo Alto"
+  ],
+  "publisher": "City of Palo Alto — Zone Districts",
+  "url": "https://services6.arcgis.com/evmyRZRrsopdeog7/arcgis/rest/services/ZoneDistrictData/FeatureServer/0",
+  "fields": {
+    "code": "DESIGNATION",
+    "category": "ZONETYPE"
+  },
+  "updatedField": "MODIFIEDDATE",
+  "codeName": "Palo Alto Municipal Code, Title 18 (Zoning)",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^PC-",
+      "class": "planned",
+      "cite": "Palo Alto Municipal Code Ch. 18.38 (PC planned community zones)"
+    },
+    {
+      "match": "^(NV-|PTOD)",
+      "class": "planned",
+      "cite": "North Ventura Coordinated Area Plan and PTOD districts"
+    },
+    {
+      "match": "^(CC|CN|CS|CD-[CSN])\\b",
+      "class": "commercial",
+      "cite": "Palo Alto Municipal Code Ch. 18.16 (CN, CC, CS) and Ch. 18.18 (CD downtown commercial)"
+    },
+    {
+      "match": "^(GM|ROLM|RP|MOR)\\b",
+      "class": "industrial",
+      "cite": "Palo Alto Municipal Code Ch. 18.20 (office, research and manufacturing districts)"
+    },
+    {
+      "match": "^PF\\b",
+      "class": "public"
+    },
+    {
+      "match": "^OS\\b",
+      "class": "open-space"
+    },
+    {
+      "match": "^AC\\b",
+      "class": "agriculture"
+    },
+    {
+      "match": "^(R-|RM-|RE|RMD|RT-|DHS|AMF)",
+      "class": "residential",
+      "cite": "Palo Alto Municipal Code Title 18 (residential districts)"
+    }
+  ],
+  "flags": [
+    {
+      "match": "\\(R\\)|\\(GF\\)",
+      "note": "Retail (R) or ground-floor (GF) combining district: requires retail or active uses on the ground floor (Palo Alto Municipal Code Ch. 18.30)."
+    }
+  ]
+}
