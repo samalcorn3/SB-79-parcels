@@ -71,6 +71,7 @@ for (const [name, j] of Object.entries(registry.jurisdictions)) {
   for (const inst of j.instruments) {
     if (inst.hcd?.letterUrl) links.push([`${name} — HCD letter`, inst.hcd.letterUrl]);
     if (inst.local?.url) links.push([`${name} — local action`, inst.local.url]);
+    for (const d of inst.documents || []) links.push([`${name} — ${d.kind}`, d.url]);
   }
 }
 const unique = [...new Map(links.map(([l, u]) => [u, [l, u]])).values()];
@@ -81,7 +82,7 @@ if (broken.length) findings.push(`Registry links not resolving:\n${broken.map((b
 const ageDays = Math.floor((Date.now() - Date.parse(registry.lastReviewed)) / 864e5);
 if (ageDays >= STALE_DAYS) findings.push(`data/jurisdictions.json was last reviewed ${ageDays} days ago (${registry.lastReviewed}). Re-check HCD's letters dashboard.`);
 
-const secondary = Object.entries(registry.jurisdictions).flatMap(([n, j]) => j.instruments.filter((i) => i.verification === 'secondary').map((i) => `${n} (${i.id})`));
+const secondary = Object.entries(registry.jurisdictions).flatMap(([n, j]) => j.instruments.filter((i) => i.verification !== 'primary').map((i) => `${n} (${i.id})`));
 
 const pageChanged = findings.some((f) => f.includes('changed'));
 const report = [
@@ -89,7 +90,7 @@ const report = [
   '',
   findings.length ? findings.map((f) => `- ${f}`).join('\n') : '- No changes detected.',
   '',
-  `Registry entries still resting on secondary sources (confirm against ${registry.hcdDashboard}): ${secondary.join(', ') || 'none'}.`,
+  `Registry entries with a primary document not yet read (confirm by hand): ${secondary.join(', ') || 'none'}.`,
   '',
   'To resolve: review HCD’s dashboard (filter Housing Law = SB 79 / Gov. Code 65912.*), update `data/jurisdictions.json` (set `lastReviewed`), then run `npm run check:hcd -- --update` and commit `data/hcd-watch.json`.',
 ].join('\n');

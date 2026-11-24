@@ -1,53 +1,89 @@
 {
   "source": "Legislative Counsel of California \u2014 leginfo database export",
   "archive": "https://downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip",
-  "archiveLastModified": "Mon, 09 Nov 2026 05:26:05 GMT",
-  "retrieved": "2026-11-15T21:56:37+00:00",
+  "archiveLastModified": "Mon, 23 Nov 2026 05:26:07 GMT",
+  "retrieved": "2026-11-24T00:15:09+00:00",
   "web": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=GOV&division=1.&title=7.&part=&chapter=4.1.5.&article=",
   "sections": {
+    "PRC-4102": {
+      "code": "PRC",
+      "section": "4102",
+      "history": "Repealed and added by Stats. 1965, Ch. 1144.",
+      "effective": "NULL",
+      "sha256": "708f6bfc2cf8f409bef9bdb4ce5d987fb8e8c302f5281ee98b24a295247ed4bc"
+    },
+    "GOV-51179": {
+      "code": "GOV",
+      "section": "51179",
+      "history": "Amended by Stats. 2022, Ch. 574, Sec. 10.   (AB 211)   Effective September 27, 2022.",
+      "effective": "2022-09-27",
+      "sha256": "0fd913b752db659f01c631a768f2f70dd22fea85b7949755b4884c8ed1cfaac3"
+    },
     "65912.156": {
+      "code": "GOV",
       "section": "65912.156",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "b660f847b52775952deec57dbdce768901921ae9417e6c1d1e508413b33519a8"
     },
     "65912.157": {
+      "code": "GOV",
       "section": "65912.157",
       "history": "Amended (as added by Stats. 2025, Ch. 512, Sec. 1) by Stats. 2026, Ch. 100, Sec. 2.   (SB 722)   Effective July 16, 2026.",
       "effective": "2026-07-16",
       "sha256": "135406b2d0beb27cb868f99cbf1e2b09252feeeb2637a7d2fc01da962b66ea2b"
     },
     "65912.158": {
+      "code": "GOV",
       "section": "65912.158",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "85e7c0a871978acc231da7c95e00026e134ffd67f6b659cf5721b924a2c39aa1"
     },
     "65912.160": {
+      "code": "GOV",
       "section": "65912.160",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "fd91d58edc6302740da97e0049ccbf78eaffde919f4bef0c6923cfe25ceb181d"
     },
     "65912.161": {
+      "code": "GOV",
       "section": "65912.161",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "b6247e2dcdfc4f2d5a0def810ff2c3af7d5bc799230eeba1d1bc4522255889a2"
     },
     "65912.162": {
+      "code": "GOV",
       "section": "65912.162",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "5d48500385f51d05887f2c25fa8478edb95b48af819b5c3cd213727ffa6f9fd8"
     },
+    "GOV-65913.4": {
+      "code": "GOV",
+      "section": "65913.4",
+      "history": "Amended by Stats. 2025, Ch. 774, Sec. 2.   (SB 597)   Effective January 1, 2026.   Repealed as of January 1, 2036, by its own provisions.",
+      "effective": "2026-01-01",
+      "sha256": "47f7c75e02db07ae742c940a3846ad17e2e3b869dc35d8ec5cde97d7f54b3fd5"
+    },
+    "GOV-51178": {
+      "code": "GOV",
+      "section": "51178",
+      "history": "Amended by Stats. 2021, Ch. 382, Sec. 2.5.   (SB 63)   Effective January 1, 2022.",
+      "effective": "2022-01-01",
+      "sha256": "85aca8390d37936d308f069dd8800aa452721e5ef0318193b3f3595add97e89a"
+    },
     "65912.155": {
+      "code": "GOV",
       "section": "65912.155",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",
       "sha256": "e078bf2ef17de5c1ae49de26a20d0d0d7c4927ec7554c8b0a036376787ebde6d"
     },
     "65912.159": {
+      "code": "GOV",
       "section": "65912.159",
       "history": "Added by Stats. 2025, Ch. 512, Sec. 1.   (SB 79)   Effective January 1, 2026.",
       "effective": "2026-01-01",

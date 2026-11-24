@@ -24,7 +24,7 @@ A map and address lookup for every parcel in California's SB 79 urban transit co
 | County | MPO | SB 79 status | Parcel source |
 |---|---|---|---|
 | Los Angeles | SCAG | In effect since July 1, 2026 | LA County Assessor parcels (hosted), with LA County DRP as fallback |
-| Orange | SCAG | **Pending.** Becomes an urban transit county when the OC Streetcar opens; zones appear automatically once SCAG maps them | OC Public Works / OC Survey |
+| Orange | SCAG | **Pending.** Not yet an urban transit county: HCD counts only stations in operation, and SCAG says OC qualifies when the OC Streetcar opens (OCTA: "service starting early 2027"). Zones appear automatically once SCAG maps them | OC Public Works / OC Survey |
 | San Diego | SANDAG (draft map) | In effect | SanGIS/SANDAG parcels |
 | Sacramento | SACOG | In effect | Sacramento County GIS parcels (hosted), with the county map server as fallback |
 | Alameda | MTC | In effect | Alameda County parcels |
@@ -63,7 +63,11 @@ SB 79 does **not** remove fire zones from TOD zones on its own, so the MPO maps'
 - **§ 65912.161(a)(2)(A)** — a TOD Alternative Plan may cut density on those sites by more than 50%.
 - **§ 65912.159(a)(3)** — the streamlined ministerial path (§ 65913.4) is unavailable on a site in a very high fire hazard severity zone.
 
-The site queries the State Fire Marshal's maps live for every parcel and reports the share of the lot in a VHFHSZ or the SRA. Where a city's ordinance in force excludes fire-zone sites, those parcels are excluded on the map and in the report, so the city's effective TOD zone takes on the fire zone's jagged edge. Currently that's Glendale, San Diego (O-22099), and Los Angeles (from the City's own layer). A parcel counts if any part of it (more than 1 m²) lies in the fire zone; the report shows the share.
+The site queries the State Fire Marshal's maps live for every parcel and reports the share of the lot in a VHFHSZ or the SRA. Where a city's ordinance in force excludes fire-zone sites, those parcels are excluded on the map and in the report, so the city's effective TOD zone takes on the fire zone's jagged edge. Currently that's San Diego (O-22099 § 4, very high FHSZ only) and Los Angeles (from the City's own layer).
+
+**Partly covered sites.** Neither SB 79 ("sites within", § 65912.161) nor § 65913.4(a)(6)(D) ("located on a site that is … within") says how to treat a site only partly inside a fire zone, so the site doesn't decide for the city. A parcel ≥ 99.5% inside counts as within. One partly inside is shown as "partly within (X%)", and the city's exclusion is marked *unconfirmed* rather than applied.
+
+**Streamlining.** § 65913.4(a)(6)(D) excludes sites in a VHFHSZ *or the State Responsibility Area*, but "does not apply to sites that have adopted fire hazard mitigation measures pursuant to existing building standards or state fire mitigation measures applicable to the development" (Pub. Resources Code §§ 4290–4291, Gov. Code § 51182, Building Code ch. 7A). The text is in [`data/statute/GOV-65913.4.txt`](data/statute/GOV-65913.4.txt).
 
 ## Which rules govern a parcel
 
@@ -78,17 +82,23 @@ The site implements these rules in [`src/lib/policy.js`](src/lib/policy.js). If 
 
 ## The jurisdiction registry, and keeping it current
 
-HCD publishes its SB 79 review letters only as PDFs on a [Power BI dashboard](https://www.hcd.ca.gov/hau/enforcement-letters), which cannot be queried programmatically. Local adoption status lives in city council records. So [`data/jurisdictions.json`](data/jurisdictions.json) is maintained by hand. Each entry records:
+[`data/jurisdictions.json`](data/jurisdictions.json) lists local SB 79 instruments and HCD's review of each. **It uses first-hand sources only**: HCD's own letters, the jurisdiction's adopted ordinance or official page, or the jurisdiction's own GIS layer. Every document cited was read for the registry, and `npm test` rejects entries without primary documents, entries citing news or law-firm sites, and any HCD status not backed by HCD's letter.
 
+Each entry records:
 - the instrument type, local adoption status, date, and link
 - HCD's status (`compliant`, `noncompliant`, `pending`, `unknown`, …), with the letter date, link, and any conditions
-- coverage: `jurisdiction-wide`, `unknown`, or `arcgis` (a live city layer showing which parcels are covered, and why)
-- `verification`: `primary` means the HCD letter or the ordinance itself was read; `secondary` means the status comes from news or law-firm reporting and still needs confirming against the dashboard
+- coverage: `jurisdiction-wide`, `unknown`, `arcgis` (a live city layer showing which parcels are covered, and why), or `criteria` (a statutory criterion computed live, e.g. San Diego O-22099 § 4's very high FHSZ phase-in)
+- `documents`: the primary sources
+- `verification`: `primary` means every document was read; `located` means a cited primary document exists but couldn't be downloaded by script and should be confirmed by hand
+
+As of the last review: San Francisco, San Jose, Beverly Hills, San Diego and Oakland are `primary`. Los Angeles is `located`: HCD's letter and the City's GIS layer were read, but the City Clerk's server won't serve Ordinance No. 188968 to scripts.
+
+Jurisdictions reported elsewhere to have instruments or HCD letters (Pasadena, Burlingame, Oceanside, Glendale, Santa Monica, South Pasadena, Culver City, Palo Alto) are **left out** until their primary documents are obtained. HCD posts its letters only through a [Power BI dashboard](https://www.hcd.ca.gov/hau/enforcement-letters) that can't be read by script, so new letters must be added by hand.
 
 **Daily monitoring** ([`.github/workflows/monitor.yml`](.github/workflows/monitor.yml)) does three things:
 
 - `npm run check:sources` verifies every endpoint and every mapped field. If one breaks, it opens a `source-health` issue.
-- `python3 scripts/statute.py` re-reads §§ 65912.155–65912.162 from the leginfo export. If any section was amended, it opens a `statute-watch` issue.
+- `python3 scripts/statute.py` re-reads §§ 65912.155–65912.162 from the leginfo export, along with the sections they cite (§ 65913.4, §§ 51178–51179, Pub. Res. Code § 4102). If any section was amended, it opens a `statute-watch` issue.
 - `npm run check:hcd` fingerprints HCD's SB 79 and letters pages, checks every registry link, and flags the registry once it is 30+ days old. Any of these opens an `hcd-watch` issue.
 
 To update the registry: edit `data/jurisdictions.json` and set `lastReviewed`. Run `npm test`, which validates the schema. Then run `npm run check:hcd -- --update` and commit both files.

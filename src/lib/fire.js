@@ -45,11 +45,31 @@ export function overlapShare(parcel, polygons) {
 export function fireStatus(parcel, { vhfhsz = [], sra = [] }) {
   const v = overlapShare(parcel, vhfhsz);
   const s = overlapShare(parcel, sra);
+  // The statute says "sites within" a zone (§ 65912.161(b)(1)(D); § 65913.4(a)(6)(D))
+  // and does not say how to treat a site only partly inside one. We therefore
+  // distinguish: `within` = the whole parcel is inside (≥ 99.5% by area, to absorb
+  // boundary-digitising noise); `partial` = some but not all of it is.
+  const WHOLE = 0.995;
+  const within = v >= WHOLE || s >= WHOLE || v + s >= WHOLE; // "VHFHSZ or SRA" (§ 65912.161(b)(1)(D))
   return {
-    vhfhsz: { hit: v > 0, share: v },
-    sra: { hit: s > 0, share: s },
-    qualifies: v > 0 || s > 0, // § 65912.161(b)(1)(D) criterion
+    vhfhsz: { hit: v > 0, share: v, within: v >= WHOLE },
+    sra: { hit: s > 0, share: s, within: s >= WHOLE },
+    within,
+    partial: !within && (v > 0 || s > 0),
+    qualifies: within,
   };
+}
+
+/**
+ * Does a parcel meet a local ordinance's fire criterion?
+ *   'vhfhsz-or-sra' — the full § 65912.161(b)(1)(D) criterion
+ *   'vhfhsz'        — ordinances that exclude only very high FHSZ sites (e.g. San Diego O-22099 § 4)
+ * Returns 'within' | 'partial' | 'outside'.
+ */
+export function fireCriterionStatus(fire, criterion) {
+  if (!fire) return 'unknown';
+  if (criterion === 'vhfhsz') return fire.vhfhsz.within ? 'within' : fire.vhfhsz.hit ? 'partial' : 'outside';
+  return fire.within ? 'within' : fire.partial ? 'partial' : 'outside';
 }
 
 /** Live query of both OSFM layers for one parcel. */

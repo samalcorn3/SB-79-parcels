@@ -26,6 +26,16 @@ from datetime import datetime, timezone
 
 ARCHIVE = "https://downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip"
 SECTIONS = [f"65912.{n}" for n in range(155, 163)]
+# Sections SB 79 incorporates by reference, kept so the site can quote them.
+#   § 65913.4  streamlined ministerial approval (SB 79 § 65912.159 points to it)
+#   § 51178 / § 51179  very high fire hazard severity zones (cited in § 65912.161)
+#   Pub. Resources Code § 4102  state responsibility area (cited in § 65912.161)
+RELATED = [("GOV", "65913.4"), ("GOV", "51178"), ("GOV", "51179"), ("PRC", "4102")]
+WANTED = {("GOV", s) for s in SECTIONS} | set(RELATED)
+
+
+def key(code, sec):
+    return sec if code == "GOV" and sec.startswith("65912.") else f"{code}-{sec}"
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "statute")
 UA = {"User-Agent": "sb79-parcels-statute-check"}
 
@@ -81,18 +91,19 @@ def fetch():
     out = {}
     for row in table.split("\n"):
         cols = [c.strip("`") for c in row.split("\t")]
-        if len(cols) < 15 or cols[1] != "GOV" or cols[2].rstrip(".") not in SECTIONS:
+        if len(cols) < 15 or (cols[1], cols[2].rstrip(".")) not in WANTED:
             continue
-        sec = cols[2].rstrip(".")
+        code, sec = cols[1], cols[2].rstrip(".")
         text = lob_to_text(zf.read(cols[14]))
-        out[sec] = {
+        out[key(code, sec)] = {
+            "code": code,
             "section": sec,
             "history": cols[13],
             "effective": cols[6][:10],
             "sha256": hashlib.sha256(text.encode()).hexdigest(),
             "text": text,
         }
-    missing = [s for s in SECTIONS if s not in out]
+    missing = [key(c, s) for c, s in WANTED if key(c, s) not in out]
     if missing:
         raise SystemExit(f"Sections not found in leginfo export: {missing}")
     return out, src.modified
@@ -106,7 +117,8 @@ def main():
         os.makedirs(OUT_DIR, exist_ok=True)
         for sec, d in current.items():
             with open(os.path.join(OUT_DIR, f"{sec}.txt"), "w") as f:
-                f.write(f"Government Code § {sec}\n{d['history']}\n\n{d['text']}\n")
+                name = "Government Code" if d["code"] == "GOV" else "Public Resources Code"
+                f.write(f"{name} § {d['section']}\n{d['history']}\n\n{d['text']}\n")
         manifest = {
             "source": "Legislative Counsel of California — leginfo database export",
             "archive": ARCHIVE,
@@ -122,8 +134,8 @@ def main():
         return 0
     with open(manifest_path) as f:
         known = json.load(f)["sections"]
-    changed = [s for s in SECTIONS if known.get(s, {}).get("sha256") != current[s]["sha256"]]
-    report = [f"## Statute check — Gov. Code §§ 65912.155–65912.162 (leginfo export, {modified})", ""]
+    changed = [s for s in current if known.get(s, {}).get("sha256") != current[s]["sha256"]]
+    report = [f"## Statute check — Gov. Code §§ 65912.155–65912.162 and sections they cite (leginfo export, {modified})", ""]
     if changed:
         report.append("**Amended since the site's standards were built:**")
         report += [f"- § {s}: {current[s]['history']}" for s in changed]
