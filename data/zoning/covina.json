@@ -1,0 +1,79 @@
+{
+  "id": "covina",
+  "name": "City of Covina",
+  "jurisdictions": [
+    "Covina"
+  ],
+  "publisher": "City of Covina GIS — Zoning",
+  "url": "https://services2.arcgis.com/nzGFbmT76gMzTNvU/arcgis/rest/services/Covina_Zoning_and_General_Land_Use_WFL1/FeatureServer/12",
+  "fields": {
+    "code": "Zone",
+    "description": "Zone_Desc"
+  },
+  "codeName": "Covina Municipal Code, Title 17 (Zoning)",
+  "codeUrl": "https://www.codepublishing.com/CA/Covina/",
+  "rules": [
+    {
+      "match": "^(CBSP|CFSP|CVSP|TCSP)",
+      "class": "planned",
+      "cite": "Covina specific plans (Covina Bowl, Covina Forward, Covina Village, Town Center)"
+    },
+    {
+      "match": "^PCD/",
+      "class": "planned",
+      "cite": "Covina Municipal Code Title 17 (PCD planned community development)"
+    },
+    {
+      "match": "^COUNTY$",
+      "class": "unknown",
+      "why": "The city's layer marks this area as county land."
+    },
+    {
+      "match": "^(AHMUOD|MUOD)/C-P$",
+      "class": "office",
+      "cite": "Covina Municipal Code Title 17 (C-P administrative and professional office; mixed-use overlay is optional)"
+    },
+    {
+      "match": "^(AHMUOD|MUOD)/C-",
+      "class": "commercial",
+      "cite": "Covina Municipal Code Title 17 (commercial zones; the mixed-use overlay is optional)"
+    },
+    {
+      "match": "^(AHMUOD|MUOD)/M-1$",
+      "class": "industrial",
+      "cite": "Covina Municipal Code Title 17 (M-1)"
+    },
+    {
+      "match": "^(AHMUOD|MUOD)/",
+      "class": "mixed-residential",
+      "cite": "Covina Municipal Code Ch. 17.31, 17.59 (mixed-use overlay districts)"
+    },
+    {
+      "match": "^C-P$",
+      "class": "office",
+      "cite": "Covina Municipal Code Title 17 (C-P administrative and professional office)"
+    },
+    {
+      "match": "^R-TP$",
+      "class": "residential",
+      "cite": "Covina Municipal Code Title 17 (trailer park)"
+    },
+    {
+      "match": "^TC-P$",
+      "class": "office",
+      "cite": "Covina Municipal Code Title 17 (TC-P Town Center medical and professional office)"
+    },
+    {
+      "match": "^TC-C$",
+      "class": "commercial",
+      "cite": "Covina Municipal Code Title 17 (TC-C Town Center commercial)"
+    }
+  ],
+  "flags": [
+    {
+      "match": "MUOD/",
+      "note": "A mixed-use overlay (MUOD or affordable-housing AHMUOD) applies; it adds residential options to the base zone (Covina Municipal Code Chs. 17.31, 17.59)."
+    }
+  ],
+  "generic": true
+}

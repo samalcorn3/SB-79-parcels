@@ -1,0 +1,64 @@
+{
+  "id": "san-mateo-city",
+  "name": "City of San Mateo",
+  "jurisdictions": [
+    "San Mateo"
+  ],
+  "publisher": "City of San Mateo Public Works — Parcels with zoning",
+  "url": "https://services2.arcgis.com/g26Y0m7OCdjU0ObA/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "zone_class"
+  },
+  "codeName": "San Mateo Municipal Code, Title 27 (Zoning)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^BMSP$",
+      "class": "planned",
+      "cite": "San Mateo Bay Meadows Specific Plan"
+    },
+    {
+      "match": "^(TOD|TC)$",
+      "class": "mixed-residential",
+      "cite": "San Mateo Municipal Code Title 27 (transit-oriented and town center districts)"
+    },
+    {
+      "match": "^(C[1-4]|CBD)\\b",
+      "class": "commercial",
+      "cite": "San Mateo Municipal Code Title 27 (commercial districts)"
+    },
+    {
+      "match": "^E[12]-",
+      "class": "office",
+      "cite": "San Mateo Municipal Code Title 27 (E1, E2 executive office districts)"
+    },
+    {
+      "match": "^M1$",
+      "class": "industrial"
+    },
+    {
+      "match": "^OS$",
+      "class": "open-space"
+    },
+    {
+      "match": "^A$",
+      "class": "agriculture"
+    },
+    {
+      "match": "^S$",
+      "class": "unknown",
+      "why": "Check the zoning code for this district."
+    },
+    {
+      "match": "^R",
+      "class": "residential",
+      "cite": "San Mateo Municipal Code Title 27 (residential districts)"
+    }
+  ],
+  "flags": [
+    {
+      "match": "/R",
+      "note": "A residential overlay (/R) also permits housing here (San Mateo Municipal Code Title 27)."
+    }
+  ]
+}

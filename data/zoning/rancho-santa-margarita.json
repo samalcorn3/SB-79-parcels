@@ -1,0 +1,48 @@
+{
+  "id": "rancho-santa-margarita",
+  "name": "City of Rancho Santa Margarita",
+  "jurisdictions": [
+    "Rancho Santa Margarita"
+  ],
+  "publisher": "City of Rancho Santa Margarita — Zoning Districts",
+  "url": "https://services3.arcgis.com/tNo51C8FdS7k3M1O/arcgis/rest/services/Zoning/FeatureServer/1",
+  "fields": {
+    "code": "CODE"
+  },
+  "codeName": "Rancho Santa Margarita Zoning Code",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^AC-ACO$",
+      "class": "unknown",
+      "why": "Check the zoning code for this district."
+    },
+    {
+      "match": "^BP",
+      "class": "industrial",
+      "cite": "Rancho Santa Margarita Zoning Code (BP business park)"
+    },
+    {
+      "match": "^(CG|CN)",
+      "class": "commercial",
+      "cite": "Rancho Santa Margarita Zoning Code (commercial districts)"
+    },
+    {
+      "match": "^MU$",
+      "class": "mixed-residential"
+    },
+    {
+      "match": "^(OS|OSG|ONP|WATER)$",
+      "class": "open-space"
+    },
+    {
+      "match": "^(P|PQ)$",
+      "class": "public"
+    },
+    {
+      "match": "^R",
+      "class": "residential",
+      "cite": "Rancho Santa Margarita Zoning Code (residential districts)"
+    }
+  ]
+}

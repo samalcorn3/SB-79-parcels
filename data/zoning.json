@@ -162,10 +162,31 @@
   },
   "index": [
     {
+      "id": "agoura-hills",
+      "name": "City of Agoura Hills",
+      "jurisdictions": [
+        "Agoura Hills"
+      ]
+    },
+    {
       "id": "alameda-city",
       "name": "City of Alameda",
       "jurisdictions": [
         "Alameda"
+      ]
+    },
+    {
+      "id": "aliso-viejo",
+      "name": "City of Aliso Viejo",
+      "jurisdictions": [
+        "Aliso Viejo"
+      ]
+    },
+    {
+      "id": "atherton",
+      "name": "Town of Atherton",
+      "jurisdictions": [
+        "Atherton"
       ]
     },
     {
@@ -176,10 +197,38 @@
       ]
     },
     {
+      "id": "bell",
+      "name": "City of Bell",
+      "jurisdictions": [
+        "Bell"
+      ]
+    },
+    {
       "id": "beverly-hills",
       "name": "City of Beverly Hills",
       "jurisdictions": [
         "Beverly Hills"
+      ]
+    },
+    {
+      "id": "brisbane",
+      "name": "City of Brisbane",
+      "jurisdictions": [
+        "Brisbane"
+      ]
+    },
+    {
+      "id": "buena-park",
+      "name": "City of Buena Park",
+      "jurisdictions": [
+        "Buena Park"
+      ]
+    },
+    {
+      "id": "burbank",
+      "name": "City of Burbank",
+      "jurisdictions": [
+        "Burbank"
       ]
     },
     {
@@ -197,6 +246,27 @@
       ]
     },
     {
+      "id": "citrus-heights",
+      "name": "City of Citrus Heights",
+      "jurisdictions": [
+        "Citrus Heights"
+      ]
+    },
+    {
+      "id": "covina",
+      "name": "City of Covina",
+      "jurisdictions": [
+        "Covina"
+      ]
+    },
+    {
+      "id": "culver-city",
+      "name": "City of Culver City",
+      "jurisdictions": [
+        "Culver City"
+      ]
+    },
+    {
       "id": "cupertino",
       "name": "City of Cupertino",
       "jurisdictions": [
@@ -208,6 +278,13 @@
       "name": "City of Daly City",
       "jurisdictions": [
         "Daly City"
+      ]
+    },
+    {
+      "id": "diamond-bar",
+      "name": "City of Diamond Bar",
+      "jurisdictions": [
+        "Diamond Bar"
       ]
     },
     {
@@ -225,10 +302,24 @@
       ]
     },
     {
+      "id": "east-palo-alto",
+      "name": "City of East Palo Alto",
+      "jurisdictions": [
+        "East Palo Alto"
+      ]
+    },
+    {
       "id": "el-cajon",
       "name": "City of El Cajon",
       "jurisdictions": [
         "El Cajon"
+      ]
+    },
+    {
+      "id": "el-segundo",
+      "name": "City of El Segundo",
+      "jurisdictions": [
+        "El Segundo"
       ]
     },
     {
@@ -295,10 +386,24 @@
       ]
     },
     {
+      "id": "huntington-beach",
+      "name": "City of Huntington Beach",
+      "jurisdictions": [
+        "Huntington Beach"
+      ]
+    },
+    {
       "id": "industry",
       "name": "City of Industry",
       "jurisdictions": [
         "Industry"
+      ]
+    },
+    {
+      "id": "irvine",
+      "name": "City of Irvine",
+      "jurisdictions": [
+        "Irvine"
       ]
     },
     {
@@ -321,10 +426,24 @@
       ]
     },
     {
+      "id": "lakewood",
+      "name": "City of Lakewood",
+      "jurisdictions": [
+        "Lakewood"
+      ]
+    },
+    {
       "id": "lb-city",
       "name": "City of Long Beach",
       "jurisdictions": [
         "Long Beach"
+      ]
+    },
+    {
+      "id": "lemon-grove",
+      "name": "City of Lemon Grove",
+      "jurisdictions": [
+        "Lemon Grove"
       ]
     },
     {
@@ -346,6 +465,13 @@
       "name": "City of Malibu",
       "jurisdictions": [
         "Malibu"
+      ]
+    },
+    {
+      "id": "manhattan-beach",
+      "name": "City of Manhattan Beach",
+      "jurisdictions": [
+        "Manhattan Beach"
       ]
     },
     {
@@ -384,6 +510,13 @@
       ]
     },
     {
+      "id": "orange",
+      "name": "City of Orange",
+      "jurisdictions": [
+        "Orange"
+      ]
+    },
+    {
       "id": "palo-alto",
       "name": "City of Palo Alto",
       "jurisdictions": [
@@ -395,6 +528,13 @@
       "name": "City of Pasadena",
       "jurisdictions": [
         "Pasadena"
+      ]
+    },
+    {
+      "id": "pico-rivera",
+      "name": "City of Pico Rivera",
+      "jurisdictions": [
+        "Pico Rivera"
       ]
     },
     {
@@ -412,6 +552,13 @@
       ]
     },
     {
+      "id": "portola-valley",
+      "name": "Town of Portola Valley",
+      "jurisdictions": [
+        "Portola Valley"
+      ]
+    },
+    {
       "id": "poway",
       "name": "City of Poway",
       "jurisdictions": [
@@ -423,6 +570,13 @@
       "name": "City of Rancho Cordova",
       "jurisdictions": [
         "Rancho Cordova"
+      ]
+    },
+    {
+      "id": "rancho-santa-margarita",
+      "name": "City of Rancho Santa Margarita",
+      "jurisdictions": [
+        "Rancho Santa Margarita"
       ]
     },
     {
@@ -440,6 +594,27 @@
       ]
     },
     {
+      "id": "san-bruno",
+      "name": "City of San Bruno",
+      "jurisdictions": [
+        "San Bruno"
+      ]
+    },
+    {
+      "id": "san-clemente",
+      "name": "City of San Clemente",
+      "jurisdictions": [
+        "San Clemente"
+      ]
+    },
+    {
+      "id": "san-juan-capistrano",
+      "name": "City of San Juan Capistrano",
+      "jurisdictions": [
+        "San Juan Capistrano"
+      ]
+    },
+    {
       "id": "san-leandro",
       "name": "City of San Leandro",
       "jurisdictions": [
@@ -451,6 +626,13 @@
       "name": "City of San Marcos",
       "jurisdictions": [
         "San Marcos"
+      ]
+    },
+    {
+      "id": "san-mateo-city",
+      "name": "City of San Mateo",
+      "jurisdictions": [
+        "San Mateo"
       ]
     },
     {
@@ -471,10 +653,24 @@
       "unincorporatedOf": "santa-clara"
     },
     {
+      "id": "santa-fe-springs",
+      "name": "City of Santa Fe Springs",
+      "jurisdictions": [
+        "Santa Fe Springs"
+      ]
+    },
+    {
       "id": "santa-monica",
       "name": "City of Santa Monica",
       "jurisdictions": [
         "Santa Monica"
+      ]
+    },
+    {
+      "id": "santee",
+      "name": "City of Santee",
+      "jurisdictions": [
+        "Santee"
       ]
     },
     {
@@ -497,11 +693,25 @@
       ]
     },
     {
+      "id": "signal-hill",
+      "name": "City of Signal Hill",
+      "jurisdictions": [
+        "Signal Hill"
+      ]
+    },
+    {
       "id": "sj-city",
       "name": "City of San José",
       "jurisdictions": [
         "San Jose",
         "San José"
+      ]
+    },
+    {
+      "id": "solana-beach",
+      "name": "City of Solana Beach",
+      "jurisdictions": [
+        "Solana Beach"
       ]
     },
     {
@@ -516,6 +726,20 @@
       "name": "City of Sunnyvale",
       "jurisdictions": [
         "Sunnyvale"
+      ]
+    },
+    {
+      "id": "temple-city",
+      "name": "City of Temple City",
+      "jurisdictions": [
+        "Temple City"
+      ]
+    },
+    {
+      "id": "union-city",
+      "name": "City of Union City",
+      "jurisdictions": [
+        "Union City"
       ]
     },
     {
@@ -540,10 +764,24 @@
       ]
     },
     {
+      "id": "westlake-village",
+      "name": "City of Westlake Village",
+      "jurisdictions": [
+        "Westlake Village"
+      ]
+    },
+    {
       "id": "whittier",
       "name": "City of Whittier",
       "jurisdictions": [
         "Whittier"
+      ]
+    },
+    {
+      "id": "woodside",
+      "name": "Town of Woodside",
+      "jurisdictions": [
+        "Woodside"
       ]
     }
   ]

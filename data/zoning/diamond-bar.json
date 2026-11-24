@@ -1,0 +1,47 @@
+{
+  "id": "diamond-bar",
+  "name": "City of Diamond Bar",
+  "jurisdictions": [
+    "Diamond Bar"
+  ],
+  "publisher": "City of Diamond Bar — Zoning",
+  "url": "https://services1.arcgis.com/yvWpR6DCcpIEETDL/arcgis/rest/services/Zoning2020/FeatureServer/0",
+  "fields": {
+    "code": "ZONECODE",
+    "description": "ZONE"
+  },
+  "codeName": "Diamond Bar Municipal Code, Title 22 (Development Code)",
+  "rules": [
+    {
+      "match": "^(SP|TCSP|SUB-PA)",
+      "class": "planned",
+      "cite": "Diamond Bar specific plans (Town Center, Diamond Bar Country Club) and planning areas"
+    },
+    {
+      "match": "^C-3-?PD",
+      "class": "planned",
+      "cite": "Diamond Bar Development Code (regional commercial planned development)"
+    },
+    {
+      "match": "^(OB|OP|CO)",
+      "class": "office",
+      "cite": "Diamond Bar Development Code (office zones)"
+    },
+    {
+      "match": "^REC$",
+      "class": "open-space"
+    },
+    {
+      "match": "^I(-H)?$",
+      "class": "industrial",
+      "cite": "Diamond Bar Development Code (I light industry)"
+    }
+  ],
+  "flags": [
+    {
+      "match": "-H$",
+      "note": "Housing Element site overlay: housing is also permitted here (Diamond Bar Development Code)."
+    }
+  ],
+  "generic": true
+}

@@ -1,0 +1,30 @@
+{
+  "id": "atherton",
+  "name": "Town of Atherton",
+  "jurisdictions": [
+    "Atherton"
+  ],
+  "publisher": "Town of Atherton — Zoning",
+  "url": "https://services6.arcgis.com/M2JnqYO98uNEpQ0u/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZONING",
+    "description": "descr"
+  },
+  "codeName": "Atherton Municipal Code, Title 17 (Zoning)",
+  "rules": [
+    {
+      "match": "^PFS$",
+      "class": "public"
+    },
+    {
+      "match": "^POS$",
+      "class": "open-space"
+    },
+    {
+      "match": "^R",
+      "class": "residential",
+      "cite": "Atherton Municipal Code Title 17 (residential districts)"
+    }
+  ],
+  "generic": true
+}

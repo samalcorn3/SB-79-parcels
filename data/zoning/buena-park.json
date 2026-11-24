@@ -1,0 +1,41 @@
+{
+  "id": "buena-park",
+  "name": "City of Buena Park",
+  "jurisdictions": [
+    "Buena Park"
+  ],
+  "publisher": "City of Buena Park — Zoning 2026 (by parcel)",
+  "url": "https://services8.arcgis.com/eVbtY4q6KGlXIxQE/arcgis/rest/services/zoning2026_Clip/FeatureServer/0",
+  "fields": {
+    "code": "BP_ZONE",
+    "description": "ZONE_Desc"
+  },
+  "codeName": "Buena Park Municipal Code, Title 19 (Zoning)",
+  "rules": [
+    {
+      "match": "SP$",
+      "class": "planned",
+      "cite": "Buena Park specific plans"
+    },
+    {
+      "match": "^C0$",
+      "class": "office",
+      "cite": "Buena Park zoning (CO office)"
+    },
+    {
+      "match": "^CR$",
+      "class": "commercial",
+      "cite": "Buena Park zoning (CR regional commercial)"
+    },
+    {
+      "match": "^AR$",
+      "class": "unknown",
+      "why": "Amusement resort zone: check whether retail or office uses are permitted by right."
+    },
+    {
+      "match": "^OR$",
+      "class": "open-space"
+    }
+  ],
+  "generic": true
+}

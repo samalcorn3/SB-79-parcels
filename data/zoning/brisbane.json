@@ -1,0 +1,33 @@
+{
+  "id": "brisbane",
+  "name": "City of Brisbane",
+  "jurisdictions": [
+    "Brisbane"
+  ],
+  "publisher": "City of Brisbane — Zoning Districts (2024)",
+  "url": "https://services9.arcgis.com/UGpGSV1ugL0pHSgX/arcgis/rest/services/BrisbaneZoningDistricts_052024/FeatureServer/0",
+  "fields": {
+    "code": "Abbreviati",
+    "description": "Descriptio"
+  },
+  "codeName": "Brisbane Municipal Code, Title 17 (Zoning)",
+  "rules": [
+    {
+      "match": "^PD$",
+      "class": "planned"
+    },
+    {
+      "match": "^(R-TUO|PAOZ)",
+      "class": "residential",
+      "cite": "Brisbane residential overlay districts"
+    },
+    {
+      "match": "Overlay",
+      "class": "unknown",
+      "why": "Overlay district without a base zone in the city's layer.",
+      "on": "description",
+      "flags": "i"
+    }
+  ],
+  "generic": true
+}

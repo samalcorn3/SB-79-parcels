@@ -1,0 +1,26 @@
+{
+  "id": "lakewood",
+  "name": "City of Lakewood",
+  "jurisdictions": [
+    "Lakewood"
+  ],
+  "publisher": "City of Lakewood — Zoning Designations",
+  "url": "https://services5.arcgis.com/bkaqPVf76HqGHC0b/arcgis/rest/services/Zoning_Designations/FeatureServer/0",
+  "fields": {
+    "code": "ZONING"
+  },
+  "codeName": "Lakewood Municipal Code, Article IX (Planning and Zoning)",
+  "rules": [
+    {
+      "match": "^PD",
+      "class": "planned",
+      "cite": "Lakewood Municipal Code Art. IX (planned development zones)"
+    },
+    {
+      "match": "^MFR$",
+      "class": "residential",
+      "cite": "Lakewood Municipal Code Art. IX (multiple-family residential)"
+    }
+  ],
+  "generic": true
+}

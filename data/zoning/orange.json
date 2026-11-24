@@ -1,0 +1,51 @@
+{
+  "id": "orange",
+  "name": "City of Orange",
+  "jurisdictions": [
+    "Orange"
+  ],
+  "publisher": "City of Orange — Zoning",
+  "url": "https://services5.arcgis.com/HsWup310bJE1lcGa/arcgis/rest/services/Orange_Zoning_Layer_2_view/FeatureServer/0",
+  "fields": {
+    "code": "ZONING_USE_CODE",
+    "description": "ZONING"
+  },
+  "codeName": "Orange Municipal Code, Title 17 (Zoning)",
+  "rules": [
+    {
+      "match": "^CR$",
+      "class": "unknown",
+      "why": "Commercial recreation zone: check whether retail or office uses are permitted by right."
+    },
+    {
+      "match": "^PC$",
+      "class": "planned",
+      "cite": "Orange Municipal Code Title 17 (PC planned community)"
+    },
+    {
+      "match": "^(UMU|NMU|OTMU)",
+      "class": "mixed-residential",
+      "cite": "Orange Municipal Code Title 17 (mixed-use districts)"
+    },
+    {
+      "match": "^O\\.C\\.F\\.C\\.D\\.$",
+      "class": "transportation"
+    },
+    {
+      "match": "^UNZONE$",
+      "class": "unknown",
+      "why": "Unzoned in the city's layer."
+    },
+    {
+      "match": "^SG$",
+      "class": "industrial",
+      "cite": "Orange Municipal Code Title 17 (sand and gravel)"
+    },
+    {
+      "match": "^SH$",
+      "class": "unknown",
+      "why": "Check the zoning code for this district."
+    }
+  ],
+  "generic": true
+}

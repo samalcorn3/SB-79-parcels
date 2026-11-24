@@ -1,0 +1,40 @@
+{
+  "id": "san-clemente",
+  "name": "City of San Clemente",
+  "jurisdictions": [
+    "San Clemente"
+  ],
+  "publisher": "City of San Clemente GIS — Zoning with specific plans",
+  "url": "https://services3.arcgis.com/x68DaqVkReQwi0Vd/arcgis/rest/services/Zoning_with_Specific_Plans/FeatureServer/0",
+  "fields": {
+    "code": "ZoneClassification",
+    "description": "ZoningDescription"
+  },
+  "codeName": "San Clemente Zoning Ordinance (Municipal Code, Title 17)",
+  "rules": [
+    {
+      "match": "^(FRSP|MCSP|MISP|PBSP|RSCSP|TSP|WPCSP)\\b",
+      "class": "planned",
+      "cite": "San Clemente specific plans"
+    },
+    {
+      "match": "^CC\\d$",
+      "class": "commercial",
+      "cite": "San Clemente Zoning Ordinance (community commercial)"
+    },
+    {
+      "match": "^NC",
+      "class": "commercial",
+      "cite": "San Clemente Zoning Ordinance (neighborhood commercial)"
+    },
+    {
+      "match": "^MU",
+      "class": "mixed-residential"
+    },
+    {
+      "match": "^CVC$",
+      "class": "public"
+    }
+  ],
+  "generic": true
+}

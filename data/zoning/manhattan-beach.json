@@ -1,0 +1,49 @@
+{
+  "id": "manhattan-beach",
+  "name": "City of Manhattan Beach",
+  "jurisdictions": [
+    "Manhattan Beach"
+  ],
+  "publisher": "City of Manhattan Beach — Zoning (2023)",
+  "url": "https://services2.arcgis.com/mP6Ul6JKT9roxmWT/arcgis/rest/services/ManhattanBeach_Zoning2023/FeatureServer/0",
+  "fields": {
+    "code": "ZONING"
+  },
+  "codeName": "Manhattan Beach Municipal Code, Title 10 (Planning and Zoning)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "/",
+      "class": "unknown",
+      "why": "The city's layer lists two districts for this parcel (for example CG/RS); check the zoning map."
+    },
+    {
+      "match": "^PD",
+      "class": "planned",
+      "cite": "Manhattan Beach Municipal Code Title 10 (PD planned development)"
+    },
+    {
+      "match": "^(CC|CD|CG|CL|CNE)\\b",
+      "class": "commercial",
+      "cite": "Manhattan Beach Municipal Code Title 10, Ch. 10.16 (commercial districts)"
+    },
+    {
+      "match": "^IP$",
+      "class": "industrial",
+      "cite": "Manhattan Beach Municipal Code Title 10 (IP industrial park)"
+    },
+    {
+      "match": "^PS$",
+      "class": "public"
+    },
+    {
+      "match": "^OS$",
+      "class": "open-space"
+    },
+    {
+      "match": "^R",
+      "class": "residential",
+      "cite": "Manhattan Beach Municipal Code Title 10, Ch. 10.12 (residential districts)"
+    }
+  ]
+}

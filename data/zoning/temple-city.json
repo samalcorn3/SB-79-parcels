@@ -1,0 +1,36 @@
+{
+  "id": "temple-city",
+  "name": "City of Temple City",
+  "jurisdictions": [
+    "Temple City"
+  ],
+  "publisher": "City of Temple City — Zoning (by parcel)",
+  "url": "https://services5.arcgis.com/946ZlbwtX04T02LN/arcgis/rest/services/EuclidHL_Temple_City_Zoning_Parcels/FeatureServer/0",
+  "fields": {
+    "code": "Zoning",
+    "description": "ZONE_DESC"
+  },
+  "codeName": "Temple City Zoning Code (Temple City Municipal Code, Title 9)",
+  "rules": [
+    {
+      "match": "^CSP$",
+      "class": "planned",
+      "cite": "Temple City Crossroads Specific Plan"
+    },
+    {
+      "match": "^RPD$",
+      "class": "planned",
+      "cite": "Temple City zoning code (residential planned development)"
+    },
+    {
+      "match": "^(DC|LTC)$",
+      "class": "commercial",
+      "cite": "Temple City zoning code (Downtown Core and Las Tunas Commercial)"
+    },
+    {
+      "match": "^Water$",
+      "class": "open-space"
+    }
+  ],
+  "generic": true
+}

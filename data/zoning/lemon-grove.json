@@ -1,0 +1,35 @@
+{
+  "id": "lemon-grove",
+  "name": "City of Lemon Grove",
+  "jurisdictions": [
+    "Lemon Grove"
+  ],
+  "publisher": "City of Lemon Grove — Zoning Districts",
+  "url": "https://services7.arcgis.com/D1qgPMtsRENpZIBr/arcgis/rest/services/Zoning___STA_Overlay/FeatureServer/51",
+  "fields": {
+    "code": "CODE",
+    "description": "FIRST_ZONE"
+  },
+  "codeName": "Lemon Grove Municipal Code, Title 17 (Zoning)",
+  "rules": [
+    {
+      "match": "^(TMU|VC)\\d",
+      "class": "mixed-residential",
+      "cite": "Lemon Grove zoning (transit mixed-use and village commercial)"
+    },
+    {
+      "match": "^ReM$",
+      "class": "industrial"
+    },
+    {
+      "match": "^RP$",
+      "class": "office",
+      "cite": "Lemon Grove zoning (residential/professional)"
+    },
+    {
+      "match": "^CI$",
+      "class": "public"
+    }
+  ],
+  "generic": true
+}

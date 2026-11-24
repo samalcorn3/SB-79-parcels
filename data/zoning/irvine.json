@@ -1,0 +1,48 @@
+{
+  "id": "irvine",
+  "name": "City of Irvine",
+  "jurisdictions": [
+    "Irvine"
+  ],
+  "publisher": "City of Irvine GIS — Zoning",
+  "url": "https://services2.arcgis.com/3mkVbLdbLBFHrfbK/arcgis/rest/services/Irvine_Zoning/FeatureServer/6",
+  "fields": {
+    "code": "ZONING",
+    "description": "DESCRIPTION"
+  },
+  "updatedField": "DATE",
+  "codeName": "Irvine Zoning Ordinance",
+  "rules": [
+    {
+      "match": "Commercial Recreation",
+      "on": "description",
+      "class": "unknown",
+      "why": "Commercial recreation zone: check whether retail or office uses are permitted by right."
+    },
+    {
+      "match": "Preservation|Water Bodies|Great Park|Cemetery",
+      "class": "open-space",
+      "on": "description",
+      "flags": "i"
+    },
+    {
+      "match": "Development Reserve",
+      "class": "unknown",
+      "on": "description",
+      "why": "Development reserve: no development is permitted until the area is rezoned."
+    },
+    {
+      "match": "Transit Oriented",
+      "class": "mixed-residential",
+      "on": "description",
+      "flags": "i"
+    },
+    {
+      "match": "Medical and Science",
+      "class": "office",
+      "cite": "Irvine Zoning Ordinance (5.5 Medical and Science district)",
+      "on": "description"
+    }
+  ],
+  "generic": true
+}

@@ -1,0 +1,36 @@
+{
+  "id": "pico-rivera",
+  "name": "City of Pico Rivera",
+  "jurisdictions": [
+    "Pico Rivera"
+  ],
+  "publisher": "City of Pico Rivera — Zoning",
+  "url": "https://services2.arcgis.com/OCysFFatYM3MITwS/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "Name",
+    "description": "FullName"
+  },
+  "codeName": "Pico Rivera Municipal Code, Title 18 (Zoning)",
+  "rules": [
+    {
+      "match": "^(SP|CPD|IPD|PUD)",
+      "class": "planned",
+      "cite": "Pico Rivera specific plans and planned development zones"
+    },
+    {
+      "match": "^P-A$",
+      "class": "office",
+      "cite": "Pico Rivera Municipal Code Title 18 (P-A professional and administrative)"
+    },
+    {
+      "match": "^P$",
+      "class": "parking",
+      "cite": "Pico Rivera Municipal Code Title 18 (P parking)"
+    },
+    {
+      "match": "^R-I$",
+      "class": "residential"
+    }
+  ],
+  "generic": true
+}

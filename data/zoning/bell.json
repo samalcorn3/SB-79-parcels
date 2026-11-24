@@ -1,0 +1,32 @@
+{
+  "id": "bell",
+  "name": "City of Bell",
+  "jurisdictions": [
+    "Bell"
+  ],
+  "publisher": "City of Bell Community Development — Zoning",
+  "url": "https://services1.arcgis.com/IDvfjYI62gruE337/arcgis/rest/services/ZONING_NEW/FeatureServer/0",
+  "fields": {
+    "code": "ZONING_ID",
+    "description": "ZONING_DESCRIPTION"
+  },
+  "codeName": "Bell Municipal Code (zoning)",
+  "rules": [
+    {
+      "match": "^C-3R?$",
+      "class": "commercial",
+      "cite": "Bell Municipal Code (C-3 and C-3R commercial zones)"
+    },
+    {
+      "match": "^POL$",
+      "class": "unknown",
+      "why": "Zone shown as POL in the city's layer; check the city's zoning map legend."
+    },
+    {
+      "match": "^T$",
+      "class": "unknown",
+      "why": "Transitional zone; check the zoning code for permitted uses."
+    }
+  ],
+  "generic": true
+}

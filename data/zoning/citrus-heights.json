@@ -1,0 +1,44 @@
+{
+  "id": "citrus-heights",
+  "name": "City of Citrus Heights",
+  "jurisdictions": [
+    "Citrus Heights"
+  ],
+  "publisher": "City of Citrus Heights — Zoning (by parcel)",
+  "url": "https://services8.arcgis.com/F2vUxnlx169smga0/arcgis/rest/services/CitrusHeights_Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZONE"
+  },
+  "codeName": "Citrus Heights Zoning Code",
+  "generic": false,
+  "rules": [
+    {
+      "match": "PD$|^SPA$",
+      "class": "planned",
+      "cite": "Citrus Heights planned development and special planning areas"
+    },
+    {
+      "match": "^(CR|GC|LC|SC)$",
+      "class": "commercial",
+      "cite": "Citrus Heights Zoning Code (commercial zones)"
+    },
+    {
+      "match": "^O$",
+      "class": "office"
+    },
+    {
+      "match": "^BP$",
+      "class": "industrial"
+    },
+    {
+      "match": "^AC$",
+      "class": "unknown",
+      "why": "Check the zoning code for this district."
+    },
+    {
+      "match": "^(RD|MH)",
+      "class": "residential",
+      "cite": "Citrus Heights Zoning Code (residential zones)"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "aliso-viejo",
+  "name": "City of Aliso Viejo",
+  "jurisdictions": [
+    "Aliso Viejo"
+  ],
+  "publisher": "City of Aliso Viejo — Zoning",
+  "url": "https://services9.arcgis.com/BMNzM85wEtX7LHzh/arcgis/rest/services/AV_Zoning/FeatureServer/0",
+  "fields": {
+    "code": "CODE",
+    "description": "ZONE"
+  },
+  "codeName": "Aliso Viejo Municipal Code, Title 15 (Zoning)",
+  "rules": [
+    {
+      "match": "^SP-",
+      "class": "planned",
+      "cite": "Aliso Viejo specific plans"
+    },
+    {
+      "match": "/RVH$",
+      "class": "mixed-residential",
+      "cite": "Aliso Viejo zoning (business park with very-high-density residential option)"
+    },
+    {
+      "match": "^BP-",
+      "class": "industrial",
+      "cite": "Aliso Viejo zoning (business park)"
+    },
+    {
+      "match": "^CT$",
+      "class": "commercial"
+    },
+    {
+      "match": "^PO$",
+      "class": "office"
+    },
+    {
+      "match": "^CF$",
+      "class": "public"
+    }
+  ],
+  "generic": true
+}
