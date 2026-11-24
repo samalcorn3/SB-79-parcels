@@ -5,7 +5,7 @@
     "San Juan Capistrano"
   ],
   "publisher": "City of San Juan Capistrano — Zoning",
-  "url": "https://services5.arcgis.com/NUp4yl2gULzlAcEm/arcgis/rest/services/Zoning_Public/FeatureServer/0",
+  "url": "https://services5.arcgis.com/NUp4yl2gULzlAcEm/arcgis/rest/services/Zoning_Hosted/FeatureServer/21",
   "fields": {
     "code": "ZONE_NEW",
     "description": "ZONE_DESC"
@@ -18,12 +18,17 @@
       "cite": "San Juan Capistrano Land Use Code (A agri-business district)"
     },
     {
+      "match": "^MHP",
+      "class": "residential",
+      "cite": "San Juan Capistrano Land Use Code (mobile home park districts)"
+    },
+    {
       "match": "^(PC|SP|PRD)",
       "class": "planned",
       "cite": "San Juan Capistrano planned community, specific plan and planned residential districts"
     },
     {
-      "match": "^(A|MHP)/|\\(",
+      "match": "^(A|MHP(-SO)?)[/(]|\\(",
       "class": "unknown",
       "why": "The city's layer combines districts or approvals for this area; check the zoning map."
     },

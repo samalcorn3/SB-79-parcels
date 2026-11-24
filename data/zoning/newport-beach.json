@@ -1,0 +1,44 @@
+{
+  "id": "newport-beach",
+  "name": "City of Newport Beach",
+  "jurisdictions": [
+    "Newport Beach"
+  ],
+  "publisher": "City of Newport Beach GIS — Zoning (by lot)",
+  "url": "https://nbgis.newportbeachca.gov/arcgis/rest/services/PublicSiteGIS/MapServer/105",
+  "fields": {
+    "code": "ZONING_UPDATE",
+    "description": "ZONING_DESCRIPTION"
+  },
+  "codeName": "Newport Beach Municipal Code, Title 20 (Planning and Zoning)",
+  "rules": [
+    {
+      "match": "^PR$",
+      "class": "open-space"
+    },
+    {
+      "match": "^(PC|SP-)",
+      "class": "planned",
+      "cite": "Newport Beach planned communities and specific plans (Title 20)"
+    },
+    {
+      "match": "^OM$",
+      "class": "office",
+      "cite": "Newport Beach Municipal Code Title 20 (OM office–medical)"
+    },
+    {
+      "match": "^CM$",
+      "class": "unknown",
+      "why": "Commercial recreational and marine zone: check whether retail or office uses are permitted by right."
+    },
+    {
+      "match": "^WATER$",
+      "class": "open-space"
+    },
+    {
+      "match": "^$",
+      "class": "transportation"
+    }
+  ],
+  "generic": true
+}

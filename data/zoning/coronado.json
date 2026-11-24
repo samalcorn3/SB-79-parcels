@@ -1,0 +1,44 @@
+{
+  "id": "coronado",
+  "name": "City of Coronado",
+  "jurisdictions": [
+    "Coronado"
+  ],
+  "publisher": "City of Coronado — Zoning (public view)",
+  "url": "https://services9.arcgis.com/1SAyrvXTnvKfdFdr/arcgis/rest/services/Zoning_-_Public_View/FeatureServer/105",
+  "fields": {
+    "code": "zoningname"
+  },
+  "codeName": "Coronado Municipal Code, Title 86 (Zoning)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^C$",
+      "class": "commercial",
+      "cite": "Coronado Municipal Code Title 86 (C commercial zone)"
+    },
+    {
+      "match": "^CR$",
+      "class": "unknown",
+      "why": "Check the zoning code for the CR zone's permitted uses."
+    },
+    {
+      "match": "^(CU|HM|MZ)$",
+      "class": "unknown",
+      "why": "Check the zoning code for this zone's permitted uses."
+    },
+    {
+      "match": "^(City Park|OS|Other/Open Space|Wetlands)$",
+      "class": "open-space"
+    },
+    {
+      "match": "^(RPCD|RSCD)$",
+      "class": "planned"
+    },
+    {
+      "match": "^(R-|HE-|Custom|Village|Waterfront)",
+      "class": "residential",
+      "cite": "Coronado Municipal Code Title 86 (residential zones)"
+    }
+  ]
+}

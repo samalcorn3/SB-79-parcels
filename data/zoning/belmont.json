@@ -1,0 +1,61 @@
+{
+  "id": "belmont",
+  "name": "City of Belmont",
+  "jurisdictions": [
+    "Belmont"
+  ],
+  "publisher": "City of Belmont — Zoning (Open Data)",
+  "url": "https://maps.belmont.gov/arcgis/rest/services/OpenData/OpenData/MapServer/10",
+  "fields": {
+    "code": "ZONECODE",
+    "description": "ZONE_DESC"
+  },
+  "codeName": "Belmont Zoning Ordinance",
+  "rules": [
+    {
+      "match": "^PD$",
+      "class": "planned"
+    },
+    {
+      "match": "^(VC|VCS|VCMU|CMU)$",
+      "class": "mixed-residential",
+      "cite": "Belmont Village Specific Plan and corridor mixed-use zones"
+    },
+    {
+      "match": "^E2\\.2$",
+      "class": "industrial",
+      "cite": "Belmont Zoning Ordinance (E2.2 executive office and warehouse)"
+    },
+    {
+      "match": "^E",
+      "class": "office",
+      "cite": "Belmont Zoning Ordinance (E1, E2.1 office zones)"
+    },
+    {
+      "match": "^HIA",
+      "class": "industrial"
+    },
+    {
+      "match": "^HWY$",
+      "class": "transportation"
+    },
+    {
+      "match": "^(PP|PS)$",
+      "class": "open-space"
+    },
+    {
+      "match": "^SE$",
+      "class": "public"
+    },
+    {
+      "match": "^HRO",
+      "class": "residential",
+      "cite": "Belmont Zoning Ordinance (hillside residential and open space)"
+    },
+    {
+      "match": "^S-1/",
+      "class": "residential"
+    }
+  ],
+  "generic": true
+}

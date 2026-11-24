@@ -183,6 +183,13 @@
       ]
     },
     {
+      "id": "anaheim",
+      "name": "City of Anaheim",
+      "jurisdictions": [
+        "Anaheim"
+      ]
+    },
+    {
       "id": "atherton",
       "name": "Town of Atherton",
       "jurisdictions": [
@@ -201,6 +208,13 @@
       "name": "City of Bell",
       "jurisdictions": [
         "Bell"
+      ]
+    },
+    {
+      "id": "belmont",
+      "name": "City of Belmont",
+      "jurisdictions": [
+        "Belmont"
       ]
     },
     {
@@ -253,6 +267,13 @@
       ]
     },
     {
+      "id": "coronado",
+      "name": "City of Coronado",
+      "jurisdictions": [
+        "Coronado"
+      ]
+    },
+    {
       "id": "covina",
       "name": "City of Covina",
       "jurisdictions": [
@@ -278,6 +299,13 @@
       "name": "City of Daly City",
       "jurisdictions": [
         "Daly City"
+      ]
+    },
+    {
+      "id": "dana-point",
+      "name": "City of Dana Point",
+      "jurisdictions": [
+        "Dana Point"
       ]
     },
     {
@@ -426,6 +454,13 @@
       ]
     },
     {
+      "id": "lake-forest",
+      "name": "City of Lake Forest",
+      "jurisdictions": [
+        "Lake Forest"
+      ]
+    },
+    {
       "id": "lakewood",
       "name": "City of Lakewood",
       "jurisdictions": [
@@ -451,6 +486,13 @@
       "name": "City of Livermore",
       "jurisdictions": [
         "Livermore"
+      ]
+    },
+    {
+      "id": "los-altos",
+      "name": "City of Los Altos",
+      "jurisdictions": [
+        "Los Altos"
       ]
     },
     {
@@ -496,6 +538,13 @@
       ]
     },
     {
+      "id": "newport-beach",
+      "name": "City of Newport Beach",
+      "jurisdictions": [
+        "Newport Beach"
+      ]
+    },
+    {
       "id": "oak-city",
       "name": "City of Oakland",
       "jurisdictions": [
@@ -535,6 +584,13 @@
       "name": "City of Pico Rivera",
       "jurisdictions": [
         "Pico Rivera"
+      ]
+    },
+    {
+      "id": "placentia",
+      "name": "City of Placentia",
+      "jurisdictions": [
+        "Placentia"
       ]
     },
     {
