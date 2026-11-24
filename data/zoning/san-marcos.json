@@ -11,13 +11,19 @@
     "description": "Zone",
     "planName": "spadistrictname"
   },
+  "standards": [
+    {
+      "label": "Density or intensity",
+      "field": "Density_Intensity"
+    }
+  ],
+  "codeName": "San Marcos Municipal Code, Title 20",
+  "generic": true,
   "rules": [
     {
       "match": "^L-I",
       "class": "industrial",
       "cite": "San Marcos Municipal Code Title 20 (light industrial)"
     }
-  ],
-  "generic": true,
-  "codeName": "San Marcos Municipal Code, Title 20"
+  ]
 }

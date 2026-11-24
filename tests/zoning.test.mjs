@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { pickZoningSource, classifyZone, combineZoneStatuses, loadZoningSource } from '../src/lib/zoning.js';
+import { pickZoningSource, classifyZone, combineZoneStatuses, loadZoningSource, limitsFromText, provenance, urlFrom, layerUpdatedInfo, CURRENT_SINCE } from '../src/lib/zoning.js';
 import { loadData, loadZoningSources } from '../scripts/load-data.mjs';
 
 const { zoning } = await loadData();
@@ -55,8 +55,9 @@ test('source choice: the city’s own layer, or the county’s for unincorporate
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Carson' }), null); // no regional compilations
   assert.equal(pickZoningSource(zoning, { countyId: 'santa-clara', cityName: 'San José' }).id, 'sj-city');
   assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Pleasanton' }).id, 'pleasanton');
-  assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Berkeley' }), null);
-  assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Torrance' }), null); // city layer incomplete (see HANDOFF)
+  assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Berkeley' }).id, 'berkeley'); // third-party copy, last resort
+  assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Piedmont' }), null);
+  assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Torrance' }).id, 'torrance'); // known gaps: never decides outright
   assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: null }).id, 'sd-county');
   assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: 'Carlsbad' }).id, 'carlsbad');
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Santa Clarita' }), null);
@@ -113,6 +114,34 @@ test('zone classification', () => {
   assert.equal(cls('palo-alto', { code: 'PC-4296(TOD)', category: 'Commercial/Residential' }).class, 'planned');
   assert.equal(cls('palo-alto', { code: 'CS(TOD)', category: 'Commercial/Residential' }).status, 'meets');
   assert.equal(cls('dublin', { code: 'DDZD' }).class, 'planned');
+});
+
+test('what the zoning allows: limits stated in a zone’s name', () => {
+  assert.deepEqual(limitsFromText('MF-20 : Residential 20 du/ac'), [{ label: 'Density', value: '20 units per acre' }]);
+  assert.deepEqual(limitsFromText('Moderate Density Residential of 6.6-15 Units/Acre'), [{ label: 'Density', value: '6.6–15 units per acre' }]);
+  assert.deepEqual(limitsFromText('SFD up to 6 du/ac'), [{ label: 'Density', value: 'up to 6 units per acre' }]);
+  assert.deepEqual(limitsFromText('R-1-7500 - Residential Zone (Single Family - 7,500 sq. ft. minimum lot size)'), [{ label: 'Minimum lot size', value: '7,500 sq ft' }]);
+  assert.deepEqual(limitsFromText('Multiple-Family Residential (2,400 s.f. min. lot area per unit)'), [{ label: 'Lot area per unit', value: '2,400 sq ft' }]);
+  assert.deepEqual(limitsFromText('General Commercial'), []);
+  assert.equal(urlFrom("<a href='https://ecode360.com/42705294'>Chapter 23.10</a>"), 'https://ecode360.com/42705294');
+});
+
+test('how the zoning was obtained, and how current it is', async () => {
+  assert.match(provenance(src('pasadena')).text, /City of Pasadena on its own ArcGIS Online organisation/);
+  assert.match(provenance(src('glendale')).text, /own GIS server \(gismap\.glendaleca\.gov\)/);
+  assert.match(provenance(src('sacramento-county')).text, /^Published by the County of Sacramento/);
+  const tp = zoning.sources.filter((s) => s.thirdParty);
+  assert.ok(tp.length >= 5);
+  for (const s of tp) {
+    assert.ok(s.thirdParty.name, `${s.id}: third-party host must be named`);
+    const p = provenance(s);
+    assert.equal(p.kind, 'third-party');
+    assert.match(p.text, /not by .* Used only because .* does not publish a zoning layer of its own/);
+  }
+  assert.deepEqual(await layerUpdatedInfo(src('irwindale')), { date: '2019', basis: src('irwindale').asOf.basis });
+  assert.ok('2019' < CURRENT_SINCE && '2023-02-01' >= CURRENT_SINCE);
+  assert.equal(src('torrance').statusCap, 'confirm');
+  assert.ok(src('torrance').caveat);
 });
 
 test('split-zoned sites', () => {

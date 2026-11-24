@@ -8,9 +8,11 @@
   "url": "https://services9.arcgis.com/UGpGSV1ugL0pHSgX/arcgis/rest/services/BrisbaneZoningDistricts_052024/FeatureServer/0",
   "fields": {
     "code": "Abbreviati",
-    "description": "Descriptio"
+    "description": "Descriptio",
+    "link": "Hyperlink"
   },
   "codeName": "Brisbane Municipal Code, Title 17 (Zoning)",
+  "generic": true,
   "rules": [
     {
       "match": "^PD$",
@@ -28,6 +30,5 @@
       "on": "description",
       "flags": "i"
     }
-  ],
-  "generic": true
+  ]
 }

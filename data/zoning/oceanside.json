@@ -11,8 +11,22 @@
     "category": "Category",
     "description": "Zone_Descr"
   },
-  "codeUrl": "https://library.municode.com/ca/oceanside/codes/zoning_ordinance",
+  "standards": [
+    {
+      "label": "Maximum height",
+      "field": "Height"
+    },
+    {
+      "label": "Minimum lot size",
+      "field": "Min_Lot_Si"
+    },
+    {
+      "label": "Density",
+      "field": "Density"
+    }
+  ],
   "codeName": "Oceanside Zoning Ordinance",
+  "codeUrl": "https://library.municode.com/ca/oceanside/codes/zoning_ordinance",
   "rules": [
     {
       "match": "^(PD|MP-|SP-|PBD|PRD)",

@@ -11,6 +11,12 @@
     "category": "TYPE",
     "description": "ZoningDescription"
   },
+  "standards": [
+    {
+      "label": "Front setback",
+      "field": "FrontSetback"
+    }
+  ],
   "updatedField": "last_edited_date",
   "codeName": "Cupertino Municipal Code, Title 19 (Zoning)",
   "generic": true,

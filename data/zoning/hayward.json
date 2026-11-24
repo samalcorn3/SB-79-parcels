@@ -7,10 +7,11 @@
   "publisher": "City of Hayward — Zoning",
   "url": "https://services3.arcgis.com/VRO5V8PH7DzSE6AU/arcgis/rest/services/Zoning/FeatureServer/0",
   "fields": {
-    "code": "ZONING_"
+    "code": "ZONING_",
+    "link": "MuniCodeURL"
   },
-  "codeUrl": "https://library.municode.com/ca/hayward/codes/municipal_code?nodeId=HAYWARD_MUNICIPAL_CODE_CH10PLZOSU_ART1ZOOR",
   "codeName": "Hayward Municipal Code, Ch. 10, Art. 1",
+  "codeUrl": "https://library.municode.com/ca/hayward/codes/municipal_code?nodeId=HAYWARD_MUNICIPAL_CODE_CH10PLZOSU_ART1ZOOR",
   "rules": [
     {
       "match": "^(CN|CG|CB|CC-C|DT-MS)",

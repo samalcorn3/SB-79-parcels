@@ -55,7 +55,11 @@ export function zoningCriterion(zoning) {
     return `${name}: ${z.label}. ${z.why}${z.cite ? ` [${z.cite}]` : ''}${z.notes?.length ? ` ${z.notes.join(' ')}` : ''}`;
   });
   const split = zoning.zones.length > 1 ? 'The parcel is split between zones. ' : '';
-  const detail = `${split}${parts.join(' ')}`;
+  const caveats = [
+    src.provenance?.kind === 'third-party' ? `Third-party source: ${src.provenance.text}` : '',
+    src.stale ? `The zoning layer was last updated ${src.updated}, before the 2023–24 housing-element rezonings; confirm the current zoning with the city.` : '',
+  ].filter(Boolean).join(' ');
+  const detail = `${split}${parts.join(' ')}${caveats ? ` ${caveats}` : ''}`;
   return {
     ...C('zoning', cite, text, zoning.status, detail),
     source: { name: `${src.publisher}${src.updated ? ` (updated ${src.updated})` : ''}`, url: src.url },

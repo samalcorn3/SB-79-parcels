@@ -57,6 +57,48 @@ function instrumentAnswer(title, a) {
   return `<div class="qa-row"><div class="qa-q">${esc(title)}</div><span class="badge ${esc(a.subject)}">${esc(a.text)}</span>${hcd}</div>`;
 }
 
+const USE_BADGE = { meets: 'Yes', fails: 'No', confirm: 'Check', 'not-evaluated': 'Not evaluated' };
+
+/**
+ * Local zoning for the parcel: the zone, what the city's layer says it allows, when the
+ * layer was last updated, and how the site obtained it. Shown above the SB 79 / AB 2011 tabs.
+ */
+export function zoningCard(z) {
+  if (!z) return '';
+  const src = z.source;
+  const updated = src?.updated
+    ? `<p class="${src.stale ? 'warn' : 'fine'}">${src.stale ? 'Older layer: ' : 'Current layer: '}the zoning was last updated <b>${esc(src.updated)}</b> (from ${esc(src.updatedBasis || 'the layer')}).${src.stale ? ' That is before the 2023–24 housing-element rezonings, so the zoning shown may be out of date; confirm it with the city.' : ''}</p>`
+    : src ? '<p class="fine">Update date: the layer does not publish one. It is read live from the agency’s server, so it shows whatever the agency currently publishes.</p>' : '';
+  const prov = src?.provenance
+    ? `<p class="${src.provenance.kind === 'third-party' ? 'warn' : 'fine'}">${src.provenance.kind === 'third-party' ? '<b>Third-party source.</b> ' : ''}How it was obtained: ${esc(src.provenance.text)} Queried live for this lookup: ${link(src.url, src.publisher)}.</p>`
+    : '';
+  const caveat = src?.caveat ? `<p class="warn">${esc(src.caveat)}</p>` : '';
+  const note = src?.note ? `<p class="fine">${esc(src.note)}</p>` : '';
+  if (!z.zones?.length) {
+    return `<div class="card zoning"><h2>Local zoning</h2><p>${esc(z.reason || 'Not available.')}</p>${updated}${prov}</div>`;
+  }
+  const code = src?.codeUrl ? link(src.codeUrl, src.codeName || 'zoning code') : esc(src?.codeName || 'the zoning code');
+  const zones = z.zones.map((x) => {
+    const name = `${esc(x.code)}${x.description && x.description !== x.code ? ` — ${esc(x.description)}` : ''}${x.category && x.category !== x.code && x.category !== x.description && !/^\d+$/.test(x.category) ? ` <span class="fine">(${esc(x.category)})</span>` : ''}`;
+    const limits = x.limits?.length
+      ? `<table class="std">${x.limits.map((l) => `<tr><th>${esc(l.label)}<div class="from">${l.from === 'layer' ? 'from the city’s layer' : 'stated in the zone’s name'}</div></th><td>${esc(l.value)}</td></tr>`).join('')}</table>`
+      : `<p class="fine">The city’s layer does not list numeric limits (height, density, floor area) for this zone. They are set in ${x.link ? link(x.link, 'the code section for this zone') : code}.</p>`;
+    return `<div class="zone-entry">
+      <p class="zone-name"><b>${name}</b></p>
+      <dl class="kv">
+        <dt>Office, retail or parking</dt><dd><span class="ab-badge ${esc(x.status)}">${esc(USE_BADGE[x.status] || x.status)}</span> ${esc(x.label)}. ${esc(x.why)}${x.cite ? ` <span class="cite">${esc(x.cite)}</span>` : ''}${x.notes?.length ? `<div class="fine">${x.notes.map(esc).join(' ')}</div>` : ''}</dd>
+      </dl>
+      <div class="zone-limits"><div class="fine"><b>What the zoning allows</b></div>${limits}${x.limits?.length && x.link ? `<p class="fine">Full rules: ${link(x.link, 'code section for this zone')}.</p>` : ''}</div>
+    </div>`;
+  }).join('');
+  return `<div class="card zoning"><h2>Local zoning</h2>
+    ${z.zones.length > 1 ? '<p class="warn">The parcel is split between zones.</p>' : ''}
+    ${zones}
+    ${caveat}${updated}${prov}${note}
+    <p class="fine">Allowed uses and limits are set by ${code}. State law (SB 79, AB 2011, density bonus) can allow more; see the tabs below.</p>
+  </div>`;
+}
+
 function standardsCard(r, doc) {
   const s = r.standards;
   if (!s || !doc) return '';
@@ -189,9 +231,7 @@ export function ab2011Card(r) {
 export function renderReport(r, { standardsDoc } = {}) {
   const p = r.parcel;
   const regime = r.regime;
-  const zoning = r.zoning?.code
-    ? `<dt>Local zoning</dt><dd>${esc(r.zoning.code)}${r.zoning.description && r.zoning.description !== r.zoning.code ? ` — ${esc(r.zoning.description)}` : ''}${r.zoning.source ? `<div class="fine">${link(r.zoning.source.url, r.zoning.source.publisher)}${r.zoning.source.updated ? `, updated ${esc(r.zoning.source.updated)}` : ''}</div>` : ''}</dd>`
-    : '';
+  const zoning = r.zoning?.code ? `<dt>Zoning</dt><dd>${esc(r.zoning.code)} <span class="fine">(details below)</span></dd>` : '';
   const warnings = [
     ...(p.stale ? p.sourceNotes : []),
     ...(r.mpo.draft ? [`${r.mpo.name} labels its SB 79 map as DRAFT.`] : []),
@@ -218,6 +258,8 @@ export function renderReport(r, { standardsDoc } = {}) {
       ${zoning}
     </dl>
   </div>
+
+  ${zoningCard(r.zoning)}
 
   <div class="lawtabs" role="tablist">
     <button role="tab" data-law="sb79" aria-selected="true">SB 79<span class="sub">Transit-oriented development</span></button>
@@ -272,6 +314,7 @@ export function renderReport(r, { standardsDoc } = {}) {
       <li>City/county limits: California Department of Technology</li>
       <li>Fire hazard zones: CAL FIRE — Office of the State Fire Marshal</li>
       <li>Site exclusions: Coastal Commission, Department of Conservation (FMMP, California Geological Survey), USFWS, DTSC, FEMA, CDFW — linked from each result</li>
+      <li>Zoning: ${r.zoning?.source ? link(r.zoning.source.url, r.zoning.source.publisher) : 'none available for this jurisdiction'}</li>
       <li>AB 2011: county parcels (street widths), Caltrans road classification, Census Bureau urban areas — linked in the AB 2011 tab</li>
       <li>Generated ${esc(new Date(r.generatedAt).toLocaleString())}</li>
     </ul>

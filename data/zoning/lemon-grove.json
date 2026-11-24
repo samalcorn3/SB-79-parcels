@@ -8,9 +8,11 @@
   "url": "https://services7.arcgis.com/D1qgPMtsRENpZIBr/arcgis/rest/services/Zoning___STA_Overlay/FeatureServer/51",
   "fields": {
     "code": "CODE",
-    "description": "FIRST_ZONE"
+    "description": "FIRST_ZONE",
+    "link": "FIRST_URL_LINK"
   },
   "codeName": "Lemon Grove Municipal Code, Title 17 (Zoning)",
+  "generic": true,
   "rules": [
     {
       "match": "^(TMU|VC)\\d",
@@ -30,6 +32,5 @@
       "match": "^CI$",
       "class": "public"
     }
-  ],
-  "generic": true
+  ]
 }

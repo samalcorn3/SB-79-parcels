@@ -8,8 +8,19 @@
   "url": "https://services8.arcgis.com/WV8ogNubjFL2BKPt/arcgis/rest/services/COMPLETE_CIty_Zoning_Parcels_20260917/FeatureServer/2",
   "fields": {
     "code": "Zoning2024",
-    "description": "FullZone24"
+    "description": "FullZone24",
+    "link": "SPLink"
   },
+  "standards": [
+    {
+      "label": "Maximum height",
+      "field": "Height"
+    },
+    {
+      "label": "Maximum lot coverage",
+      "field": "LotCover"
+    }
+  ],
   "codeName": "West Covina Municipal Code, Chapter 26 (Zoning)",
   "generic": false,
   "rules": [
@@ -54,18 +65,18 @@
       "cite": "West Covina Municipal Code Ch. 26 (R-A, R-1 and MF residential zones)"
     }
   ],
-  "reviewedAlternatives": [
-    {
-      "service": "COMPLETE_CIty_Zoning_Parcels_20260625",
-      "asOf": "2026-11-24",
-      "note": "Earlier copy of the same parcel zoning layer; the 20260917 service is the later publication."
-    }
-  ],
   "flags": [
     {
       "match": "^O-P$",
       "note": "The city's layer gives the older O-P code here with the newer OPMU (office professional mixed-use) description; confirm the current zone with West Covina Planning.",
       "status": "confirm"
+    }
+  ],
+  "reviewedAlternatives": [
+    {
+      "service": "COMPLETE_CIty_Zoning_Parcels_20260625",
+      "asOf": "2026-11-24",
+      "note": "Earlier copy of the same parcel zoning layer; the 20260917 service is the later publication."
     }
   ]
 }

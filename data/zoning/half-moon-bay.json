@@ -1,0 +1,35 @@
+{
+  "id": "half-moon-bay",
+  "name": "City of Half Moon Bay",
+  "jurisdictions": [
+    "Half Moon Bay"
+  ],
+  "publisher": "M-Group — Half Moon Bay zoning",
+  "url": "https://services3.arcgis.com/DekmcG0oYPlmT2HS/arcgis/rest/services/HMB_Conflict_Analysis_WFL1/FeatureServer/6",
+  "fields": {
+    "code": "ZONING",
+    "description": "Zoning_Lon"
+  },
+  "codeName": "Half Moon Bay Municipal Code, Title 18 (Zoning)",
+  "thirdParty": {
+    "name": "M-Group, a planning firm that works for the city",
+    "note": "The layer comes from a zoning–general plan consistency analysis."
+  },
+  "rules": [
+    {
+      "match": "^U-R$",
+      "class": "unknown",
+      "why": "Urban reserve: check the zoning code for permitted uses."
+    },
+    {
+      "match": "^C-VS$",
+      "class": "commercial",
+      "cite": "Half Moon Bay zoning (C-VS commercial visitor-serving)"
+    },
+    {
+      "match": "^C-R$",
+      "class": "mixed-residential"
+    }
+  ],
+  "generic": true
+}

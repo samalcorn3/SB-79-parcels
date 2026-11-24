@@ -8,7 +8,8 @@
   "url": "https://utility.arcgis.com/usrsvcs/servers/a948f63a123e433493dac74dcc5d07a4/rest/services/Development_Services/FeatureServer/37",
   "fields": {
     "code": "Zoning",
-    "description": "ZoneDesc"
+    "description": "ZoneDesc",
+    "link": "ZoneLink"
   },
   "codeName": "Lancaster Municipal Code, Title 17 (Zoning)",
   "generic": false,

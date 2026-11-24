@@ -8,8 +8,43 @@
   "url": "https://services2.arcgis.com/pZpm6pZToD6HSf7k/arcgis/rest/services/Land_Use/FeatureServer/4",
   "fields": {
     "code": "ZONING",
-    "description": "ZONINGDesc"
+    "description": "ZONINGDesc",
+    "link": "ZMCLink"
   },
+  "standards": [
+    {
+      "label": "Permitted uses",
+      "field": "ZPermittedUses"
+    },
+    {
+      "label": "Lot area per unit",
+      "field": "ZLotAreaPerUnit"
+    },
+    {
+      "label": "Maximum lot coverage",
+      "field": "ZLotCoverage"
+    },
+    {
+      "label": "Maximum height",
+      "field": "ZBldgHeight"
+    },
+    {
+      "label": "Open space",
+      "field": "ZOpenSpace"
+    },
+    {
+      "label": "Front setback",
+      "field": "ZFrontSetback"
+    },
+    {
+      "label": "Side setback",
+      "field": "ZSideSetback"
+    },
+    {
+      "label": "Rear setback",
+      "field": "ZRearSetback"
+    }
+  ],
   "codeName": "Hermosa Beach Municipal Code, Title 17 (Zoning)",
   "generic": false,
   "rules": [

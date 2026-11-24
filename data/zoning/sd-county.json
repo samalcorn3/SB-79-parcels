@@ -7,8 +7,31 @@
   "fields": {
     "code": "USEREG"
   },
-  "codeUrl": "https://www.sandiegocounty.gov/content/sdc/pds/zoning/ordinance.html",
+  "standards": [
+    {
+      "label": "Density designator",
+      "field": "DENSITY"
+    },
+    {
+      "label": "Maximum floor area designator",
+      "field": "MAXFLR"
+    },
+    {
+      "label": "Height designator",
+      "field": "HEIGHT"
+    },
+    {
+      "label": "Lot coverage designator",
+      "field": "COVERAGE"
+    },
+    {
+      "label": "Setback designator",
+      "field": "SETBACK"
+    }
+  ],
   "codeName": "San Diego County Zoning Ordinance",
+  "codeUrl": "https://www.sandiegocounty.gov/content/sdc/pds/zoning/ordinance.html",
+  "note": "San Diego County lists development limits as letter designators (density, floor area, height, coverage, setback) defined in the Zoning Ordinance, Part Four (§§ 4000–4900).",
   "rules": [
     {
       "match": "^C3[0-8]$|^C4[0-6]$|^CL-",

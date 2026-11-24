@@ -1,0 +1,38 @@
+{
+  "id": "laguna-niguel",
+  "name": "City of Laguna Niguel",
+  "jurisdictions": [
+    "Laguna Niguel"
+  ],
+  "publisher": "Economics Inc. account — Laguna Niguel zoning",
+  "url": "https://services9.arcgis.com/8v49wFoZYRgwQQ90/arcgis/rest/services/Zoning_Data2/FeatureServer/0",
+  "fields": {
+    "code": "ZONING_COD",
+    "description": "DESC_"
+  },
+  "codeName": "Laguna Niguel Zoning Code",
+  "thirdParty": {
+    "name": "an Economics Inc. (consultant) ArcGIS Online account",
+    "note": ""
+  },
+  "rules": [
+    {
+      "match": "^ACLCP$",
+      "class": "planned"
+    },
+    {
+      "match": "^WATER$",
+      "class": "open-space"
+    },
+    {
+      "match": "^street$",
+      "class": "transportation"
+    },
+    {
+      "match": "^NO DESIG$",
+      "class": "unknown",
+      "why": "No zoning designation in the layer."
+    }
+  ],
+  "generic": true
+}

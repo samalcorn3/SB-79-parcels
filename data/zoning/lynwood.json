@@ -1,0 +1,48 @@
+{
+  "id": "lynwood",
+  "name": "City of Lynwood",
+  "jurisdictions": [
+    "Lynwood"
+  ],
+  "publisher": "City of Lynwood GIS — Zoning Districts",
+  "url": "https://services8.arcgis.com/TLogqQbe6TnrHFMm/arcgis/rest/services/Zoning_Districts/FeatureServer/0",
+  "fields": {
+    "code": "CITY_GP_CO"
+  },
+  "codeName": "Lynwood Municipal Code, Title 25 (Zoning)",
+  "caveat": "Lynwood’s zoning layer gives zone categories (commercial, multi-family, parking and so on), not district codes; the field is labelled as a general plan code and records a 2006 adoption year.",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^C$",
+      "class": "commercial",
+      "cite": "Lynwood zoning (commercial districts)"
+    },
+    {
+      "match": "^I$",
+      "class": "industrial"
+    },
+    {
+      "match": "^(MF|SF|TH)$",
+      "class": "residential",
+      "cite": "Lynwood zoning (residential districts)"
+    },
+    {
+      "match": "^OS$",
+      "class": "open-space"
+    },
+    {
+      "match": "^P1$",
+      "class": "parking",
+      "cite": "Lynwood zoning (P-1 automobile parking)"
+    },
+    {
+      "match": "^(PF|SCH)$",
+      "class": "public"
+    },
+    {
+      "match": "^SPA$",
+      "class": "planned"
+    }
+  ]
+}

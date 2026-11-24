@@ -11,8 +11,15 @@
     "code": "ZONINGABBREV",
     "description": "ZONING"
   },
-  "codeUrl": "https://library.municode.com/ca/san_jose/codes/code_of_ordinances?nodeId=TIT20ZO",
+  "standards": [
+    {
+      "label": "Planned development density",
+      "field": "PDDENSITY"
+    }
+  ],
+  "updatedField": "LASTUPDATE",
   "codeName": "San José Municipal Code, Title 20",
+  "codeUrl": "https://library.municode.com/ca/san_jose/codes/code_of_ordinances?nodeId=TIT20ZO",
   "rules": [
     {
       "match": "\\(PD\\)",
@@ -68,6 +75,5 @@
       "match": "^WATER$",
       "class": "transportation"
     }
-  ],
-  "updatedField": "LASTUPDATE"
+  ]
 }

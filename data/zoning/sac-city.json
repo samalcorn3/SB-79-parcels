@@ -10,10 +10,11 @@
     "code": "BASE_ZONE",
     "description": "DESCRIPTION",
     "planName": "SPDNAME",
-    "pudName": "PUDNAME"
+    "pudName": "PUDNAME",
+    "link": "URL"
   },
-  "codeUrl": "https://library.qcode.us/lib/sacramento_ca/pub/city_code/item/title_17",
   "codeName": "Sacramento City Code, Title 17",
+  "codeUrl": "https://library.qcode.us/lib/sacramento_ca/pub/city_code/item/title_17",
   "rules": [
     {
       "match": "^(C-[1-4]|SC|HC)$",

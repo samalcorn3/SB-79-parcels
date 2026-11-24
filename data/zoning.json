@@ -190,6 +190,13 @@
       ]
     },
     {
+      "id": "arcadia",
+      "name": "City of Arcadia",
+      "jurisdictions": [
+        "Arcadia"
+      ]
+    },
+    {
       "id": "artesia",
       "name": "City of Artesia",
       "jurisdictions": [
@@ -211,6 +218,13 @@
       ]
     },
     {
+      "id": "azusa",
+      "name": "City of Azusa",
+      "jurisdictions": [
+        "Azusa"
+      ]
+    },
+    {
       "id": "bell",
       "name": "City of Bell",
       "jurisdictions": [
@@ -222,6 +236,13 @@
       "name": "City of Belmont",
       "jurisdictions": [
         "Belmont"
+      ]
+    },
+    {
+      "id": "berkeley",
+      "name": "City of Berkeley",
+      "jurisdictions": [
+        "Berkeley"
       ]
     },
     {
@@ -407,10 +428,24 @@
       ]
     },
     {
+      "id": "fullerton",
+      "name": "City of Fullerton",
+      "jurisdictions": [
+        "Fullerton"
+      ]
+    },
+    {
       "id": "gardena",
       "name": "City of Gardena",
       "jurisdictions": [
         "Gardena"
+      ]
+    },
+    {
+      "id": "gilroy",
+      "name": "City of Gilroy",
+      "jurisdictions": [
+        "Gilroy"
       ]
     },
     {
@@ -425,6 +460,13 @@
       "name": "City of Glendora",
       "jurisdictions": [
         "Glendora"
+      ]
+    },
+    {
+      "id": "half-moon-bay",
+      "name": "City of Half Moon Bay",
+      "jurisdictions": [
+        "Half Moon Bay"
       ]
     },
     {
@@ -470,6 +512,13 @@
       ]
     },
     {
+      "id": "irwindale",
+      "name": "City of Irwindale",
+      "jurisdictions": [
+        "Irwindale"
+      ]
+    },
+    {
       "id": "la-city",
       "name": "City of Los Angeles",
       "jurisdictions": [
@@ -486,6 +535,20 @@
       "name": "City of La Mesa",
       "jurisdictions": [
         "La Mesa"
+      ]
+    },
+    {
+      "id": "laguna-beach",
+      "name": "City of Laguna Beach",
+      "jurisdictions": [
+        "Laguna Beach"
+      ]
+    },
+    {
+      "id": "laguna-niguel",
+      "name": "City of Laguna Niguel",
+      "jurisdictions": [
+        "Laguna Niguel"
       ]
     },
     {
@@ -545,6 +608,13 @@
       ]
     },
     {
+      "id": "lynwood",
+      "name": "City of Lynwood",
+      "jurisdictions": [
+        "Lynwood"
+      ]
+    },
+    {
       "id": "malibu",
       "name": "City of Malibu",
       "jurisdictions": [
@@ -559,10 +629,24 @@
       ]
     },
     {
+      "id": "menlo-park",
+      "name": "City of Menlo Park",
+      "jurisdictions": [
+        "Menlo Park"
+      ]
+    },
+    {
       "id": "milpitas",
       "name": "City of Milpitas",
       "jurisdictions": [
         "Milpitas"
+      ]
+    },
+    {
+      "id": "monrovia",
+      "name": "City of Monrovia",
+      "jurisdictions": [
+        "Monrovia"
       ]
     },
     {
@@ -617,6 +701,13 @@
       "name": "City of Orange",
       "jurisdictions": [
         "Orange"
+      ]
+    },
+    {
+      "id": "palmdale",
+      "name": "City of Palmdale",
+      "jurisdictions": [
+        "Palmdale"
       ]
     },
     {
@@ -723,6 +814,13 @@
       ]
     },
     {
+      "id": "san-fernando",
+      "name": "City of San Fernando",
+      "jurisdictions": [
+        "San Fernando"
+      ]
+    },
+    {
       "id": "san-juan-capistrano",
       "name": "City of San Juan Capistrano",
       "jurisdictions": [
@@ -754,6 +852,13 @@
       "id": "san-mateo-county",
       "name": "Unincorporated San Mateo County",
       "unincorporatedOf": "san-mateo"
+    },
+    {
+      "id": "santa-ana",
+      "name": "City of Santa Ana",
+      "jurisdictions": [
+        "Santa Ana"
+      ]
     },
     {
       "id": "santa-clara-city",
@@ -855,6 +960,20 @@
       "name": "City of Temple City",
       "jurisdictions": [
         "Temple City"
+      ]
+    },
+    {
+      "id": "torrance",
+      "name": "City of Torrance",
+      "jurisdictions": [
+        "Torrance"
+      ]
+    },
+    {
+      "id": "tustin",
+      "name": "City of Tustin",
+      "jurisdictions": [
+        "Tustin"
       ]
     },
     {

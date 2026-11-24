@@ -8,7 +8,8 @@
   "url": "https://services2.arcgis.com/sNwJsChyrhgtFVFc/arcgis/rest/services/TempPlanningMap/FeatureServer/12",
   "fields": {
     "code": "Zone",
-    "description": "Zone_Description"
+    "description": "Zone_Description",
+    "link": "URLMuniCode"
   },
   "codeName": "El Cajon Municipal Code, Title 17 (Zoning)",
   "codeUrl": "https://ecode360.com/44375421",

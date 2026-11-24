@@ -1,0 +1,65 @@
+{
+  "id": "arcadia",
+  "name": "City of Arcadia",
+  "jurisdictions": [
+    "Arcadia"
+  ],
+  "publisher": "City of Arcadia — Zoning",
+  "url": "https://services.arcgis.com/xsicuXZ553tglig9/arcgis/rest/services/Zoning/FeatureServer/1",
+  "fields": {
+    "code": "Zones"
+  },
+  "asOf": {
+    "date": "2013-08-05",
+    "basis": "the ArcGIS Online item’s last-modified date (the layer has no edit record)"
+  },
+  "codeName": "Arcadia Development Code (Municipal Code, Article IX)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^CPD",
+      "class": "planned"
+    },
+    {
+      "match": "^(DMU|MU)$",
+      "class": "mixed-residential",
+      "cite": "Arcadia Development Code (mixed-use zones)"
+    },
+    {
+      "match": "^C-M$",
+      "class": "industrial",
+      "cite": "Arcadia Development Code (C-M commercial manufacturing)"
+    },
+    {
+      "match": "^C-O$",
+      "class": "office"
+    },
+    {
+      "match": "^(C-1|C-2|CBD)$",
+      "class": "commercial",
+      "cite": "Arcadia Development Code (commercial zones)"
+    },
+    {
+      "match": "^S-[12]$",
+      "class": "public",
+      "cite": "Arcadia Development Code (S-1 special use, S-2 public purpose)"
+    },
+    {
+      "match": "^(ROW|SCRRA)$",
+      "class": "transportation"
+    },
+    {
+      "match": "^R",
+      "class": "residential",
+      "cite": "Arcadia Development Code (residential zones)"
+    },
+    {
+      "match": "^M-1$",
+      "class": "industrial"
+    },
+    {
+      "match": "^OS$",
+      "class": "open-space"
+    }
+  ]
+}

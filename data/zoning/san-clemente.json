@@ -8,9 +8,53 @@
   "url": "https://services3.arcgis.com/x68DaqVkReQwi0Vd/arcgis/rest/services/Zoning_with_Specific_Plans/FeatureServer/0",
   "fields": {
     "code": "ZoneClassification",
-    "description": "ZoningDescription"
+    "description": "ZoningDescription",
+    "link": "LinkZoningPermittedUses"
   },
+  "standards": [
+    {
+      "label": "Maximum floor area ratio",
+      "field": "FARMax"
+    },
+    {
+      "label": "Maximum height",
+      "field": "HeightMax"
+    },
+    {
+      "label": "Maximum floors",
+      "field": "FloorsMax"
+    },
+    {
+      "label": "Maximum lot coverage",
+      "field": "LotCoverageMax"
+    },
+    {
+      "label": "Minimum lot area",
+      "field": "LotAreaMin"
+    },
+    {
+      "label": "Maximum dwellings per net lot area",
+      "field": "DwellingsPerNetLotAreaMax"
+    },
+    {
+      "label": "Maximum dwellings per lot",
+      "field": "DwellingsPerLotMax"
+    },
+    {
+      "label": "Front setback",
+      "field": "SetbackFrontMin"
+    },
+    {
+      "label": "Side setback",
+      "field": "SetbackSideMin"
+    },
+    {
+      "label": "Rear setback",
+      "field": "SetbackRearMin"
+    }
+  ],
   "codeName": "San Clemente Zoning Ordinance (Municipal Code, Title 17)",
+  "generic": true,
   "rules": [
     {
       "match": "^(FRSP|MCSP|MISP|PBSP|RSCSP|TSP|WPCSP)\\b",
@@ -35,6 +79,5 @@
       "match": "^CVC$",
       "class": "public"
     }
-  ],
-  "generic": true
+  ]
 }

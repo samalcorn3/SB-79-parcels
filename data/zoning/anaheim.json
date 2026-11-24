@@ -8,10 +8,12 @@
   "url": "https://gis.anaheim.net/map/rest/services/OpenData2/FeatureServer/59",
   "fields": {
     "code": "ZONING",
-    "description": "ZONINGDES"
+    "description": "ZONINGDES",
+    "link": "CODELINK"
   },
   "updatedField": "last_edited_date",
   "codeName": "Anaheim Municipal Code, Title 18 (Zoning)",
+  "generic": true,
   "rules": [
     {
       "match": "^SP \\d",
@@ -37,6 +39,5 @@
       "class": "office",
       "cite": "Anaheim Municipal Code Title 18 (O-H and O-L office zones)"
     }
-  ],
-  "generic": true
+  ]
 }

@@ -9,8 +9,12 @@
   "fields": {
     "code": "ZONING",
     "description": "ZoningDescription",
-    "category": "ZoningDistrict"
+    "category": "ZoningDistrict",
+    "link": "DocumentURL"
   },
+  "updatedField": "RevDate",
+  "codeName": "Campbell Municipal Code, Title 21",
+  "generic": true,
   "rules": [
     {
       "match": "^(C-PD|P-D)$",
@@ -21,8 +25,5 @@
       "match": "^ROW$",
       "class": "transportation"
     }
-  ],
-  "generic": true,
-  "updatedField": "RevDate",
-  "codeName": "Campbell Municipal Code, Title 21"
+  ]
 }

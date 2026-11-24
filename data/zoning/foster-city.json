@@ -8,7 +8,8 @@
   "url": "https://utility.arcgis.com/usrsvcs/servers/75362edec4704d3884121c98db49e58f/rest/services/Hosted/Zoning_and_Land_Use/FeatureServer/0",
   "fields": {
     "code": "zoningclass",
-    "description": "zoningdescription"
+    "description": "zoningdescription",
+    "link": "zoning_link_1"
   },
   "codeName": "Foster City Municipal Code, Title 17 (Zoning)",
   "generic": false,

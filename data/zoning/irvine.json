@@ -8,10 +8,12 @@
   "url": "https://services2.arcgis.com/3mkVbLdbLBFHrfbK/arcgis/rest/services/Irvine_Zoning/FeatureServer/6",
   "fields": {
     "code": "ZONING",
-    "description": "DESCRIPTION"
+    "description": "DESCRIPTION",
+    "link": "URL"
   },
   "updatedField": "DATE",
   "codeName": "Irvine Zoning Ordinance",
+  "generic": true,
   "rules": [
     {
       "match": "Commercial Recreation",
@@ -43,6 +45,5 @@
       "cite": "Irvine Zoning Ordinance (5.5 Medical and Science district)",
       "on": "description"
     }
-  ],
-  "generic": true
+  ]
 }

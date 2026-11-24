@@ -8,9 +8,11 @@
   "url": "https://services7.arcgis.com/mRLEu9cKL0xMY05m/arcgis/rest/services/DP_Zoning/FeatureServer/0",
   "fields": {
     "code": "CODE",
-    "description": "ZONE"
+    "description": "ZONE",
+    "link": "ZONELINK"
   },
   "codeName": "Dana Point Zoning Code",
+  "generic": true,
   "rules": [
     {
       "match": "^(DPHPC|DPSP|SPO ZONE)$",
@@ -44,6 +46,5 @@
       "match": "^ROW$",
       "class": "transportation"
     }
-  ],
-  "generic": true
+  ]
 }

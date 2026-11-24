@@ -7,10 +7,11 @@
   "publisher": "City of Santa Clara — Zoning Codes",
   "url": "https://map.santaclaraca.gov/maps/rest/services/OPENDATA/RegionalZoningOpenData/MapServer/0",
   "fields": {
-    "code": "ZONGDSGN"
+    "code": "ZONGDSGN",
+    "link": "ZoningURL"
   },
-  "codeUrl": "https://www.codepublishing.com/CA/SantaClara/#!/SantaClara18/SantaClara18.html",
   "codeName": "Santa Clara City Code, Title 18",
+  "codeUrl": "https://www.codepublishing.com/CA/SantaClara/#!/SantaClara18/SantaClara18.html",
   "rules": [
     {
       "match": "^C",

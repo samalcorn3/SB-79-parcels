@@ -8,8 +8,11 @@
   "url": "https://services8.arcgis.com/6pr2WaSuWO79zliF/arcgis/rest/services/GP_Zoning_Published_L_WFL1/FeatureServer/6",
   "fields": {
     "code": "Zone_landType",
-    "description": "Zone"
+    "description": "Zone",
+    "link": "CityCodeURL"
   },
+  "codeName": "Downey Municipal Code, Art. IX",
+  "generic": true,
   "rules": [
     {
       "match": "Specific Plan|Master Plan",
@@ -31,7 +34,5 @@
       "class": "residential",
       "cite": "Downey Municipal Code, Art. IX (residential zones)"
     }
-  ],
-  "generic": true,
-  "codeName": "Downey Municipal Code, Art. IX"
+  ]
 }

@@ -8,9 +8,11 @@
   "url": "https://services5.arcgis.com/3PoWYg8BG9g9WsOS/arcgis/rest/services/zoning/FeatureServer/0",
   "fields": {
     "code": "Zoning",
-    "description": "FullName"
+    "description": "FullName",
+    "link": "URL"
   },
   "codeName": "Westlake Village Municipal Code, Title 9 (Zoning)",
+  "generic": true,
   "rules": [
     {
       "match": "^(RPD|CPD|LBD)",
@@ -39,6 +41,5 @@
       "match": "^BP$",
       "class": "industrial"
     }
-  ],
-  "generic": true
+  ]
 }

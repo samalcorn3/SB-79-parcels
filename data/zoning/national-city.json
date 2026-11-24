@@ -8,8 +8,15 @@
   "url": "https://services7.arcgis.com/RLQtED7qlYHuT1ha/arcgis/rest/services/NC_Zoning_Web_Map_WFL1/FeatureServer/20",
   "fields": {
     "code": "Zoning",
-    "description": "Spec_Plan"
+    "description": "Spec_Plan",
+    "link": "Zone_Link"
   },
+  "standards": [
+    {
+      "label": "Maximum floor area ratio",
+      "field": "FAR"
+    }
+  ],
   "codeName": "National City Land Use Code (Municipal Code, Title 18)",
   "generic": false,
   "rules": [

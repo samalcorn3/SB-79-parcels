@@ -14,7 +14,8 @@
     "serve": "python3 -m http.server 8080",
     "check:zoning": "node scripts/check-zoning.mjs",
     "zoning:index": "node scripts/zoning-index.mjs",
-    "zoning:classify": "node scripts/zoning-classify.mjs"
+    "zoning:classify": "node scripts/zoning-classify.mjs",
+    "zoning:coverage": "node scripts/zoning-coverage.mjs docs/ZONING-COVERAGE.md"
   },
   "devDependencies": {
     "@turf/turf": "7.2.0",

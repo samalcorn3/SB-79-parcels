@@ -1,0 +1,31 @@
+{
+  "id": "monrovia",
+  "name": "City of Monrovia",
+  "jurisdictions": [
+    "Monrovia"
+  ],
+  "publisher": "City of Monrovia — Zoning Map",
+  "url": "https://services3.arcgis.com/FWAF6BxrbupAgJHr/arcgis/rest/services/MonroviaZoningMap_WFL/FeatureServer/1",
+  "fields": {
+    "code": "ZONECLASS",
+    "description": "ZONEDESC"
+  },
+  "updatedField": "LASTUPDATE",
+  "codeName": "Monrovia Municipal Code, Title 17 (Zoning)",
+  "rules": [
+    {
+      "match": "^O/RD/LM$",
+      "class": "industrial",
+      "cite": "Monrovia Municipal Code Title 17 (office/research and development/light manufacturing)"
+    },
+    {
+      "match": "^BE$",
+      "class": "industrial"
+    },
+    {
+      "match": "^(ANF|HR|HWP)$",
+      "class": "open-space"
+    }
+  ],
+  "generic": true
+}

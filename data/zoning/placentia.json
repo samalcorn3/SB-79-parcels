@@ -8,9 +8,11 @@
   "url": "https://services1.arcgis.com/3CyDafKD7aN8Dr8M/arcgis/rest/services/Zoning/FeatureServer/1",
   "fields": {
     "code": "ZoningCode",
-    "description": "Zoning_Description"
+    "description": "Zoning_Description",
+    "link": "ZoningInfo"
   },
   "codeName": "Placentia Municipal Code, Title 23 (Zoning)",
+  "generic": true,
   "rules": [
     {
       "match": "^(SP-|PUD|RPC|CCSP|TOD)",
@@ -37,6 +39,5 @@
       "class": "unknown",
       "why": "Check the zoning code for this district."
     }
-  ],
-  "generic": true
+  ]
 }

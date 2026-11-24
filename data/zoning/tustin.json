@@ -1,0 +1,45 @@
+{
+  "id": "tustin",
+  "name": "City of Tustin",
+  "jurisdictions": [
+    "Tustin"
+  ],
+  "publisher": "City of Tustin — Zoning (parcel lookup)",
+  "url": "https://services8.arcgis.com/omhBSxytABi3T0US/arcgis/rest/services/ParcelLookup/FeatureServer/2",
+  "fields": {
+    "code": "ZoneCode",
+    "description": "ZoneName"
+  },
+  "codeName": "Tustin City Code, Article 9 (Land Use)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^(PC|PD|SP)",
+      "class": "planned",
+      "cite": "Tustin planned community, planned development and specific plan districts"
+    },
+    {
+      "match": "^(C1|C2|CG)\\b",
+      "class": "commercial",
+      "cite": "Tustin City Code Art. 9 (commercial districts)"
+    },
+    {
+      "match": "^PR\\b",
+      "class": "office",
+      "cite": "Tustin City Code Art. 9 (Pr professional district)"
+    },
+    {
+      "match": "^PI\\b",
+      "class": "public"
+    },
+    {
+      "match": "^M\\b",
+      "class": "industrial"
+    },
+    {
+      "match": "^(R|E4|MHP)",
+      "class": "residential",
+      "cite": "Tustin City Code Art. 9 (residential districts)"
+    }
+  ]
+}

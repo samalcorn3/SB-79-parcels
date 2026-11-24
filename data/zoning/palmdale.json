@@ -1,0 +1,57 @@
+{
+  "id": "palmdale",
+  "name": "City of Palmdale",
+  "jurisdictions": [
+    "Palmdale"
+  ],
+  "publisher": "City of Palmdale — Zoning (by parcel)",
+  "url": "https://mapserver.cityofpalmdale.org/arcgis/rest/services/Planning_Zoning/PlanningZoning/FeatureServer/12",
+  "fields": {
+    "code": "CITY_ZONE",
+    "description": "ZONE_NAME"
+  },
+  "updatedField": "Last_Attri",
+  "codeName": "Palmdale Zoning Ordinance",
+  "rules": [
+    {
+      "match": "PZ$",
+      "class": "unknown",
+      "why": "Prezoned: the zoning takes effect only on annexation."
+    },
+    {
+      "match": "^SP-",
+      "class": "planned",
+      "cite": "Palmdale specific plans"
+    },
+    {
+      "match": "^CA Aqueduct",
+      "class": "transportation"
+    },
+    {
+      "match": "MX$",
+      "class": "mixed-residential",
+      "cite": "Palmdale zoning (mixed-use overlay)"
+    },
+    {
+      "match": "^C-1$",
+      "class": "commercial",
+      "cite": "Palmdale Zoning Ordinance (C-1 light commercial)"
+    },
+    {
+      "match": "^C-2$",
+      "class": "office",
+      "cite": "Palmdale Zoning Ordinance (C-2 office commercial)"
+    },
+    {
+      "match": "^C-[345]$",
+      "class": "commercial",
+      "cite": "Palmdale Zoning Ordinance (commercial zones)"
+    },
+    {
+      "match": "^R-",
+      "class": "residential",
+      "cite": "Palmdale Zoning Ordinance (residential zones)"
+    }
+  ],
+  "generic": true
+}

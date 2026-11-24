@@ -1,0 +1,37 @@
+{
+  "id": "santa-ana",
+  "name": "City of Santa Ana",
+  "jurisdictions": [
+    "Santa Ana"
+  ],
+  "publisher": "Houseal Lavigne — Santa Ana parcels with 2026 zoning",
+  "url": "https://services5.arcgis.com/74bZbbuf05Ctvbzv/arcgis/rest/services/LandBaseParcels_Zoning2026/FeatureServer/0",
+  "fields": {
+    "code": "PrimaryZoning",
+    "description": "ZoningDescription",
+    "link": "Link"
+  },
+  "codeName": "Santa Ana Municipal Code, Chapter 41 (Zoning)",
+  "thirdParty": {
+    "name": "Houseal Lavigne, a planning consultant that prepared Santa Ana’s zoning update",
+    "note": "The layer records the adopting ordinance for each zone."
+  },
+  "rules": [
+    {
+      "match": "^DC$",
+      "class": "mixed-residential",
+      "cite": "Santa Ana zoning (District Center)"
+    },
+    {
+      "match": "^UN$",
+      "class": "mixed-residential",
+      "cite": "Santa Ana zoning (Urban Neighborhood)"
+    },
+    {
+      "match": "^SD$",
+      "class": "planned",
+      "cite": "Santa Ana zoning (Specific Development)"
+    }
+  ],
+  "generic": true
+}

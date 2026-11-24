@@ -8,9 +8,33 @@
   "url": "https://nbgis.newportbeachca.gov/arcgis/rest/services/PublicSiteGIS/MapServer/105",
   "fields": {
     "code": "ZONING_UPDATE",
-    "description": "ZONING_DESCRIPTION"
+    "description": "ZONING_DESCRIPTION",
+    "link": "ZONING_CODE_LINK"
   },
+  "standards": [
+    {
+      "label": "Height limit zone (feet)",
+      "field": "HEIGHT_ZONE"
+    },
+    {
+      "label": "Development limit",
+      "field": "ZONING_DEV_LIMIT"
+    },
+    {
+      "label": "Density or intensity",
+      "field": "DENSITY_INTENSITY"
+    },
+    {
+      "label": "Unit limit",
+      "field": "UNIT_LIMIT"
+    },
+    {
+      "label": "Floor area limit (sq ft)",
+      "field": "SQFT_LIMIT"
+    }
+  ],
   "codeName": "Newport Beach Municipal Code, Title 20 (Planning and Zoning)",
+  "generic": true,
   "rules": [
     {
       "match": "^PR$",
@@ -39,6 +63,5 @@
       "match": "^$",
       "class": "transportation"
     }
-  ],
-  "generic": true
+  ]
 }

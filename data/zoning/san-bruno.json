@@ -7,7 +7,8 @@
   "publisher": "City of San Bruno Planning — Zoning",
   "url": "https://services2.arcgis.com/iLsFVn6d1pmqKEfA/arcgis/rest/services/Zoning/FeatureServer/1",
   "fields": {
-    "code": "Zoning"
+    "code": "Zoning",
+    "link": "DocumentURL"
   },
   "updatedField": "RevDate",
   "codeName": "San Bruno Municipal Code, Title 12 (Land Use and Development)",

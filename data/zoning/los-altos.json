@@ -7,7 +7,8 @@
   "publisher": "City of Los Altos — Zoning Districts",
   "url": "https://map.losaltosca.gov/arcgis/rest/services/Public/PublicGISLayers/MapServer/60",
   "fields": {
-    "code": "ZONING"
+    "code": "ZONING",
+    "link": "Muni_Code_URL"
   },
   "codeName": "Los Altos Municipal Code, Title 14 (Zoning)",
   "generic": false,

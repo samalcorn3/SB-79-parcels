@@ -8,8 +8,11 @@
   "url": "https://services.arcgis.com/nFaSPZoTjS78xXjw/arcgis/rest/services/Zoning/FeatureServer/0",
   "fields": {
     "code": "ZONING",
-    "description": "ZONINGDESC"
+    "description": "ZONINGDESC",
+    "link": "ZONING_LINKS"
   },
+  "codeName": "San Leandro Zoning Code",
+  "generic": true,
   "rules": [
     {
       "match": "^B-TOD$",
@@ -21,7 +24,5 @@
       "class": "planned",
       "cite": "Downtown and North Area districts"
     }
-  ],
-  "generic": true,
-  "codeName": "San Leandro Zoning Code"
+  ]
 }

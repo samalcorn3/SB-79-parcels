@@ -8,9 +8,11 @@
   "url": "https://services5.arcgis.com/NUp4yl2gULzlAcEm/arcgis/rest/services/Zoning_Hosted/FeatureServer/21",
   "fields": {
     "code": "ZONE_NEW",
-    "description": "ZONE_DESC"
+    "description": "ZONE_DESC",
+    "link": "ZoningDoc"
   },
   "codeName": "San Juan Capistrano Land Use Code (Municipal Code, Title 9)",
+  "generic": true,
   "rules": [
     {
       "match": "^A$",
@@ -46,6 +48,5 @@
       "match": "^FM$",
       "class": "commercial"
     }
-  ],
-  "generic": true
+  ]
 }
