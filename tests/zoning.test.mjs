@@ -36,7 +36,9 @@ test('source choice: the city’s own layer, or the county’s for unincorporate
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: null }).id, 'la-county');
   assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Carson' }), null); // no regional compilations
   assert.equal(pickZoningSource(zoning, { countyId: 'santa-clara', cityName: 'San José' }).id, 'sj-city');
-  assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Pleasanton' }), null);
+  assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Pleasanton' }).id, 'pleasanton');
+  assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Berkeley' }), null);
+  assert.equal(pickZoningSource(zoning, { countyId: 'los-angeles', cityName: 'Torrance' }), null); // city layer incomplete (see HANDOFF)
   assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: null }).id, 'sd-county');
   assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: 'Carlsbad' }), null);
 });
@@ -75,6 +77,19 @@ test('zone classification', () => {
   assert.equal(cls('elk-grove', { code: 'RD-5' }).status, 'fails');
   assert.equal(cls('oceanside', { code: 'D-6A', category: 'Commercial' }).status, 'meets');
   assert.equal(cls('oceanside', { code: 'PD-27', category: 'Commercial' }).class, 'planned');
+  assert.equal(cls('livermore', { code: 'PDC-00-172', category: 'PDC', description: 'Planned Development' }).class, 'planned');
+  assert.equal(cls('livermore', { code: 'CNB', category: 'CNB', description: 'Commercial' }).status, 'meets');
+  assert.equal(cls('milpitas', { code: 'C2', category: 'Commercial' }).status, 'meets');
+  assert.equal(cls('milpitas', { code: 'POS', category: 'Single Family Residential' }).class, 'open-space');
+  assert.equal(cls('pleasanton', { code: 'PUD-C-C', description: 'Central Commercial-PUD' }).class, 'planned');
+  assert.equal(cls('pleasanton', { code: 'O', description: 'Office Commercial' }).status, 'meets');
+  assert.equal(cls('west-covina', { code: 'O-S', description: 'R-1: Residential Single Family' }).class, 'open-space'); // code wins
+  assert.equal(cls('west-covina', { code: 'O-P', description: 'OPMU : Office Professional Mixed-Use' }).status, 'confirm');
+  assert.equal(cls('cupertino', { code: 'P(CG, R3)', category: 'P', description: 'Planned Development' }).class, 'planned');
+  assert.equal(cls('el-cajon', { code: 'P', description: 'Parking' }).class, 'parking');
+  assert.equal(cls('palo-alto', { code: 'PC-4296(TOD)', category: 'Commercial/Residential' }).class, 'planned');
+  assert.equal(cls('palo-alto', { code: 'CS(TOD)', category: 'Commercial/Residential' }).status, 'meets');
+  assert.equal(cls('dublin', { code: 'DDZD' }).class, 'planned');
 });
 
 test('split-zoned sites', () => {

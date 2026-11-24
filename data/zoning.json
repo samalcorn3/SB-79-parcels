@@ -2260,6 +2260,433 @@
           "cite": "West Hollywood Municipal Code Ch. 19.06 (residential zoning districts)"
         }
       ]
+    },
+    {
+      "id": "livermore",
+      "name": "City of Livermore",
+      "jurisdictions": [
+        "Livermore"
+      ],
+      "publisher": "City of Livermore — Zoning Districts",
+      "url": "https://services7.arcgis.com/BJisQXdgVScP0JMy/arcgis/rest/services/ZoningDistricts/FeatureServer/0",
+      "fields": {
+        "code": "ZoningDistrict",
+        "category": "ZoningCategory",
+        "description": "ZoningDescription"
+      },
+      "codeName": "Livermore Development Code",
+      "codeUrl": "https://ecode360.com/LI2656",
+      "generic": true,
+      "rules": [
+        {
+          "on": "category",
+          "match": "^(PD|PDC|PDI|PDR|PUD|PD-|PDOS|PDR ?\\d)",
+          "class": "planned",
+          "cite": "Livermore Development Code (planned development districts)"
+        },
+        {
+          "on": "category",
+          "match": "^DSP$",
+          "class": "planned",
+          "cite": "Livermore Downtown Specific Plan"
+        },
+        {
+          "on": "category",
+          "match": "^T\\d",
+          "class": "mixed-residential",
+          "cite": "Livermore Development Code (form-based transect districts)"
+        },
+        {
+          "on": "category",
+          "match": "^AIR",
+          "class": "public",
+          "cite": "Livermore Development Code (airport districts)"
+        },
+        {
+          "on": "category",
+          "match": "^CO$",
+          "class": "office",
+          "cite": "Livermore Development Code (CO commercial office district)"
+        }
+      ]
+    },
+    {
+      "id": "milpitas",
+      "name": "City of Milpitas",
+      "jurisdictions": [
+        "Milpitas"
+      ],
+      "publisher": "City of Milpitas GIS — Zoning by Parcel",
+      "url": "https://services8.arcgis.com/OPmRdssd8jj0bT5H/arcgis/rest/services/Zoning%20By%20Parcel/FeatureServer/0",
+      "fields": {
+        "code": "ZoningDescription",
+        "category": "ZONE_CODE1"
+      },
+      "codeName": "Milpitas Municipal Code, Title XI, Chapter 10 (Zoning)",
+      "generic": true,
+      "rules": [
+        {
+          "match": "^POS$",
+          "class": "open-space"
+        },
+        {
+          "match": "^HS$",
+          "class": "commercial",
+          "cite": "Milpitas Zoning Code (HS highway services district)"
+        },
+        {
+          "match": "^CO$",
+          "class": "office",
+          "cite": "Milpitas Zoning Code (CO administrative and professional office district)"
+        },
+        {
+          "match": "^Outside City Limits$",
+          "class": "unknown",
+          "why": "The city's layer marks this area as outside Milpitas."
+        },
+        {
+          "on": "category",
+          "match": "^Transportaion|^Transportation",
+          "class": "transportation"
+        }
+      ]
+    },
+    {
+      "id": "pleasanton",
+      "name": "City of Pleasanton",
+      "jurisdictions": [
+        "Pleasanton"
+      ],
+      "publisher": "City of Pleasanton GIS — Zoning",
+      "url": "https://services1.arcgis.com/vQBE9cyhukJHVTrT/arcgis/rest/services/Zoning_vwPublic/FeatureServer/0",
+      "fields": {
+        "code": "DATA",
+        "description": "DATA_TYPE"
+      },
+      "codeName": "Pleasanton Municipal Code, Title 18 (Zoning)",
+      "generic": true,
+      "rules": [
+        {
+          "match": "^(PUD|HPD)",
+          "class": "planned",
+          "cite": "Pleasanton Municipal Code Title 18 (planned unit development and hillside planned development districts)"
+        },
+        {
+          "match": "^S$",
+          "class": "unknown",
+          "why": "Study district: the city has not yet set permanent zoning here."
+        },
+        {
+          "match": "^U$",
+          "class": "unknown",
+          "why": "The city's layer marks this area as unincorporated."
+        }
+      ]
+    },
+    {
+      "id": "west-covina",
+      "name": "City of West Covina",
+      "jurisdictions": [
+        "West Covina"
+      ],
+      "publisher": "City of West Covina Planning — Citywide zoning by parcel (2024 zoning)",
+      "url": "https://services8.arcgis.com/WV8ogNubjFL2BKPt/arcgis/rest/services/COMPLETE_CIty_Zoning_Parcels_20260917/FeatureServer/2",
+      "fields": {
+        "code": "Zoning2024",
+        "description": "FullZone24"
+      },
+      "codeName": "West Covina Municipal Code, Chapter 26 (Zoning)",
+      "generic": false,
+      "rules": [
+        {
+          "match": "^SP$",
+          "class": "planned",
+          "cite": "West Covina specific plans"
+        },
+        {
+          "match": "^PCD",
+          "class": "planned",
+          "cite": "West Covina Municipal Code Ch. 26 (PCD planned community development)"
+        },
+        {
+          "match": "^C-2$",
+          "class": "commercial",
+          "cite": "West Covina Municipal Code Ch. 26 (C-2 commercial zone)"
+        },
+        {
+          "match": "^O-P$",
+          "class": "office",
+          "cite": "West Covina Municipal Code Ch. 26 (O-P office professional zone)"
+        },
+        {
+          "match": "^(NMU|SMU|RMU|OPMU)$",
+          "class": "mixed-residential",
+          "cite": "West Covina Municipal Code Ch. 26 (NMU, SMU, RMU, OPMU commercial and office mixed-use zones)"
+        },
+        {
+          "match": "^M-1$",
+          "class": "industrial",
+          "cite": "West Covina Municipal Code Ch. 26 (M-1 manufacturing zone)"
+        },
+        {
+          "match": "^O-S$",
+          "class": "open-space",
+          "cite": "West Covina Municipal Code Ch. 26 (O-S open space zone)"
+        },
+        {
+          "match": "^(R-A|R-1|MF-\\d+)",
+          "class": "residential",
+          "cite": "West Covina Municipal Code Ch. 26 (R-A, R-1 and MF residential zones)"
+        }
+      ],
+      "reviewedAlternatives": [
+        {
+          "service": "COMPLETE_CIty_Zoning_Parcels_20260625",
+          "asOf": "2026-11-24",
+          "note": "Earlier copy of the same parcel zoning layer; the 20260917 service is the later publication."
+        }
+      ],
+      "flags": [
+        {
+          "match": "^O-P$",
+          "note": "The city's layer gives the older O-P code here with the newer OPMU (office professional mixed-use) description; confirm the current zone with West Covina Planning.",
+          "status": "confirm"
+        }
+      ]
+    },
+    {
+      "id": "cupertino",
+      "name": "City of Cupertino",
+      "jurisdictions": [
+        "Cupertino"
+      ],
+      "publisher": "City of Cupertino GIS — Zoning",
+      "url": "https://gis.cupertino.org/cupgis/rest/services/Public/Zoning/MapServer/10",
+      "fields": {
+        "code": "LABEL",
+        "category": "TYPE",
+        "description": "ZoningDescription"
+      },
+      "updatedField": "last_edited_date",
+      "codeName": "Cupertino Municipal Code, Title 19 (Zoning)",
+      "generic": true,
+      "rules": [
+        {
+          "match": "^P\\b|^P\\(",
+          "class": "planned",
+          "cite": "Cupertino Municipal Code Title 19 (P planned development zones; uses listed in parentheses)"
+        },
+        {
+          "match": "^Pre",
+          "class": "unknown",
+          "why": "Prezoned unincorporated land: the zoning takes effect on annexation."
+        },
+        {
+          "match": "^PR$",
+          "class": "open-space",
+          "cite": "Cupertino Municipal Code Title 19 (PR park and recreation zone)"
+        },
+        {
+          "on": "category",
+          "match": "^OA$|^OP$",
+          "class": "office",
+          "cite": "Cupertino Municipal Code Title 19 (administrative and professional office zones)"
+        },
+        {
+          "on": "category",
+          "match": "^(BA|BQ)$",
+          "class": "public",
+          "cite": "Cupertino Municipal Code Title 19 (public and quasi-public building zones)"
+        }
+      ]
+    },
+    {
+      "id": "daly-city",
+      "name": "City of Daly City",
+      "jurisdictions": [
+        "Daly City"
+      ],
+      "publisher": "City of Daly City GIS — Zoning",
+      "url": "https://gis.dalycity.org/server/rest/services/Zoning/FeatureServer/1",
+      "fields": {
+        "code": "ZONECLASS",
+        "description": "ZONEDESC"
+      },
+      "updatedField": "LASTUPDATE",
+      "codeName": "Daly City Municipal Code, Title 17 (Zoning)",
+      "generic": true,
+      "rules": [
+        {
+          "match": "^(PD|PRE-PD)",
+          "class": "planned",
+          "cite": "Daly City Municipal Code Title 17 (planned development districts)"
+        },
+        {
+          "match": "^(ID|U|U-RP)$",
+          "class": "unknown",
+          "why": "Interim or unzoned area in the city's layer; check with Daly City Planning."
+        },
+        {
+          "match": "^(BART|PG&E)$",
+          "class": "transportation"
+        },
+        {
+          "match": "^CEM$",
+          "class": "open-space"
+        }
+      ]
+    },
+    {
+      "id": "vista",
+      "name": "City of Vista",
+      "jurisdictions": [
+        "Vista"
+      ],
+      "publisher": "City of Vista GIS — Zoning",
+      "url": "https://gis.vista.gov/arcgis/rest/services/CityGIS/Land_Use/MapServer/40",
+      "fields": {
+        "code": "ZoningCode",
+        "description": "ZoningDesc"
+      },
+      "codeName": "Vista Municipal Code, Title 18 (Zoning)",
+      "generic": true,
+      "rules": [
+        {
+          "match": "^SPI$",
+          "class": "planned",
+          "cite": "Vista specific plan implementation zones"
+        },
+        {
+          "match": "^O-P$",
+          "class": "office",
+          "cite": "Vista Municipal Code Title 18 (O-P office professional zone)"
+        }
+      ]
+    },
+    {
+      "id": "dublin",
+      "name": "City of Dublin",
+      "jurisdictions": [
+        "Dublin"
+      ],
+      "publisher": "City of Dublin GIS — Zoning",
+      "url": "https://gis111.dublin.ca.gov/arcgis/rest/services/Planning/ZoningAttachments/MapServer/0",
+      "fields": {
+        "code": "zone_code"
+      },
+      "codeName": "Dublin Municipal Code, Title 8 (Zoning Ordinance)",
+      "codeUrl": "https://ecode360.com/DU4414",
+      "generic": true,
+      "rules": [
+        {
+          "match": "^(DCZD|DDZD)$",
+          "class": "planned",
+          "cite": "Dublin Crossing and Downtown Dublin zoning districts (specific plans)"
+        },
+        {
+          "match": "^PD$",
+          "class": "planned",
+          "cite": "Dublin Zoning Ordinance (PD planned development)"
+        },
+        {
+          "match": "^C-O$",
+          "class": "office",
+          "cite": "Dublin Zoning Ordinance (C-O commercial office)"
+        },
+        {
+          "match": "^M-P$",
+          "class": "industrial",
+          "cite": "Dublin Zoning Ordinance (M-P industrial park)"
+        }
+      ]
+    },
+    {
+      "id": "el-cajon",
+      "name": "City of El Cajon",
+      "jurisdictions": [
+        "El Cajon"
+      ],
+      "publisher": "City of El Cajon Planning — Zoning",
+      "url": "https://services2.arcgis.com/sNwJsChyrhgtFVFc/arcgis/rest/services/TempPlanningMap/FeatureServer/12",
+      "fields": {
+        "code": "Zone",
+        "description": "Zone_Description"
+      },
+      "codeName": "El Cajon Municipal Code, Title 17 (Zoning)",
+      "codeUrl": "https://ecode360.com/44375421",
+      "generic": true,
+      "rules": [
+        {
+          "match": "^ST-HWY$",
+          "class": "transportation"
+        },
+        {
+          "match": "^PRD",
+          "class": "residential",
+          "cite": "El Cajon Municipal Code Title 17 (planned residential development zones)"
+        }
+      ]
+    },
+    {
+      "id": "palo-alto",
+      "name": "City of Palo Alto",
+      "jurisdictions": [
+        "Palo Alto"
+      ],
+      "publisher": "City of Palo Alto — Zone Districts",
+      "url": "https://services6.arcgis.com/evmyRZRrsopdeog7/arcgis/rest/services/ZoneDistrictData/FeatureServer/0",
+      "fields": {
+        "code": "DESIGNATION",
+        "category": "ZONETYPE"
+      },
+      "updatedField": "MODIFIEDDATE",
+      "codeName": "Palo Alto Municipal Code, Title 18 (Zoning)",
+      "generic": true,
+      "rules": [
+        {
+          "match": "^PC-",
+          "class": "planned",
+          "cite": "Palo Alto Municipal Code Ch. 18.38 (PC planned community zones)"
+        },
+        {
+          "match": "^(NV-|PTOD)",
+          "class": "planned",
+          "cite": "North Ventura Coordinated Area Plan and PTOD districts"
+        },
+        {
+          "match": "^(CC|CN|CS|CD-[CSN])\\b",
+          "class": "commercial",
+          "cite": "Palo Alto Municipal Code Ch. 18.16 (CN, CC, CS) and Ch. 18.18 (CD downtown commercial)"
+        },
+        {
+          "match": "^(GM|ROLM|RP|MOR)\\b",
+          "class": "industrial",
+          "cite": "Palo Alto Municipal Code Ch. 18.20 (office, research and manufacturing districts)"
+        },
+        {
+          "match": "^PF\\b",
+          "class": "public"
+        },
+        {
+          "match": "^OS\\b",
+          "class": "open-space"
+        },
+        {
+          "match": "^AC\\b",
+          "class": "agriculture"
+        },
+        {
+          "match": "^(R-|RM-|RE|RMD|RT-|DHS|AMF)",
+          "class": "residential",
+          "cite": "Palo Alto Municipal Code Title 18 (residential districts)"
+        }
+      ],
+      "flags": [
+        {
+          "match": "\\(R\\)|\\(GF\\)",
+          "note": "Retail (R) or ground-floor (GF) combining district: requires retail or active uses on the ground floor (Palo Alto Municipal Code Ch. 18.30)."
+        }
+      ]
     }
   ],
   "genericRules": {
