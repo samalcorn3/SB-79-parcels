@@ -27,9 +27,15 @@ export function pickZoningSource(zoning, { countyId, cityName }) {
 }
 
 /** Class, status and reasons for one zone under a source's rules. */
-export function classifyZone(zoning, source, { code, category }) {
-  const value = { code: String(code ?? '').trim(), category: String(category ?? '').trim() };
-  const rule = (source.rules || []).find((r) => new RegExp(r.match).test(value[r.on || 'code']));
+export function classifyZone(zoning, source, { code, category, description }) {
+  const value = { code: String(code ?? '').trim(), category: String(category ?? '').trim(), description: String(description ?? '').trim() };
+  const g = source.generic ? zoning.genericRules : null;
+  // Shared rules read the jurisdiction's own zone description (or category), then common code prefixes.
+  const shared = g ? [
+    ...g.description.map((r) => ({ ...r, on: value.description ? 'description' : 'category', flags: 'i', cite: `${source.codeName || `${source.name} zoning ordinance`} (zone described by the jurisdiction as “{text}”)` })),
+    ...g.code.map((r) => ({ ...r, cite: `${source.codeName || `${source.name} zoning ordinance`} (zone ${value.code})` })),
+  ] : [];
+  const rule = [...(source.rules || []), ...shared].find((r) => value[r.on || 'code'] && new RegExp(r.match, r.flags || '').test(value[r.on || 'code']));
   const cls = zoning.classes[rule?.class || 'unknown'];
   let status = rule?.status || cls.status;
   const notes = [];
@@ -38,7 +44,8 @@ export function classifyZone(zoning, source, { code, category }) {
     notes.push(f.note);
     if (f.status === 'confirm' && status === 'meets') status = 'confirm';
   }
-  return { class: rule?.class || 'unknown', label: cls.label, status, why: rule?.why || cls.why, cite: rule?.cite || null, notes };
+  const cite = rule?.cite ? rule.cite.replace('{text}', value[rule.on || 'code']) : null;
+  return { class: rule?.class || 'unknown', label: cls.label, status, why: rule?.why || cls.why, cite, notes };
 }
 
 /** Overall status for a site that may span several zones. */

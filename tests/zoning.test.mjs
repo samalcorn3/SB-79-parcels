@@ -38,7 +38,7 @@ test('source choice: the city’s own layer, or the county’s for unincorporate
   assert.equal(pickZoningSource(zoning, { countyId: 'santa-clara', cityName: 'San José' }).id, 'sj-city');
   assert.equal(pickZoningSource(zoning, { countyId: 'alameda', cityName: 'Pleasanton' }), null);
   assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: null }).id, 'sd-county');
-  assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: 'Chula Vista' }), null);
+  assert.equal(pickZoningSource(zoning, { countyId: 'san-diego', cityName: 'Carlsbad' }), null);
 });
 
 test('zone classification', () => {

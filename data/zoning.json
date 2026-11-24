@@ -404,6 +404,11 @@
       "codeName": "Oakland Planning Code, Title 17",
       "rules": [
         {
+          "match": "^RD$",
+          "class": "residential",
+          "cite": "Oakland Planning Code Ch. 17.13 (detached residential)"
+        },
+        {
           "match": "^(CN|CC|CR)-",
           "class": "commercial",
           "cite": "Oakland Planning Code § 17.33.040 (CN), § 17.35.040 (CC), § 17.37.040 (CR)"
@@ -1012,6 +1017,968 @@
           "cite": "Oceanside Harbor district"
         }
       ]
+    },
+    {
+      "id": "avalon",
+      "name": "City of Avalon",
+      "jurisdictions": [
+        "Avalon"
+      ],
+      "publisher": "City of Avalon — Zoning",
+      "url": "https://services6.arcgis.com/AmaMX17fQiEwdFuX/arcgis/rest/services/Zoning_public_68997345e782477da19a259a200a7d7d/FeatureServer/0",
+      "fields": {
+        "code": "ZONECLASS",
+        "description": "ZONEDESC"
+      },
+      "rules": [
+        {
+          "match": "^RR$",
+          "class": "unknown"
+        }
+      ],
+      "generic": true,
+      "updatedField": "LASTUPDATE",
+      "codeName": "Avalon Municipal Code, Title 9 (zoning)"
+    },
+    {
+      "id": "downey",
+      "name": "City of Downey",
+      "jurisdictions": [
+        "Downey"
+      ],
+      "publisher": "City of Downey — General Plan and Zoning (published layer)",
+      "url": "https://services8.arcgis.com/6pr2WaSuWO79zliF/arcgis/rest/services/GP_Zoning_Published_L_WFL1/FeatureServer/6",
+      "fields": {
+        "code": "Zone_landType",
+        "description": "Zone"
+      },
+      "rules": [
+        {
+          "match": "Specific Plan|Master Plan",
+          "class": "planned",
+          "cite": "Downey specific and master plans"
+        },
+        {
+          "match": "^Commercial Zones$",
+          "class": "commercial",
+          "cite": "Downey Municipal Code, Art. IX (commercial zones)"
+        },
+        {
+          "match": "^Manufacture Zones$",
+          "class": "industrial",
+          "cite": "Downey Municipal Code, Art. IX (manufacturing zones)"
+        },
+        {
+          "match": "^Residential Zones$",
+          "class": "residential",
+          "cite": "Downey Municipal Code, Art. IX (residential zones)"
+        }
+      ],
+      "generic": true,
+      "codeName": "Downey Municipal Code, Art. IX"
+    },
+    {
+      "id": "gardena",
+      "name": "City of Gardena",
+      "jurisdictions": [
+        "Gardena"
+      ],
+      "publisher": "City of Gardena — Zoning",
+      "url": "https://services6.arcgis.com/0LYnC2LP950VYCyM/arcgis/rest/services/Zoning_2021_PUBLIC/FeatureServer/0",
+      "fields": {
+        "code": "Zoning",
+        "description": "Description"
+      },
+      "rules": [
+        {
+          "match": "^O$",
+          "class": "unknown"
+        },
+        {
+          "match": "^HB$",
+          "class": "unknown"
+        }
+      ],
+      "generic": true,
+      "codeName": "Gardena Municipal Code, Title 18"
+    },
+    {
+      "id": "industry",
+      "name": "City of Industry",
+      "jurisdictions": [
+        "Industry"
+      ],
+      "publisher": "City of Industry — Zoning Map",
+      "url": "https://services6.arcgis.com/xHZOIuVPW78WpOFQ/arcgis/rest/services/City_of_Industry_Zoning_Map_HOZ_WFL1/FeatureServer/1",
+      "fields": {
+        "code": "Zoning",
+        "description": "Zoning"
+      },
+      "rules": [
+        {
+          "match": "Automobile",
+          "class": "unknown"
+        }
+      ],
+      "generic": true,
+      "codeName": "City of Industry Municipal Code, Title 17"
+    },
+    {
+      "id": "malibu",
+      "name": "City of Malibu",
+      "jurisdictions": [
+        "Malibu"
+      ],
+      "publisher": "City of Malibu — Zoning",
+      "url": "https://services3.arcgis.com/w2LtkSgyOOlg6OKZ/arcgis/rest/services/Zoning_Malibu/FeatureServer/0",
+      "fields": {
+        "code": "MALIBUZONE"
+      },
+      "rules": [
+        {
+          "match": "^(CC|CG|CN|CR|CV-[12])$",
+          "class": "commercial",
+          "cite": "Malibu Municipal Code Title 17 (commercial zones)"
+        },
+        {
+          "match": "^I$",
+          "class": "public",
+          "cite": "Malibu Municipal Code Title 17 (institutional zone)"
+        },
+        {
+          "match": "^(MF|MFBF|MH|RR\\d+|SFL|SFM|RD)$",
+          "class": "residential",
+          "cite": "Malibu Municipal Code Title 17 (residential zones)"
+        },
+        {
+          "match": "^POS$",
+          "class": "open-space"
+        },
+        {
+          "match": "^PRF$",
+          "class": "public"
+        },
+        {
+          "match": "^PD$",
+          "class": "planned"
+        },
+        {
+          "match": "^RVP$",
+          "class": "unknown"
+        }
+      ],
+      "generic": false,
+      "codeName": "Malibu Municipal Code, Title 17"
+    },
+    {
+      "id": "monterey-park",
+      "name": "City of Monterey Park",
+      "jurisdictions": [
+        "Monterey Park"
+      ],
+      "publisher": "City of Monterey Park — Zoning (master version)",
+      "url": "https://services9.arcgis.com/ivAMP6vRMPA12GAA/arcgis/rest/services/MPK_Zoning/FeatureServer/0",
+      "fields": {
+        "code": "zone",
+        "description": "zone"
+      },
+      "rules": [
+        {
+          "match": "\\(R-S\\)",
+          "class": "commercial",
+          "cite": "Monterey Park Municipal Code Title 21 (regional specialty center)"
+        }
+      ],
+      "generic": true,
+      "codeName": "Monterey Park Municipal Code, Title 21"
+    },
+    {
+      "id": "pomona",
+      "name": "City of Pomona",
+      "jurisdictions": [
+        "Pomona"
+      ],
+      "publisher": "City of Pomona — Zoning Code adopted map (July 1, 2024)",
+      "url": "https://services.arcgis.com/uhcc7qx0gSnzEgBx/arcgis/rest/services/Zoning_Code_July_1st_2024/FeatureServer/0",
+      "fields": {
+        "code": "ZONE_STRG",
+        "description": "ZONE_BASE"
+      },
+      "rules": [
+        {
+          "match": "-SP\\]",
+          "class": "planned",
+          "cite": "Pomona specific plans"
+        },
+        {
+          "match": "-CX\\d\\]",
+          "class": "mixed-commercial",
+          "cite": "Pomona Zoning Code, commercial-mixed (CX) use districts"
+        },
+        {
+          "match": "-RX\\d\\]",
+          "class": "mixed-residential",
+          "cite": "Pomona Zoning Code, residential-mixed (RX) use districts"
+        },
+        {
+          "match": "-R\\d\\]",
+          "class": "residential",
+          "cite": "Pomona Zoning Code, residential (R) use districts"
+        },
+        {
+          "match": "-IX\\d\\]|-I\\d\\]",
+          "class": "industrial",
+          "cite": "Pomona Zoning Code, industrial use districts"
+        },
+        {
+          "match": "-P\\d\\]",
+          "class": "public",
+          "cite": "Pomona Zoning Code, public use districts"
+        },
+        {
+          "match": "-OS\\d\\]",
+          "class": "open-space",
+          "cite": "Pomona Zoning Code, open space use districts"
+        }
+      ],
+      "generic": false,
+      "codeName": "Pomona Zoning Code (2024)"
+    },
+    {
+      "id": "redondo-beach",
+      "name": "City of Redondo Beach",
+      "jurisdictions": [
+        "Redondo Beach"
+      ],
+      "publisher": "City of Redondo Beach — Zoning",
+      "url": "https://services6.arcgis.com/4Y3DUWGj4Rq1ajvv/arcgis/rest/services/Zoning/FeatureServer/2",
+      "fields": {
+        "code": "ZoningCode"
+      },
+      "rules": [
+        {
+          "match": "^(C-\\d|C-\\dA|C-\\dB|CC-\\d|CR)",
+          "class": "commercial",
+          "cite": "Redondo Beach Municipal Code Title 10, Ch. 2 (commercial zones)"
+        },
+        {
+          "match": "^(I-\\d|IC-)",
+          "class": "industrial",
+          "cite": "Redondo Beach Municipal Code Title 10, Ch. 2 (industrial zones)"
+        },
+        {
+          "match": "^MU-",
+          "class": "mixed-residential",
+          "cite": "Redondo Beach Municipal Code (mixed-use zones)"
+        },
+        {
+          "match": "^(R-|RH-|RMD)",
+          "class": "residential",
+          "cite": "Redondo Beach Municipal Code (residential zones)"
+        },
+        {
+          "match": "^P-ROW$",
+          "class": "transportation"
+        },
+        {
+          "match": "^P-",
+          "class": "public",
+          "cite": "Redondo Beach Municipal Code (public and institutional zones)"
+        }
+      ],
+      "generic": false,
+      "updatedField": "LASTUPDATE",
+      "codeName": "Redondo Beach Municipal Code, Title 10"
+    },
+    {
+      "id": "santa-monica",
+      "name": "City of Santa Monica",
+      "jurisdictions": [
+        "Santa Monica"
+      ],
+      "publisher": "City of Santa Monica — Zoning",
+      "url": "https://gis.santamonica.gov/server/rest/services/Zoning/MapServer/2",
+      "fields": {
+        "code": "zoning",
+        "description": "zonedesc"
+      },
+      "rules": [
+        {
+          "match": "^(GC|NC)$",
+          "class": "commercial",
+          "cite": "Santa Monica Municipal Code Ch. 9.11 (commercial districts)"
+        },
+        {
+          "match": "^OC$",
+          "class": "office",
+          "cite": "SMMC Ch. 9.12 (office campus)"
+        },
+        {
+          "match": "^IC$",
+          "class": "industrial",
+          "cite": "SMMC Ch. 9.12 (industrial conservation)"
+        },
+        {
+          "match": "^(BC|TA|WT|LT|NV|OT|OF|BTV|CAC|CCS|CC)$",
+          "class": "planned",
+          "cite": "Downtown Community Plan, Bergamot Area Plan, and special districts"
+        }
+      ],
+      "generic": true,
+      "codeName": "Santa Monica Municipal Code, Article 9"
+    },
+    {
+      "id": "whittier",
+      "name": "City of Whittier",
+      "jurisdictions": [
+        "Whittier"
+      ],
+      "publisher": "City of Whittier — Zoning (2024)",
+      "url": "https://services6.arcgis.com/ep2P4aOWGVVBct0i/arcgis/rest/services/Zoning_2024/FeatureServer/0",
+      "fields": {
+        "code": "Zone22",
+        "description": "Zoning_APO"
+      },
+      "rules": [
+        {
+          "match": "^C-3$",
+          "class": "commercial",
+          "cite": "Whittier Municipal Code Title 18 (C-3 commercial manufacturing)"
+        },
+        {
+          "match": "^(Innovation|Medical)$",
+          "class": "unknown"
+        }
+      ],
+      "generic": true,
+      "codeName": "Whittier Municipal Code, Title 18"
+    },
+    {
+      "id": "chula-vista",
+      "name": "City of Chula Vista",
+      "jurisdictions": [
+        "Chula Vista"
+      ],
+      "publisher": "City of Chula Vista — Zoning District Boundaries (city GIS)",
+      "url": "https://services2.arcgis.com/2nV1ORz8qFa0iiF2/arcgis/rest/services/Chula_Vista_Zoning_District_Boundary_Data/FeatureServer/10",
+      "fields": {
+        "code": "ZONE",
+        "category": "ZoneCategory",
+        "description": "ZoneDesc"
+      },
+      "rules": [
+        {
+          "match": "^V-\\d",
+          "class": "planned",
+          "cite": "Chula Vista Village District Specific Plan"
+        },
+        {
+          "match": "^PC",
+          "class": "planned",
+          "cite": "Chula Vista planned community districts"
+        },
+        {
+          "on": "category",
+          "match": "^Commercial$",
+          "class": "commercial",
+          "cite": "Chula Vista Municipal Code Title 19 (commercial zones)"
+        },
+        {
+          "on": "category",
+          "match": "^Mixed Use$",
+          "class": "mixed-residential",
+          "cite": "Chula Vista mixed-use zones"
+        },
+        {
+          "on": "category",
+          "match": "^Industrial$",
+          "class": "industrial",
+          "cite": "Chula Vista Municipal Code Title 19 (industrial zones)"
+        },
+        {
+          "on": "category",
+          "match": "^Residential$",
+          "class": "residential",
+          "cite": "Chula Vista Municipal Code Title 19 (residential zones)"
+        },
+        {
+          "on": "category",
+          "match": "Open Space",
+          "class": "open-space"
+        }
+      ],
+      "generic": true,
+      "codeName": "Chula Vista Municipal Code, Title 19"
+    },
+    {
+      "id": "encinitas",
+      "name": "City of Encinitas",
+      "jurisdictions": [
+        "Encinitas"
+      ],
+      "publisher": "City of Encinitas — Base Zoning",
+      "url": "https://coemapservices.encinitasca.gov/hypegis/rest/services/PublicServices/Encinitas_Base_Zoning/FeatureServer/0",
+      "fields": {
+        "code": "ZoneDesignation",
+        "description": "PlanName"
+      },
+      "rules": [
+        {
+          "match": "^(D|N|ER)-|^ER/|^SPA$",
+          "class": "planned",
+          "cite": "Downtown, North 101, and Encinitas Ranch specific plans"
+        },
+        {
+          "match": "^(GC|GC-PCD|LC|VSC|LVSC|TC|C-GC\\d|C-R11)$",
+          "class": "commercial",
+          "cite": "Encinitas Municipal Code Ch. 30.09 (commercial zones)"
+        },
+        {
+          "match": "^(OP|C-OP)$",
+          "class": "office",
+          "cite": "Encinitas Municipal Code Ch. 30.09 (office professional)"
+        },
+        {
+          "match": "^(BP|LI)$",
+          "class": "industrial",
+          "cite": "Encinitas Municipal Code Ch. 30.09 (business park, light industrial)"
+        },
+        {
+          "match": "^(R\\d+|RR\\d?|RRFP|RS\\d+|MHP|R30 OL)$",
+          "class": "residential",
+          "cite": "Encinitas Municipal Code Ch. 30.09 (residential zones)"
+        },
+        {
+          "match": "^P/SP$",
+          "class": "public"
+        }
+      ],
+      "generic": false,
+      "codeName": "Encinitas Municipal Code, Title 30"
+    },
+    {
+      "id": "escondido",
+      "name": "City of Escondido",
+      "jurisdictions": [
+        "Escondido"
+      ],
+      "publisher": "City of Escondido — Zoning",
+      "url": "https://services2.arcgis.com/eJcVbjTyyZIzZ5Ye/arcgis/rest/services/Zoning/FeatureServer/0",
+      "fields": {
+        "code": "ZONING"
+      },
+      "rules": [
+        {
+          "match": "^C-G$",
+          "class": "commercial",
+          "cite": "Escondido Zoning Code Art. 16 (general commercial)"
+        },
+        {
+          "match": "^C-P$",
+          "class": "office",
+          "cite": "Escondido Zoning Code Art. 16 (commercial professional)"
+        },
+        {
+          "match": "^(M-1|M-2|I-P)$",
+          "class": "industrial",
+          "cite": "Escondido Zoning Code Art. 26 (industrial zones)"
+        },
+        {
+          "match": "^(PD|PZ-PD|S-P|FCC)",
+          "class": "planned",
+          "cite": "Escondido planned development and specific plan zones"
+        },
+        {
+          "match": "^(PZ-)?(R|RE|RA)",
+          "class": "residential",
+          "cite": "Escondido Zoning Code (residential zones)"
+        },
+        {
+          "match": "^OS",
+          "class": "open-space"
+        },
+        {
+          "match": "^COUNTY$",
+          "class": "unknown"
+        }
+      ],
+      "generic": false,
+      "codeName": "Escondido Zoning Code"
+    },
+    {
+      "id": "la-mesa",
+      "name": "City of La Mesa",
+      "jurisdictions": [
+        "La Mesa"
+      ],
+      "publisher": "City of La Mesa — Zoning",
+      "url": "https://utility.arcgis.com/usrsvcs/servers/f239405db9554f8e9e154ffcae0f3798/rest/services/CommDev/Zoning_AGO/MapServer/1",
+      "fields": {
+        "code": "ZONING",
+        "description": "DESCR"
+      },
+      "rules": [],
+      "generic": true,
+      "updatedField": "last_edited_date",
+      "codeName": "La Mesa Municipal Code, Title 24"
+    },
+    {
+      "id": "poway",
+      "name": "City of Poway",
+      "jurisdictions": [
+        "Poway"
+      ],
+      "publisher": "City of Poway — Zoning",
+      "url": "https://powaygis.poway.org/powaygis/rest/services/Public/PowHUB_Planning_Survey_Street_Transportation_Layers/MapServer/4",
+      "fields": {
+        "code": "ZoningCode",
+        "description": "ZoningDescription"
+      },
+      "rules": [
+        {
+          "match": "^CB$",
+          "class": "commercial",
+          "cite": "Poway Municipal Code Title 17 (community business)"
+        },
+        {
+          "match": "^HC$",
+          "class": "public",
+          "cite": "Poway Municipal Code Title 17 (hospital campus)"
+        }
+      ],
+      "generic": true,
+      "updatedField": "last_edited_date",
+      "codeName": "Poway Municipal Code, Title 17"
+    },
+    {
+      "id": "san-marcos",
+      "name": "City of San Marcos",
+      "jurisdictions": [
+        "San Marcos"
+      ],
+      "publisher": "City of San Marcos — Zoning",
+      "url": "https://services1.arcgis.com/e7Mp0AHrN8K5Kx6X/arcgis/rest/services/Zoning/FeatureServer/16",
+      "fields": {
+        "code": "ZoneCode",
+        "description": "Zone",
+        "planName": "spadistrictname"
+      },
+      "rules": [
+        {
+          "match": "^L-I",
+          "class": "industrial",
+          "cite": "San Marcos Municipal Code Title 20 (light industrial)"
+        }
+      ],
+      "generic": true,
+      "codeName": "San Marcos Municipal Code, Title 20"
+    },
+    {
+      "id": "rancho-cordova",
+      "name": "City of Rancho Cordova",
+      "jurisdictions": [
+        "Rancho Cordova"
+      ],
+      "publisher": "City of Rancho Cordova — Zoning",
+      "url": "https://services1.arcgis.com/kSSEfQQl69HmZZw6/arcgis/rest/services/Zoning/FeatureServer/0",
+      "fields": {
+        "code": "Zone"
+      },
+      "rules": [
+        {
+          "match": "\\((RDOSP|SCSP|SDSP|FBSP|SPA|ZSPA|SSSPA|ASPA|CVSPA|MFSPA|WRSPA)\\)|^SPA|^COMMERCIAL \\(SPA\\)|^RANCH",
+          "class": "planned",
+          "cite": "Rancho Cordova specific and special planning areas"
+        },
+        {
+          "match": "^(GC|CS)$",
+          "class": "commercial",
+          "cite": "Rancho Cordova Municipal Code Title 23 (commercial zones)"
+        },
+        {
+          "match": "^CMU$",
+          "class": "mixed-commercial",
+          "cite": "Rancho Cordova Municipal Code Title 23 (commercial mixed use)"
+        },
+        {
+          "match": "^(OIMU|OPMU)$",
+          "class": "office",
+          "cite": "Rancho Cordova Municipal Code Title 23 (office mixed-use zones)"
+        },
+        {
+          "match": "^(RMU|VCMU)$",
+          "class": "mixed-residential"
+        },
+        {
+          "match": "^(M-1|M-2|LIBP|IR)$",
+          "class": "industrial",
+          "cite": "Rancho Cordova Municipal Code Title 23 (industrial zones)"
+        },
+        {
+          "match": "^(HDR|MDR|LDR|RD ?\\d+|RMH)$",
+          "class": "residential",
+          "cite": "Rancho Cordova Municipal Code Title 23 (residential zones)"
+        },
+        {
+          "match": "^(POS|P/OS)",
+          "class": "open-space"
+        },
+        {
+          "match": "^AG",
+          "class": "agriculture"
+        },
+        {
+          "match": "^T$",
+          "class": "transportation"
+        }
+      ],
+      "generic": false,
+      "updatedField": "EDIT_DATE",
+      "codeName": "Rancho Cordova Municipal Code, Title 23"
+    },
+    {
+      "id": "alameda-city",
+      "name": "City of Alameda",
+      "jurisdictions": [
+        "Alameda"
+      ],
+      "publisher": "City of Alameda — Zoning",
+      "url": "https://services9.arcgis.com/ucDLsG1EwPnOGY4c/arcgis/rest/services/Zoning_v02_view/FeatureServer/0",
+      "fields": {
+        "code": "zone"
+      },
+      "rules": [
+        {
+          "match": "^(AP-|NP-)",
+          "class": "planned",
+          "cite": "Alameda Point and North Park Street districts"
+        },
+        {
+          "match": "^(C-1|C-2|C-C|C-M)",
+          "class": "commercial",
+          "cite": "Alameda Municipal Code Ch. 30-4 (commercial districts)"
+        },
+        {
+          "match": "^A-P",
+          "class": "office",
+          "cite": "Alameda Municipal Code Ch. 30-4 (administrative-professional)"
+        },
+        {
+          "match": "^M-X",
+          "class": "mixed-residential"
+        },
+        {
+          "match": "^M-[12]",
+          "class": "industrial",
+          "cite": "Alameda Municipal Code Ch. 30-4 (industrial districts)"
+        },
+        {
+          "match": "^(R-\\d|E)",
+          "class": "residential",
+          "cite": "Alameda Municipal Code Ch. 30-4 (residential districts)"
+        },
+        {
+          "match": "^O",
+          "class": "unknown"
+        }
+      ],
+      "generic": false,
+      "codeName": "Alameda Municipal Code, Ch. 30"
+    },
+    {
+      "id": "emeryville",
+      "name": "City of Emeryville",
+      "jurisdictions": [
+        "Emeryville"
+      ],
+      "publisher": "City of Emeryville — Zoning",
+      "url": "https://services3.arcgis.com/ljOdqLVbHpS7dOJQ/arcgis/rest/services/Zoning_View/FeatureServer/0",
+      "fields": {
+        "code": "ZoningLabel",
+        "description": "ZoningDescription"
+      },
+      "rules": [
+        {
+          "match": "^(M|SM)$",
+          "class": "unknown"
+        }
+      ],
+      "generic": true,
+      "codeName": "Emeryville Planning Regulations, Title 9"
+    },
+    {
+      "id": "san-leandro",
+      "name": "City of San Leandro",
+      "jurisdictions": [
+        "San Leandro"
+      ],
+      "publisher": "City of San Leandro — Zoning",
+      "url": "https://services.arcgis.com/nFaSPZoTjS78xXjw/arcgis/rest/services/Zoning/FeatureServer/0",
+      "fields": {
+        "code": "ZONING",
+        "description": "ZONINGDESC"
+      },
+      "rules": [
+        {
+          "match": "^B-TOD$",
+          "class": "planned",
+          "cite": "Bay Fair TOD Specific Plan"
+        },
+        {
+          "match": "^(DA-|NA-)",
+          "class": "planned",
+          "cite": "Downtown and North Area districts"
+        }
+      ],
+      "generic": true,
+      "codeName": "San Leandro Zoning Code"
+    },
+    {
+      "id": "south-san-francisco",
+      "name": "City of South San Francisco",
+      "jurisdictions": [
+        "South San Francisco"
+      ],
+      "publisher": "City of South San Francisco — Zoning",
+      "url": "https://services5.arcgis.com/inY93B27l4TSbT7h/arcgis/rest/services/Zoning/FeatureServer/0",
+      "fields": {
+        "code": "Zonecode",
+        "description": "Zone"
+      },
+      "rules": [
+        {
+          "match": "^T\\d",
+          "class": "planned",
+          "cite": "Lindenville and El Camino form-based transect zones"
+        },
+        {
+          "match": "^(DTC|ETC|GAC|LNC)$",
+          "class": "commercial",
+          "cite": "South San Francisco Municipal Code Title 20 (downtown and core districts)"
+        }
+      ],
+      "generic": true,
+      "codeName": "South San Francisco Municipal Code, Title 20"
+    },
+    {
+      "id": "los-gatos",
+      "name": "Town of Los Gatos",
+      "jurisdictions": [
+        "Los Gatos"
+      ],
+      "publisher": "Town of Los Gatos — Zoning",
+      "url": "https://services3.arcgis.com/JAU7IM34hqT9y9ew/arcgis/rest/services/Zoning/FeatureServer/0",
+      "fields": {
+        "code": "ZoningDistrict",
+        "category": "ZoningClass"
+      },
+      "rules": [
+        {
+          "on": "category",
+          "match": "^PD$",
+          "class": "planned",
+          "cite": "Los Gatos planned development"
+        },
+        {
+          "on": "category",
+          "match": "^C-?[12](:HEOZ)?$",
+          "class": "commercial",
+          "cite": "Los Gatos Town Code Ch. 29 (commercial zones; HEOZ housing element overlay)"
+        },
+        {
+          "on": "category",
+          "match": "^(C1|C2|CH)$",
+          "class": "commercial",
+          "cite": "Los Gatos Town Code Ch. 29 (commercial zones)"
+        },
+        {
+          "on": "category",
+          "match": "^O$",
+          "class": "office",
+          "cite": "Los Gatos Town Code Ch. 29 (office zone)"
+        },
+        {
+          "on": "category",
+          "match": "^(CM|LM)$",
+          "class": "industrial",
+          "cite": "Los Gatos Town Code Ch. 29 (controlled manufacturing, light industrial)"
+        },
+        {
+          "on": "category",
+          "match": "^(R1|RM|RD|HR|RPD|R1D|RMH)$",
+          "class": "residential",
+          "cite": "Los Gatos Town Code Ch. 29 (residential zones)"
+        },
+        {
+          "on": "category",
+          "match": "^RC$",
+          "class": "open-space",
+          "cite": "Los Gatos Town Code Ch. 29 (resource conservation)"
+        },
+        {
+          "on": "category",
+          "match": "SP$",
+          "class": "planned"
+        }
+      ],
+      "generic": false,
+      "codeName": "Los Gatos Town Code, Ch. 29"
+    },
+    {
+      "id": "mountain-view",
+      "name": "City of Mountain View",
+      "jurisdictions": [
+        "Mountain View"
+      ],
+      "publisher": "City of Mountain View — Zoning Districts",
+      "url": "https://maps.mountainview.gov/arcgis/rest/services/Public/ZoningDistrict/MapServer/0",
+      "fields": {
+        "code": "ZONELABEL",
+        "category": "ZONECLASS"
+      },
+      "rules": [
+        {
+          "on": "category",
+          "match": "^(CN|CS)$",
+          "class": "commercial",
+          "cite": "Mountain View City Code Ch. 36, Art. IV (commercial districts)"
+        },
+        {
+          "on": "category",
+          "match": "^CO$",
+          "class": "office",
+          "cite": "Mountain View City Code Ch. 36 (commercial-office)"
+        },
+        {
+          "on": "category",
+          "match": "^CRA$",
+          "class": "mixed-residential",
+          "cite": "Mountain View City Code Ch. 36 (commercial-residential-arterial)"
+        },
+        {
+          "on": "category",
+          "match": "^(ML|MM)$",
+          "class": "industrial",
+          "cite": "Mountain View City Code Ch. 36 (industrial districts)"
+        },
+        {
+          "on": "category",
+          "match": "^P$",
+          "class": "planned",
+          "cite": "Mountain View precise plans"
+        },
+        {
+          "on": "category",
+          "match": "^PF$",
+          "class": "public"
+        },
+        {
+          "on": "category",
+          "match": "^(R1|R2|R3|R4|RMH)$",
+          "class": "residential",
+          "cite": "Mountain View City Code Ch. 36 (residential districts)"
+        },
+        {
+          "on": "category",
+          "match": "^A$",
+          "class": "agriculture"
+        },
+        {
+          "on": "category",
+          "match": "^F$",
+          "class": "open-space"
+        }
+      ],
+      "generic": false,
+      "updatedField": "LASTUPDATE",
+      "codeName": "Mountain View City Code, Ch. 36"
     }
-  ]
+  ],
+  "genericRules": {
+    "note": "Used after a source's own rules when it sets \"generic\": true. They read the jurisdiction's own description of the zone (or, failing that, widely shared California zone-code prefixes) and cite it.",
+    "description": [
+      {
+        "match": "parking",
+        "class": "parking"
+      },
+      {
+        "match": "specific plan|planned (unit |community )?development|master plan|precise plan|planned community|form[- ]based",
+        "class": "planned"
+      },
+      {
+        "match": "(commercial|office)[- /]+residential|residential[- /]+(commercial|office)|mixed[- ]?use|multi[- ]use|mixed density",
+        "class": "mixed-residential"
+      },
+      {
+        "match": "office|professional",
+        "class": "office"
+      },
+      {
+        "match": "industr|manufactur|business park|technology park|research|warehous|light industrial",
+        "class": "industrial"
+      },
+      {
+        "match": "residential|single[- ]family|single[- ]unit|multiple[- ]family|multi[- ]family|duplex|townhouse|estate|mobile ?home|dwelling",
+        "class": "residential"
+      },
+      {
+        "match": "commercial|retail|shopping|neighborhood business|general business|downtown|town center|village center|business district",
+        "class": "commercial"
+      },
+      {
+        "match": "open space|park|recreation|conservation|preserve|golf|cemetery|resource",
+        "class": "open-space"
+      },
+      {
+        "match": "agricultur|farm|ranch",
+        "class": "agriculture"
+      },
+      {
+        "match": "public|institution|civic|school|government|quasi|community facilit",
+        "class": "public"
+      },
+      {
+        "match": "utilit|transportation|right[- ]of[- ]way|freeway|railroad",
+        "class": "transportation"
+      }
+    ],
+    "code": [
+      {
+        "match": "^(PD|PUD|SP|SPA)\\b",
+        "class": "planned"
+      },
+      {
+        "match": "^(MU|MX|M-X|CMU|RMU)\\b",
+        "class": "mixed-residential"
+      },
+      {
+        "match": "^(C|CC|CG|CN|CR|CS|C-\\d|C\\d|GC|NC|LC|CBD)\\b",
+        "class": "commercial"
+      },
+      {
+        "match": "^(CO|C-O|OP|BP|O-P|PO|BPO)\\b",
+        "class": "office"
+      },
+      {
+        "match": "^(M|M-\\d|M\\d|I|I-\\d|IL|IG|IP|LI|HI|ML)\\b",
+        "class": "industrial"
+      },
+      {
+        "match": "^(R|R-?\\d|RS|RM|RH|RD|RE|RR|RL|SF|MF|RMH|MHP)\\b",
+        "class": "residential"
+      },
+      {
+        "match": "^(OS|O-S|POS)\\b",
+        "class": "open-space"
+      },
+      {
+        "match": "^(A|AG|A-\\d|A\\d)\\b",
+        "class": "agriculture"
+      },
+      {
+        "match": "^(PF|P-F|PQP|PS|P/QP|PL|P/SP)\\b",
+        "class": "public"
+      }
+    ]
+  }
 }
