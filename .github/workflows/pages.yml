@@ -15,18 +15,19 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read # deploy-pages looks up the uploaded artifact
 concurrency:
   group: pages
   cancel-in-progress: true
 env:
   # "<git branch>:<preview folder>" pairs, space-separated
   PREVIEW_BRANCHES: "claude/ab2011:ab2011"
+# Build and deploy are separate jobs (GitHub's recommended layout). Deploying in
+# the same job as the upload races GitHub's artifact index ("No artifacts named
+# github-pages were found"); a separate job starts after the upload is indexed.
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -59,5 +60,19 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url || steps.retry.outputs.page_url }}
+    steps:
       - id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - name: Wait before retrying
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 30
+      - id: retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v4
