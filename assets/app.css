@@ -164,3 +164,9 @@ ul.plain li { margin: 4px 0; }
 .ab-fails .ab-mark { color: var(--bad); background: var(--bad-bg); }
 .ab-confirm .ab-mark { color: var(--warn); background: var(--warn-bg); }
 .ab-not-evaluated .ab-mark { color: var(--ink-3); background: var(--bg); }
+.ab-none-mapped .ab-mark { color: var(--ok); background: var(--bg); border: 1px solid var(--ok-bg); }
+.ab-list .src { margin-top: 2px; }
+.ab-a6 summary { cursor: pointer; }
+.ab-mini { list-style: none; padding: 0; margin: 6px 0; display: grid; gap: 4px; }
+.ab-mini li { display: grid; grid-template-columns: 22px 1fr; gap: 6px; font-size: 12px; }
+.ab-list .src a { color: var(--ink-2); }

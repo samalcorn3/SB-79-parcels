@@ -62,6 +62,134 @@
       ]
     }
   },
+  "siteExclusions": {
+    "statute": "Gov. Code § 65913.4(a)(6)(A)–(K). Applies to SB 79 projects using streamlined ministerial approval (§ 65912.159(a)(3)) and to both AB 2011 paths (§§ 65912.111(e), 65912.121(g), which omit clause (A)(iv)).",
+    "coastalZone": {
+      "publisher": "California Coastal Commission — Coastal Zone Boundary (digital)",
+      "url": "https://services9.arcgis.com/wwVnNW92ZHUIr0V0/arcgis/rest/services/Coastal_Zone_Polygon/FeatureServer/0",
+      "fields": [
+        "FID"
+      ],
+      "note": "The Commission's adopted 1977 maps are the legal boundary; the digital line is a representation of them. Near the line, ask the Commission for a boundary determination."
+    },
+    "lcpSegments": {
+      "publisher": "California Coastal Commission — Local Coastal Program segments",
+      "url": "https://services9.arcgis.com/wwVnNW92ZHUIr0V0/arcgis/rest/services/VIEW_Local_Coastal_Program_Segments/FeatureServer/0",
+      "fields": [
+        "Name",
+        "LCPCert",
+        "Effec_Cert",
+        "LUPDate",
+        "LCPDate",
+        "UncertArea",
+        "NonLCP"
+      ]
+    },
+    "farmland": {
+      "publisher": "California Department of Conservation — Farmland Mapping and Monitoring Program (Important Farmland)",
+      "folder": "https://gis.conservation.ca.gov/server/rest/services/DLRP",
+      "servicePattern": "^DLRP/CaliforniaImportantFarmland_(\\d{4})$",
+      "layer": 0,
+      "where": "polygon_ty IN ('P','S')",
+      "fields": [
+        "polygon_ty",
+        "upd_year"
+      ],
+      "note": "The newest survey year is found live from the folder listing. P = Prime Farmland, S = Farmland of Statewide Importance."
+    },
+    "wetlands": {
+      "publisher": "U.S. Fish and Wildlife Service — National Wetlands Inventory",
+      "url": "https://fwspublicservices.wim.usgs.gov/wetlandsmapservice/rest/services/Wetlands/MapServer/0",
+      "fields": [
+        "ATTRIBUTE",
+        "WETLAND_TYPE"
+      ],
+      "fallback": {
+        "publisher": "California Department of Fish and Wildlife — National Wetlands Inventory, California (USFWS data republished as BIOS ds2630)",
+        "url": "https://services2.arcgis.com/Uq9r85Potqm3MfRV/arcgis/rest/services/biosds2630_fpu/FeatureServer/0",
+        "fields": [
+          "ATTRIBUTE",
+          "WETLAND_TYPE"
+        ],
+        "note": "Used only when the USFWS server does not answer; its firewall rejects some clients."
+      }
+    },
+    "hazardous": {
+      "publisher": "Department of Toxic Substances Control — EnviroStor public data export (updated daily)",
+      "layers": [
+        {
+          "label": "cleanup site",
+          "url": "https://services3.arcgis.com/Oy2JTCD10wkoelxS/arcgis/rest/services/Envirostor_Public_Data_Export/FeatureServer/0",
+          "fields": [
+            "project_name",
+            "site_type",
+            "status",
+            "envirostor_id"
+          ]
+        },
+        {
+          "label": "hazardous waste facility",
+          "url": "https://services3.arcgis.com/Oy2JTCD10wkoelxS/arcgis/rest/services/Envirostor_Public_Data_Export/FeatureServer/1",
+          "fields": [
+            "facility_name",
+            "facility_type",
+            "facility_status",
+            "epa_id"
+          ]
+        }
+      ],
+      "profileUrl": "https://www.envirostor.dtsc.ca.gov/public/profile_report?global_id=",
+      "corteseUrl": "https://calepa.ca.gov/sitecleanup/corteselist/",
+      "note": "The § 65962.5 (Cortese) list also includes State Water Board GeoTracker leaking-tank sites and cease-and-desist / cleanup-and-abatement orders, which have no public map service."
+    },
+    "faultZones": {
+      "publisher": "California Geological Survey — Alquist-Priolo Earthquake Fault Zones",
+      "url": "https://services2.arcgis.com/zr3KAIbsRSUyARHG/arcgis/rest/services/CGS_Alquist_Priolo_Fault_Zones/FeatureServer/0",
+      "fields": [
+        "QUAD_NAME",
+        "ZN_RELEASED",
+        "REPORTLINK"
+      ]
+    },
+    "flood": {
+      "publisher": "FEMA — National Flood Hazard Layer",
+      "url": "https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer/28",
+      "fields": [
+        "FLD_ZONE",
+        "ZONE_SUBTY",
+        "SFHA_TF",
+        "DFIRM_ID"
+      ]
+    },
+    "conservationPlans": {
+      "publisher": "California Department of Fish and Wildlife — Conservation Plan Boundaries, HCP and NCCP (ds760)",
+      "url": "https://services2.arcgis.com/Uq9r85Potqm3MfRV/arcgis/rest/services/biosds760_fpu/FeatureServer/0",
+      "fields": [
+        "Display_Name",
+        "Plan_Type",
+        "Plan_Stage",
+        "Website"
+      ]
+    },
+    "criticalHabitat": {
+      "publisher": "U.S. Fish and Wildlife Service — Final Critical Habitat",
+      "url": "https://services.arcgis.com/QVENGdaPbd4LUkLV/arcgis/rest/services/USFWS_Critical_Habitat/FeatureServer/0",
+      "fields": [
+        "comname",
+        "sciname",
+        "listing_status"
+      ]
+    },
+    "agEasements": {
+      "publisher": "California Department of Conservation — Agricultural Conservation Easements",
+      "url": "https://gis.conservation.ca.gov/server/rest/services/DLRP/Ag_ConservationEasements/FeatureServer/1",
+      "fields": [
+        "HOLDER",
+        "Easement_T",
+        "ACRES"
+      ]
+    }
+  },
   "geocoder": {
     "publisher": "Esri World Geocoding Service (non-stored geocoding)",
     "url": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"

@@ -11,7 +11,9 @@
 //   'meets' | 'fails'     decided from authoritative data
 //   'confirm'             depends on facts no authoritative layer holds (zoning
 //                         permissions, building use, tenancy, historic register…)
-//   'not-evaluated'       data exists but is not wired in yet
+//   'none-mapped'         the agency's map shows nothing, but the statutory test is
+//                         broader than the map (see exclusions.js)
+//   'not-evaluated'       the source could not be queried
 import * as turf from '@turf/turf';
 import { queryIntersecting, toEsriGeometry, getJSON } from './arcgis.js';
 import { measureFrontages, corridorTest } from './row.js';
@@ -80,11 +82,12 @@ async function cityInUrbanArea(sources, cityName) {
 /**
  * Evaluate AB 2011 for a parcel already resolved by the SB 79 lookup.
  * @param data  { sources }
- * @param ctx   { parcel (GeoJSON Feature), county (config), city ({name, population}|null), fire, zones (SB 79 zones), zoning, lotSqFt }
+ * @param ctx   { parcel (GeoJSON Feature), county (config), city ({name, population}|null), zones (SB 79 zones), zoning, lotSqFt,
+ *               exclusions (exclusionsFor('ab2011', …) items, or null) }
  */
 export async function ab2011ForParcel(data, ctx) {
   const { sources } = data;
-  const { parcel, county, city, fire, zones, zoning, lotSqFt } = ctx;
+  const { parcel, county, city, zones, zoning, lotSqFt, exclusions } = ctx;
   const errors = [];
   const soft = (label, p) => p.catch((e) => {
     errors.push(`${label}: ${e.message}`);
@@ -138,14 +141,12 @@ export async function ab2011ForParcel(data, ctx) {
       'Requires the current use of the surrounding parcels; assessor land-use codes are not an authoritative record of use.'),
     C('industrial', '§ 65912.111(d); § 65912.121(f)', 'Not on or adjoining (including across a street) a site where more than one-third of the square footage is dedicated to industrial use', 'confirm',
       'Depends on current and most recently permitted uses and the pre-2022 general plan designation.'),
-    (() => {
-      if (!fire) return C('fire', '§ 65912.111(e); § 65912.121(g) → § 65913.4(a)(6)(D)', 'Not in a very high fire hazard severity zone or the state responsibility area (unless fire-mitigation standards apply)', 'not-evaluated', 'Fire-zone check unavailable.');
-      if (!fire.vhfhsz.hit && !fire.sra.hit) return C('fire', '§ 65912.111(e); § 65912.121(g) → § 65913.4(a)(6)(D)', 'Not in a very high fire hazard severity zone or the state responsibility area', 'meets', 'Outside both (State Fire Marshal maps).');
-      return C('fire', '§ 65912.111(e); § 65912.121(g) → § 65913.4(a)(6)(D)', 'Not in a very high fire hazard severity zone or the state responsibility area, unless the site has adopted fire hazard mitigation measures under existing building standards', 'confirm',
-        `${fire.vhfhsz.hit ? `${Math.round(fire.vhfhsz.share * 100)}% in a VHFHSZ. ` : ''}${fire.sra.hit ? `${Math.round(fire.sra.share * 100)}% in the SRA. ` : ''}§ 65913.4(a)(6)(D) “does not apply to sites that have adopted fire hazard mitigation measures pursuant to existing building standards” (Building Code ch. 7A etc.). If the site is vacant, § 65912.111(h)(2) / § 65912.121(j)(2) bar VHFHSZ sites outright.`);
-    })(),
-    C('a6-other', '§ 65912.111(e); § 65912.121(g) → § 65913.4(a)(6)(A)–(C), (E)–(K)', 'Other site exclusions: coastal zone, farmland, wetlands, hazardous waste site, earthquake fault zone, flood hazard area or floodway, conservation lands, protected habitat', 'not-evaluated',
-      'Authoritative layers exist for each (FEMA, California Geological Survey, DTSC, Department of Conservation, Coastal Commission, USFWS); not yet wired in.'),
+    // § 65912.111(e) / § 65912.121(g): all of § 65913.4(a)(6) except clause (A)(iv), checked map by map.
+    ...(exclusions?.length
+      ? exclusions.map((x) => C(`a6-${x.id}`, x.cite, x.title, x.status, x.id === 'fire' && x.status === 'confirm'
+        ? `${x.detail} If the site is vacant, § 65912.111(h)(2) / § 65912.121(j)(2) bar VHFHSZ sites outright.`
+        : x.detail))
+      : [C('a6', '§ 65912.111(e); § 65912.121(g) → § 65913.4(a)(6)', 'Site exclusions: coastal zone, farmland, wetlands, fire, hazardous waste, fault zone, flood, conservation lands, habitat, easements', 'not-evaluated', 'Site-exclusion check unavailable.')]),
     C('historic-mobilehome', '§ 65912.111(f); § 65912.121(h)(3), (6)', 'Does not demolish a historic structure on a national, state, or local register; not a mobilehome or RV park', 'confirm', 'No statewide authoritative parcel layer.'),
     C('neighborhood-plan', '§ 65912.111(g); § 65912.121(i)', 'If in a neighborhood plan area, the plan permits multifamily housing on the site', 'confirm', 'Check for a specific, area, community, or similar plan adopted before 2024 (§ 65912.101(t)).'),
     C('tribal', '§ 65912.111(h)(1); § 65912.121(j)(1)', 'If vacant, no tribal cultural resources identified through AB 52 consultation that cannot be mitigated', 'confirm', 'Determined through consultation, not mapping.'),
@@ -179,6 +180,7 @@ export async function ab2011ForParcel(data, ctx) {
   mixed.status = statusOf(mixed.criteria);
 
   // ---- standards (§ 65912.123), shown when the corridor is known ----
+  const coastalItem = exclusions?.find((x) => x.id === 'coastal' && x.inCoastalZone != null);
   const nearTransit = (zones || []).length > 0; // inside an SB 79 TOD zone ⇒ within ½ mile of a TOD stop, which is a major transit stop (§ 65912.156(p))
   const d = AB2011.density;
   const pick = (t) => (nearTransit ? t.transitOrCampus : acres < 1 ? t.smallSite : width != null && width >= AB2011.corridor.wideFt ? t.wideCorridor : t.narrowCorridor);
@@ -195,7 +197,7 @@ export async function ab2011ForParcel(data, ctx) {
       value: width >= AB2011.corridor.wideFt ? AB2011.height.wideCorridor : AB2011.height.narrowCorridor,
       transitValue: nearTransit ? AB2011.height.transit : null,
       note: nearTransit
-        ? `65 ft applies instead if the city has more than 100,000 residents and the site is not in the coastal zone (§ 65912.123(c)(4)). Or the local height limit, if greater.`
+        ? `65 ft applies instead if the city has more than 100,000 residents${city?.population ? ` (${city.name}: ${city.population.toLocaleString('en-US')})` : ''} and the site is not in the coastal zone${coastalItem ? (coastalItem.inCoastalZone ? ' (this site is in it)' : ' (this site is outside it)') : ''} (§ 65912.123(c)(4)). Or the local height limit, if greater.`
         : 'Or the local height limit, if greater.',
       cite: '§ 65912.123(c)',
     },

@@ -17,6 +17,7 @@ A map and address lookup for every parcel in California's SB 79 urban transit co
 | City and county limits | **California Department of Technology** | Jurisdiction, and incorporated vs. unincorporated |
 | Local exclusion parcels | City-published layers (San Francisco, Los Angeles) | Whether an ordinance covers this exact parcel |
 | Fire hazard severity zones | **CAL FIRE — Office of the State Fire Marshal** (LRA 2025 maps; SRA v23.3) | VHFHSZ / State Responsibility Area status and the fire-zone exclusions cities adopt |
+| Site exclusions, § 65913.4(a)(6) | **Coastal Commission** (coastal zone, LCP certification); **Dept. of Conservation** (Important Farmland, newest survey found live; ag easements); **California Geological Survey** (Alquist-Priolo fault zones); **FEMA** (National Flood Hazard Layer); **USFWS** (National Wetlands Inventory; critical habitat); **DTSC** (EnviroStor, updated daily); **CDFW** (NCCP/HCP plan areas) | Whether the site clears the exclusions that apply to SB 79 streamlining and to AB 2011 |
 | Ordinances, TODAPs, HCD findings | [`data/jurisdictions.json`](data/jurisdictions.json), a curated registry citing HCD letters | Which instrument governs |
 
 ## Coverage
@@ -69,6 +70,30 @@ The site queries the State Fire Marshal's maps live for every parcel and reports
 
 **Streamlining.** § 65913.4(a)(6)(D) excludes sites in a VHFHSZ *or the State Responsibility Area*, but "does not apply to sites that have adopted fire hazard mitigation measures pursuant to existing building standards or state fire mitigation measures applicable to the development" (Pub. Resources Code §§ 4290–4291, Gov. Code § 51182, Building Code ch. 7A). The text is in [`data/statute/GOV-65913.4.txt`](data/statute/GOV-65913.4.txt).
 
+## Site exclusions — § 65913.4(a)(6)
+
+Each report checks the eleven site exclusions of Gov. Code § 65913.4(a)(6)(A)–(K), each against the map of the agency the statute names or the closest authoritative one ([`src/lib/exclusions.js`](src/lib/exclusions.js)).
+
+**Which laws apply them.**
+- **SB 79:** only if the project uses streamlined ministerial approval. § 65912.159(a)(3) requires such projects to "comply with all other requirements of Section 65913.4". A project reviewed through the city's ordinary process (§ 65912.159(b)) is not subject to them.
+- **AB 2011:** both paths, "exclusive of clause (iv) of subparagraph (A)" (§§ 65912.111(e), 65912.121(g)).
+
+| | Exclusion | Source | How it's decided |
+|---|---|---|---|
+| (A) | Coastal zone (appeal area, uncertified LCP, 5 ft sea-level rise, not zoned multifamily, near wetlands/prime ag) | Coastal Commission boundary and LCP segments | Outside the zone: ✓. Inside: clause (ii) is decided from the LCP's certification; the other clauses are flagged ? |
+| (B) | Prime farmland / farmland of statewide importance | DOC Farmland Mapping and Monitoring Program | ✓ / ✗ (? if partly covered) |
+| (C) | Wetlands | USFWS National Wetlands Inventory (CDFW's republished copy if the USFWS server refuses) | ? if mapped; ○ if not, since the legal test is the USFWS definition, not the map |
+| (D) | Very high fire hazard zone or State Responsibility Area | State Fire Marshal | ✓, or ? because of the fire-mitigation exception |
+| (E) | Hazardous waste site (Cortese list, H&S Code § 25356) | DTSC EnviroStor | ? if a site is on the parcel; ○ otherwise, since the Water Board's GeoTracker part of the Cortese list has no public map service |
+| (F) | Earthquake fault zone | California Geological Survey (Alquist-Priolo) | ✓, or ? because of the seismic-code exception |
+| (G) | 100-year flood zone | FEMA National Flood Hazard Layer | ✓, or ? (Letter of Map Revision / NFIP criteria exception) |
+| (H) | Regulatory floodway | FEMA National Flood Hazard Layer | ✓, or ? (no-rise certification exception) |
+| (I) | Lands identified for conservation in an NCCP, HCP, or other plan | CDFW plan boundaries | ? inside a plan area (only its reserve lands are excluded); ○ otherwise |
+| (J) | Protected-species habitat | USFWS designated critical habitat | ? if mapped; ○ otherwise (the legal test is broader than critical habitat) |
+| (K) | Conservation easement | DOC agricultural conservation easements | ✗ / ? if mapped; ○ otherwise (easements are recorded with the county; check a title report) |
+
+Marks: ✓ not excluded, per the map the statute names · ○ nothing on the agency's map, but the map isn't conclusive · ? a mapped constraint that an exception or a site-specific fact decides · ✗ excluded. `tests/exclusions.test.mjs` checks each check against the text of its subparagraph and checks which laws apply them.
+
 ## Which rules govern a parcel
 
 From [HCD's SB 79 page](https://www.hcd.ca.gov/planning-and-research/sb79-tod), "TOD Project Compliance":
@@ -98,7 +123,7 @@ Jurisdictions reported elsewhere to have instruments or HCD letters (Pasadena, B
 **Daily monitoring** ([`.github/workflows/monitor.yml`](.github/workflows/monitor.yml)) does three things:
 
 - `npm run check:sources` verifies every endpoint and every mapped field. If one breaks, it opens a `source-health` issue.
-- `python3 scripts/statute.py` re-reads §§ 65912.155–65912.162 from the leginfo export, along with the sections they cite (§ 65913.4, §§ 51178–51179, Pub. Res. Code § 4102). If any section was amended, it opens a `statute-watch` issue.
+- `python3 scripts/statute.py` re-reads §§ 65912.155–65912.162 and §§ 65912.100–65912.140 from the leginfo export, along with the sections they cite (§ 65913.4, §§ 51178–51179, § 65583.2, Pub. Res. Code § 4102). If any section was amended, it opens a `statute-watch` issue.
 - `npm run check:hcd` fingerprints HCD's SB 79 and letters pages, checks every registry link, and flags the registry once it is 30+ days old. Any of these opens an `hcd-watch` issue.
 
 To update the registry: edit `data/jurisdictions.json` and set `lastReviewed`. Run `npm test`, which validates the schema. Then run `npm run check:hcd -- --update` and commit both files.
@@ -127,13 +152,15 @@ Each parcel report also checks **AB 2011**, the Affordable Housing and High Road
 |---|---|
 | ✓ / ✗ | Decided from authoritative data |
 | ? | Depends on facts no public layer holds; confirm with the city |
-| – | Authoritative data exists but isn't wired in yet |
+| ○ | Nothing on the agency's map, but the map isn't conclusive |
+| – | Not evaluated (the source didn't answer) |
 
 What it computes:
 - **Commercial corridor (§ 65912.101(c), § 65912.121(c)).** The right-of-way is measured property line to property line from the county assessor's parcels: perpendicular to each street frontage, sampled every 10 ft, ignoring samples near corners ([`src/lib/row.js`](src/lib/row.js)). Per HCD's draft AB 2011 guidelines (May 5, 2026), a site qualifies if any portion of the right-of-way fronting it is 70–150 ft wide. At least two adjacent samples must be in range, and the frontage must be at least 50 ft. Measured frontages are drawn on the map, green where they qualify.
 - **Not a freeway (§ 65912.101(g); Veh. Code § 332).** Uses Caltrans's Public Road Functional Classification. Class 1 (Interstate) is a freeway. Class 2 ("other freeway or expressway") is flagged to confirm, since expressways aren't freeways. Caltrans publishes no live layer of access control; its State Highway Network lines carry only route type.
 - **Urbanized area (§ 65912.121(b)).** Uses Census Bureau 2020 Urban Areas (TIGERweb).
-- **Site size (§ 65912.121(d))** and **fire zones (§ 65913.4(a)(6)(D))**, using the State Fire Marshal maps already used for SB 79.
+- **Site size (§ 65912.121(d)).**
+- **Site exclusions (§§ 65912.111(e), 65912.121(g)).** All of § 65913.4(a)(6) except clause (A)(iv), from the same checks as the Site exclusions card (see above).
 - **Density and height (§ 65912.123).** Shown from the measured corridor width and whether the parcel is within ½ mile of an SB 79 TOD stop. Every TOD stop is a major transit stop (§ 65912.156(p)).
 
 `tests/ab2011.test.mjs` checks every AB 2011 figure against the statute text.
@@ -153,7 +180,7 @@ What it computes:
 - **SACOG's zone layer has no tier field.** All SACOG stops are treated as Tier 2, since SacRT is light rail per HCD's March 2026 advisory and the region has no heavy rail.
 - **SCAG commuter-rail zones** follow HCD's advisory method, which counts all services at a station. They are flagged in the report.
 - **Setbacks and lot coverage.** SB 79 sets no numeric values for these. Local objective standards apply as long as they don't physically preclude the SB 79 density and FAR. The report shows local zoning where a county or city publishes it (San Francisco, Sacramento County, City of San Diego, and unincorporated LA County).
-- **Partial registry.** Many entries are still `secondary`, and most cities have not published parcel-level exclusion layers. See [docs/METHODOLOGY.md](docs/METHODOLOGY.md).
+- **Partial registry.** Most cities have not published parcel-level exclusion layers. See [docs/METHODOLOGY.md](docs/METHODOLOGY.md).
 
 ## Layout
 

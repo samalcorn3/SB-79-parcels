@@ -99,6 +99,12 @@ await check('point lookup (LA City Hall)', '?pt=-118.2428,34.0537', () => docume
 await check('AB 2011 card (3600 Wilshire Blvd)', '?q=3600%20Wilshire%20Blvd%2C%20Los%20Angeles%2C%20CA', () => document.querySelector('.ab-path summary'), 'ab2011-wilshire.png');
 const abText = await page.$$eval('.ab-path summary', (els) => els.map((e) => e.textContent.trim())).catch(() => []);
 results.push({ name: 'AB 2011: mixed-income path possibly eligible on Wilshire', ok: abText.some((t) => /Possibly eligible\s+Mixed-income/.test(t)), abText });
+const exText = await page.$$eval('.card h2', (els) => els.filter((e) => /Site exclusions/.test(e.textContent)).map((e) => e.parentElement.textContent)).catch(() => []);
+const exEval = await page.$$eval('.card.exclusions .ab-not-evaluated b', (els) => els.map((e) => e.textContent)).catch(() => []);
+results.push({ name: 'Site exclusions: every source answered', ok: exEval.length === 0, notEvaluated: exEval });
+results.push({ name: 'Site exclusions card: all 11 checks (A)–(K) rendered', ok: exText.length === 1 && ['(A)', '(B)', '(C)', '(D)', '(E)', '(F)', '(G)', '(H)', '(I)', '(J)', '(K)'].every((x) => exText[0].includes(`65913.4(a)(6)${x}`)) });
+const abCites = await page.$$eval('.ab-mini .cite', (els) => els.map((e) => e.textContent)).catch(() => []);
+results.push({ name: 'AB 2011 lists each § 65913.4(a)(6) exclusion on both paths', ok: abCites.filter((c) => /65913\.4\(a\)\(6\)\([A-K]\)/.test(c)).length >= 22 });
 await page.setViewportSize({ width: 1400, height: 900 });
 await check('parcel layer (downtown LA, z17)', '#17/34.04870/-118.25860', () => /(in a TOD zone|Parcels:|parcels: )/.test(document.getElementById('map-status')?.textContent || ''), 'parcels-la.png');
 const parcelStatus = await page.textContent('#map-status').catch(() => null);

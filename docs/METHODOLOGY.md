@@ -47,6 +47,15 @@ Sources: CAL FIRE — Office of the State Fire Marshal, `FHSZLRA25_v1_All` (Loca
 
 For each parcel, the overlapping fire polygons are fetched and the intersected area is computed in the browser. Overlaps under 1 m² are ignored, so lot lines that coincide with zone boundaries don't count. A registry instrument with `coverage.type = "criteria"` and `criteria: ["fire-hazard"]` covers any qualifying parcel. If the ordinance also has criteria that can't be computed (historic resources, low-resource areas), a non-fire parcel is reported as "unconfirmed" rather than "not covered".
 
+## 3b. Site exclusions (§ 65913.4(a)(6))
+
+All eleven checks run in parallel after the SB 79 report renders, each with a 15-second limit, so a slow agency server shows as "not evaluated" instead of holding up the page. Each layer is queried with the parcel polygon. Two queries per polygon layer tell "whole parcel inside" (`esriSpatialRelWithin`) from "partly inside" (`esriSpatialRelIntersects`). The statute doesn't say how a partly covered site is treated, so partial coverage is never marked ✗.
+
+- **Farmland:** the Department of Conservation publishes each biennial survey as a separate service (`CaliforniaImportantFarmland_YYYY`). The newest year is read from the server's folder listing at query time, so a new survey is used as soon as it's published. `polygon_ty` P = Prime, S = Statewide Importance.
+- **Coastal zone:** the Coastal Commission's digital boundary represents its adopted 1977 maps, which remain the legal boundary. Clause (A)(ii) is decided from the Commission's LCP segments: a certified LCP (`LCPCert` or `Effec_Cert` = Y) or a certified Land Use Plan (`LUPDate` set) means it doesn't apply. Areas of deferred certification and federal or tribal land are flagged ?.
+- **Wetlands:** the USFWS server sits behind a firewall that rejects some clients (including automated test browsers). If it refuses, CDFW's republished copy of the same inventory (BIOS ds2630) is used, and the report says so.
+- **Hazardous sites:** DTSC's EnviroStor cleanup sites and hazardous waste facilities whose location point falls on the parcel. Points are approximate. EnviroStor is only part of the Cortese list; GeoTracker leaking-tank sites and Water Board orders have no public map service.
+
 ## 4. Sources for the legal rules
 
 **Development standards and project requirements** come from the statute: Gov. Code §§ 65912.155–65912.162, current text, read from the Legislative Counsel's leginfo database export (`downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip`, `LAW_SECTION_TBL`). The copy in `data/statute/` records each section's history line. § 65912.157 reads "Amended … by Stats. 2026, Ch. 100, Sec. 2 (SB 722), effective July 16, 2026". A diff against SB 79's chaptered text (`BILL_VERSION_TBL`, version `20250SB7984CHP`) shows the only substantive change is new paragraph (h)(3).

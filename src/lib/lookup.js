@@ -10,6 +10,7 @@ import { findJurisdiction, determineRegime, summarizeInstruments } from './polic
 import { parcelsAtPoint } from './parcels.js';
 import { fireForParcel, fireCriterionStatus } from './fire.js';
 import { ab2011ForParcel } from './ab2011.js';
+import { siteExclusionsForParcel, exclusionsFor } from './exclusions.js';
 
 const SQFT_PER_SQM = 10.7639;
 const FEET_PER_MILE = 5280;
@@ -311,10 +312,18 @@ export async function reportForAddress(data, text, { magicKey, location } = {}) 
   return { ...report, candidates };
 }
 
+/** § 65913.4(a)(6) site exclusions for a finished report (shared by SB 79's streamlined path and AB 2011). */
+export async function exclusionsForReport(data, report) {
+  const c = report.ab2011Context;
+  if (!c) return null;
+  return siteExclusionsForParcel(data, { parcel: c.parcel, fire: c.fire }).catch((e) => ({ error: e.message }));
+}
+
 /** AB 2011 for a finished report. Kept separate so the SB 79 report can render first. */
-export async function ab2011ForReport(data, report) {
+export async function ab2011ForReport(data, report, exclusions) {
   const c = report.ab2011Context;
   if (!c) return null;
   const county = data.sources.counties.find((x) => x.id === c.countyId);
-  return ab2011ForParcel(data, { ...c, county }).catch((e) => ({ error: e.message }));
+  const ex = await (exclusions ?? exclusionsForReport(data, report));
+  return ab2011ForParcel(data, { ...c, county, exclusions: ex && !ex.error ? exclusionsFor('ab2011', ex) : null }).catch((e) => ({ error: e.message }));
 }

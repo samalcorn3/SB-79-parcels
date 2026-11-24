@@ -122,17 +122,49 @@ function fireCard(r) {
 }
 
 
-const AB_STATUS = { meets: ['✓', 'Meets'], fails: ['✗', 'Fails'], confirm: ['?', 'Confirm locally'], 'not-evaluated': ['–', 'Not yet evaluated'] };
+const AB_STATUS = { meets: ['✓', 'Meets'], fails: ['✗', 'Fails'], confirm: ['?', 'Confirm locally'], 'none-mapped': ['○', 'None mapped — the map is not conclusive'], 'not-evaluated': ['–', 'Not evaluated'] };
+
+const criterionLi = (c, extra = '') => `<li class="ab-${esc(c.status)}"><span class="ab-mark" title="${esc(AB_STATUS[c.status][1])}">${AB_STATUS[c.status][0]}</span><div><b>${esc(c.text ?? c.title)}</b> <span class="cite">${esc(c.cite)}</span><div class="fine">${esc(c.detail)}</div>${extra}</div></li>`;
+
+const EX_BADGE = { fails: 'Excluded', meets: 'No exclusion applies', confirm: 'Check flagged items' };
+
+/** § 65913.4(a)(6) site exclusions — shared by SB 79's streamlined path and AB 2011. */
+export function exclusionsCard(r) {
+  const x = r.exclusions;
+  if (x === undefined) return '<div class="card loading" id="exclusions-slot"><span class="spinner"></span>Checking site exclusions: FEMA, State Geologist, Department of Conservation, Coastal Commission, DTSC, USFWS, CDFW…</div>';
+  if (!x) return '';
+  if (x.error) return `<div class="card"><h2>Site exclusions</h2><div class="err">${esc(x.error)}</div></div>`;
+  const srcLinks = (i) => [i.source?.url ? `Source: ${link(i.source.url, i.source.name)}` : '', ...(i.links || []).map((l) => link(l.url, l.label))].filter(Boolean).join(' · ');
+  return `<div class="card exclusions"><h2>Site exclusions — § 65913.4(a)(6)</h2>
+    <ul class="plain fine">
+      <li><b>SB 79:</b> apply only if the project uses streamlined ministerial approval, which requires compliance “with all other requirements of Section 65913.4”. A project reviewed through the city’s ordinary process is not subject to them. <span class="cite">§ 65912.159(a)(3), (b)</span></li>
+      <li><b>AB 2011:</b> apply to both the 100% affordable and the mixed-income paths, except clause (A)(iv). <span class="cite">§ 65912.111(e); § 65912.121(g)</span></li>
+    </ul>
+    <p><span class="ab-badge ${esc(x.status)}">${EX_BADGE[x.status]}</span> SB 79 streamlined approval</p>
+    <ul class="ab-list">${x.items.map((i) => criterionLi(i, `<div class="fine src">${srcLinks(i)}</div>`)).join('')}</ul>
+    <p class="fine">✓ not excluded, per the map the statute names · ○ nothing on the agency’s map, but the legal test is broader than the map · ? a mapped constraint that an exception or a site-specific fact decides · ✗ excluded. Each map is queried live.</p>
+    ${x.errors?.length ? `<div class="err">${x.errors.map(esc).join('<br>')}</div>` : ''}
+  </div>`;
+}
+
+/** AB 2011's § 65913.4(a)(6) criteria as one expandable row; the full text is in the Site exclusions card. */
+function a6Row(list) {
+  if (!list.length) return '';
+  const status = list.some((c) => c.status === 'fails') ? 'fails' : list.every((c) => c.status === 'meets') ? 'meets' : 'confirm';
+  return `<li class="ab-${status}"><span class="ab-mark" title="${esc(AB_STATUS[status][1])}">${AB_STATUS[status][0]}</span><div><details class="ab-a6"><summary><b>Site exclusions (coastal, farmland, wetlands, fire, hazardous waste, fault, flood, conservation, habitat, easements)</b> <span class="cite">§ 65912.111(e); § 65912.121(g) → § 65913.4(a)(6), except (A)(iv)</span></summary>
+    <ul class="ab-mini">${list.map((c) => `<li class="ab-${esc(c.status)}"><span class="ab-mark" title="${esc(AB_STATUS[c.status][1])}">${AB_STATUS[c.status][0]}</span><span>${esc(c.text)} <span class="cite">${esc(c.cite.replace(/^.*→ /, ''))}</span></span></li>`).join('')}</ul>
+    <div class="fine">Details and sources: the Site exclusions card above.</div></details></div></li>`;
+}
 
 export function ab2011Card(r) {
   const a = r.ab2011;
-  if (a === undefined) return '<div class="card loading" id="ab2011-slot"><span class="spinner"></span>Checking AB 2011: measuring the street frontage and querying Caltrans and the Census Bureau…</div>';
+  if (a === undefined) return '<div class="card loading" id="ab2011-slot"><span class="spinner"></span>Checking AB 2011: measuring the street frontage and querying Caltrans, the Census Bureau, and the site-exclusion maps…</div>';
   if (!a) return '';
   if (a.error) return `<div class="card"><h2>AB 2011</h2><div class="err">${esc(a.error)}</div></div>`;
   const path = (p) => `
     <details class="ab-path" ${p.status === 'fails' ? '' : 'open'}>
       <summary><span class="ab-badge ${esc(p.status)}">${p.status === 'fails' ? 'Not eligible' : p.status === 'meets' ? 'Eligible' : 'Possibly eligible'}</span> ${esc(p.title)}</summary>
-      <ul class="ab-list">${p.criteria.map((c) => `<li class="ab-${esc(c.status)}"><span class="ab-mark" title="${esc(AB_STATUS[c.status][1])}">${AB_STATUS[c.status][0]}</span><div><b>${esc(c.text)}</b> <span class="cite">${esc(c.cite)}</span><div class="fine">${esc(c.detail)}</div></div></li>`).join('')}</ul>
+      <ul class="ab-list">${p.criteria.filter((c) => !c.id.startsWith('a6-')).map((c) => criterionLi(c)).join('')}${a6Row(p.criteria.filter((c) => c.id.startsWith('a6-')))}</ul>
     </details>`;
   const st = a.standards;
   const std = st ? `<table class="std"><tr><th>Density (metropolitan / other)<div class="from">${esc(st.density.basis)} — ${esc(st.density.cite)}</div></th><td class="num">${st.density.metropolitan} / ${st.density.other} du/ac</td></tr>
@@ -140,7 +172,7 @@ export function ab2011Card(r) {
       <p class="fine">${esc(st.density.note)} ${esc(st.heightFt.note)}</p>
       ${st.freewayWithin500Ft === 'yes' ? '<p class="warn">Within 500 ft of a freeway: air filtration (MERV 16), air intakes facing away from the freeway, and no balconies facing it (§ 65912.123(f)).</p>' : st.freewayWithin500Ft === 'possibly' ? '<p class="warn">Within 500 ft of a road Caltrans classes as “other freeway or expressway”; if it is a freeway, § 65912.123(f) ventilation and balcony rules apply.</p>' : ''}` : '';
   return `<div class="card"><h2>AB 2011 — housing on commercial land</h2>
-    <p class="fine">${esc(a.statute)}. Statuses: ✓ decided from authoritative data · ✗ fails · ? depends on facts no public layer holds · – not yet evaluated.</p>
+    <p class="fine">${esc(a.statute)}. Statuses: ✓ decided from authoritative data · ✗ fails · ? depends on facts no public layer holds or on an exception · ○ nothing mapped, but the map is not conclusive · – not evaluated.</p>
     ${path(a.paths.mixed)}${path(a.paths.affordable)}
     ${std ? `<h2 style="margin-top:12px">If eligible: mixed-income standards</h2>${std}` : ''}
     ${a.errors?.length ? `<div class="err">${a.errors.map(esc).join('<br>')}</div>` : ''}
@@ -199,6 +231,8 @@ export function renderReport(r, { standardsDoc } = {}) {
 
   ${fireCard(r)}
 
+  ${exclusionsCard(r)}
+
   ${ab2011Card(r)}
 
   ${standardsCard(r, standardsDoc)}
@@ -217,6 +251,7 @@ export function renderReport(r, { standardsDoc } = {}) {
       <li>TOD zones &amp; stops: ${link(r.mpo.mapPage, r.mpo.name)}</li>
       <li>City/county limits: California Department of Technology</li>
       <li>Fire hazard zones: CAL FIRE — Office of the State Fire Marshal</li>
+      <li>Site exclusions: Coastal Commission, Department of Conservation (FMMP, California Geological Survey), USFWS, DTSC, FEMA, CDFW — listed with each result above</li>
       <li>Generated ${esc(new Date(r.generatedAt).toLocaleString())}</li>
     </ul>
     ${r.errors.length ? `<div class="err">${r.errors.map(esc).join('<br>')}</div>` : ''}

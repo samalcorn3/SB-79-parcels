@@ -1,8 +1,8 @@
 // App wiring: map, search, click-to-lookup, live layers.
 /* global L */
-import { reportForAddress, reportForPoint, suggest, ab2011ForReport } from '../lib/lookup.js';
+import { reportForAddress, reportForPoint, suggest, ab2011ForReport, exclusionsForReport } from '../lib/lookup.js';
 import { instrumentInForce } from '../lib/policy.js';
-import { renderReport, renderLoading, renderError, renderNotOk, ab2011Card } from './report.js';
+import { renderReport, renderLoading, renderError, renderNotOk, ab2011Card, exclusionsCard } from './report.js';
 import {
   ZoneStore, classifyParcels, zoneLayer, stopsLayer, parcelLayer,
   loadParcelsInView, loadExclusionsInView, parcelsToCSV,
@@ -249,9 +249,15 @@ async function run(promise, label) {
     reportEl.innerHTML = renderReport(r, { standardsDoc: data.standards });
     showParcel(r.parcel.geometry);
     showFrontages([]);
-    // AB 2011 measures the street and checks Caltrans/Census; fill it in when ready.
+    // Site exclusions and AB 2011 query more servers; fill them in when ready.
     const token = ++lookupToken;
-    ab2011ForReport(data, r).then((ab) => {
+    const ex = exclusionsForReport(data, r);
+    ex.then((x) => {
+      if (token !== lookupToken) return;
+      const slot = document.getElementById('exclusions-slot');
+      if (slot) slot.outerHTML = exclusionsCard({ exclusions: x });
+    });
+    ab2011ForReport(data, r, ex).then((ab) => {
       if (token !== lookupToken) return;
       const slot = document.getElementById('ab2011-slot');
       if (slot) slot.outerHTML = ab2011Card({ ab2011: ab });
