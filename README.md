@@ -119,6 +119,14 @@ npm run serve                  # then open http://localhost:8080
 
 The site is static: `index.html`, `assets/`, `src/`, and `data/`. [`.github/workflows/pages.yml`](.github/workflows/pages.yml) runs the tests and publishes to GitHub Pages on every push to `main`. One-time setup: **Settings → Pages → Source: GitHub Actions**.
 
+## Previews, merging, and undoing
+
+- **The live site is always the `main` branch.** Nothing on another branch changes it.
+- **Work in progress lives on its own branch** and is published as a preview next to the live site. For example, `claude/ab2011` appears at `https://samalcorn3.github.io/SB-79-parcels/preview/ab2011/`. Branches to preview are listed in `PREVIEW_BRANCHES` in [`.github/workflows/pages.yml`](.github/workflows/pages.yml).
+- **To adopt a branch:** open a pull request from it into `main` and merge it.
+- **To drop a branch:** close its pull request, or never open one. The live site is unaffected.
+- **To undo something already merged:** open the merged pull request on GitHub and click **Revert**. GitHub creates a new pull request that reverses it; merge that. Nothing is lost, since every past version stays in the history.
+
 ## Known limitations
 
 - **Not a zoning determination.** Confirm with the local planning department.

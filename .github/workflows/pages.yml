@@ -2,6 +2,11 @@ name: Deploy site to GitHub Pages
 # Publishes the static site. The site holds no parcel data: every lookup is
 # answered in the visitor's browser by live queries to MPO, county, and state
 # servers, so redeploys are only needed when code or data/*.json change.
+#
+# The live site is always `main`. Work-in-progress branches listed in
+# PREVIEW_BRANCHES are published alongside it at /preview/<name>/ so they can be
+# tried without touching the live site. Pushing to a preview branch triggers this
+# workflow on `main` (see preview-trigger.yml on that branch).
 on:
   push:
     branches: [main]
@@ -13,6 +18,9 @@ permissions:
 concurrency:
   group: pages
   cancel-in-progress: true
+env:
+  # "<git branch>:<preview folder>" pairs, space-separated
+  PREVIEW_BRANCHES: "claude/ab2011:ab2011"
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -21,6 +29,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -31,6 +41,20 @@ jobs:
           mkdir -p _site
           cp -r index.html assets src data _site/
           touch _site/.nojekyll
+      - name: Add branch previews
+        run: |
+          for pair in $PREVIEW_BRANCHES; do
+            branch="${pair%%:*}"; folder="${pair##*:}"
+            if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+              git fetch --depth 1 origin "$branch"
+              mkdir -p "_site/preview/$folder" "/tmp/preview-$folder"
+              git --work-tree="/tmp/preview-$folder" checkout FETCH_HEAD -- index.html assets src data
+              cp -r "/tmp/preview-$folder/." "_site/preview/$folder/"
+              echo "Preview of $branch published at /preview/$folder/"
+            else
+              echo "No branch $branch; skipping preview"
+            fi
+          done
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
