@@ -1108,11 +1108,11 @@
       "jurisdictions": [
         "Industry"
       ],
-      "publisher": "City of Industry — Zoning Map",
-      "url": "https://services6.arcgis.com/xHZOIuVPW78WpOFQ/arcgis/rest/services/City_of_Industry_Zoning_Map_HOZ_WFL1/FeatureServer/1",
+      "publisher": "City of Industry — Zoning Designation",
+      "url": "https://services6.arcgis.com/xHZOIuVPW78WpOFQ/arcgis/rest/services/Zoning_Designation/FeatureServer/27",
       "fields": {
-        "code": "Zoning",
-        "description": "Zoning"
+        "code": "zoning",
+        "description": "zoning"
       },
       "rules": [
         {
@@ -1351,7 +1351,14 @@
         }
       ],
       "generic": true,
-      "codeName": "Whittier Municipal Code, Title 18"
+      "codeName": "Whittier Municipal Code, Title 18",
+      "reviewedAlternatives": [
+        {
+          "service": "ZoningLandUse_Web",
+          "asOf": "2026-11-24",
+          "note": "Display layer; lacks the MU-1 to MU-3 districts in Zoning_2024, so it does not supersede it."
+        }
+      ]
     },
     {
       "id": "chula-vista",
@@ -1755,7 +1762,24 @@
         }
       ],
       "generic": true,
-      "codeName": "South San Francisco Municipal Code, Title 20"
+      "codeName": "South San Francisco Municipal Code, Title 20",
+      "reviewedAlternatives": [
+        {
+          "service": "new_zoning_parcel_service_FGDB",
+          "asOf": "2026-11-24",
+          "note": "Parcel subset (13 districts), not a replacement."
+        },
+        {
+          "service": "ZoningParcelsView_NoOwner",
+          "asOf": "2026-11-24",
+          "note": "Parcel view, not a replacement."
+        },
+        {
+          "service": "NewZoningParcels_NoOwner_View",
+          "asOf": "2026-11-24",
+          "note": "Parcel view, not a replacement."
+        }
+      ]
     },
     {
       "id": "los-gatos",

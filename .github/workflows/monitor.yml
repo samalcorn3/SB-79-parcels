@@ -1,6 +1,7 @@
 name: Monitor live sources & HCD
 # Daily: (1) verify every MPO / county / city endpoint and field mapping still
-# works, (2) detect amendments to Gov. Code §§ 65912.155–.162 in the Legislative
+# works, (1b) flag a city that has published a newer zoning layer than the one
+# data/zoning.json reads, (2) detect amendments to Gov. Code §§ 65912.155–.162 in the Legislative
 # Counsel's leginfo database, and (3) watch HCD's SB 79 pages and registry links.
 # Opens (or comments on) an issue when something needs a human.
 on:
@@ -24,6 +25,10 @@ jobs:
         id: sources
         continue-on-error: true
         run: npm run check:sources -- sources-report.md
+      - name: Check zoning layers for newer versions
+        id: zoning
+        continue-on-error: true
+        run: npm run check:zoning -- zoning-report.md
       - name: Check HCD
         id: hcd
         env:
@@ -41,6 +46,7 @@ jobs:
           SOURCES_FAILED: ${{ steps.sources.outcome == 'failure' }}
           HCD_ATTENTION: ${{ steps.hcd.outputs.attention }}
           STATUTE_CHANGED: ${{ steps.statute.outcome == 'failure' }}
+          ZONING_ATTENTION: ${{ steps.zoning.outcome == 'failure' }}
         run: |
           file_issue () {
             title="$1"; body_file="$2"; label="$3"
@@ -55,6 +61,10 @@ jobs:
           if [ "$STATUTE_CHANGED" = "true" ]; then
             [ -s statute-report.md ] || echo "Statute check failed to run; see the workflow log." > statute-report.md
             file_issue "SB 79 statute amended or check failing: review data/standards.json" statute-report.md statute-watch
+          fi
+          if [ "$ZONING_ATTENTION" = "true" ]; then
+            [ -s zoning-report.md ] || echo "Zoning freshness check failed to run; see the workflow log." > zoning-report.md
+            file_issue "Newer zoning layer published: review data/zoning.json" zoning-report.md zoning-watch
           fi
           if [ "$HCD_ATTENTION" = "true" ]; then
             file_issue "HCD SB 79 review needed: update data/jurisdictions.json" hcd-report.md hcd-watch

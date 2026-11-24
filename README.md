@@ -94,6 +94,13 @@ Each report checks the eleven site exclusions of Gov. Code § 65913.4(a)(6)(A)�
 
 Marks: ✓ not excluded, per the map the statute names · ○ nothing on the agency's map, but the map isn't conclusive · ? a mapped constraint that an exception or a site-specific fact decides · ✗ excluded. `tests/exclusions.test.mjs` checks each check against the text of its subparagraph and checks which laws apply them.
 
+## Keeping zoning current
+
+- **Live reads.** Each lookup queries the city's or county's zoning layer at that moment, with no copy kept here. When a city edits its layer, the next lookup reflects it. The report shows the date the agency last updated the layer.
+- **A layer that stops changing.** Some cities publish revised zoning as a *new* layer rather than editing the old one. Oakland publishes a new service per zoning ordinance; Pomona and Whittier name theirs by year. The site would keep reading the old layer until `data/zoning.json` is updated. [`scripts/check-zoning.mjs`](scripts/check-zoning.mjs) runs daily in the monitor workflow. It lists each publisher's other zoning layers and opens a `zoning-watch` issue when one changed after the layer in use. A layer reviewed and found not to supersede it is recorded under `reviewedAlternatives`, and flagged again only if it changes after that review.
+- **A layer that disappears or changes shape.** The daily source check (`check:sources`) opens a `source-health` issue if a zoning layer stops answering or loses a field the site reads.
+- **What it can't see.** A council can adopt a rezoning before the city updates its GIS layer. In the gap, the report reflects the layer, not the ordinance. Recent zoning changes should be confirmed with the city.
+
 ## Which rules govern a parcel
 
 From [HCD's SB 79 page](https://www.hcd.ca.gov/planning-and-research/sb79-tod), "TOD Project Compliance":

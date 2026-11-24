@@ -11,7 +11,8 @@
     "check:hcd": "node scripts/check-hcd.mjs",
     "check:statute": "python3 scripts/statute.py",
     "lookup": "node scripts/lookup.mjs",
-    "serve": "python3 -m http.server 8080"
+    "serve": "python3 -m http.server 8080",
+    "check:zoning": "node scripts/check-zoning.mjs"
   },
   "devDependencies": {
     "@turf/turf": "7.2.0",
