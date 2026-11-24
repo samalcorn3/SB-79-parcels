@@ -124,8 +124,9 @@ function fireCard(r) {
 
 const AB_STATUS = { meets: ['✓', 'Meets'], fails: ['✗', 'Fails'], confirm: ['?', 'Confirm locally'], 'not-evaluated': ['–', 'Not yet evaluated'] };
 
-function ab2011Card(r) {
+export function ab2011Card(r) {
   const a = r.ab2011;
+  if (a === undefined) return '<div class="card loading" id="ab2011-slot"><span class="spinner"></span>Checking AB 2011: measuring the street frontage and querying Caltrans and the Census Bureau…</div>';
   if (!a) return '';
   if (a.error) return `<div class="card"><h2>AB 2011</h2><div class="err">${esc(a.error)}</div></div>`;
   const path = (p) => `

@@ -69,10 +69,21 @@ export function measureFrontages(parcel, neighbors, { step = 10, cornerTrim = 15
   const origin = pr[0][0];
   const P = projector(origin);
   const subj = pr.map((r) => r.map(P.fwd));
-  const others = neighbors
-    .filter((n) => n !== parcel && n.geometry && JSON.stringify(n.geometry.coordinates[0]?.[0]) !== JSON.stringify(parcel.geometry.coordinates[0]?.[0]))
-    .map((n) => rings(n.geometry).map((r) => r.map(P.fwd)));
-  const segs = others.flatMap((rs) => rs.flatMap((r) => r.slice(1).map((p, i) => [r[i], p])));
+  // Only neighbours within reach of the subject (its bbox grown by maxFt) can matter.
+  const xs = subj.flat().map((p) => p[0]);
+  const ys = subj.flat().map((p) => p[1]);
+  const reach = [Math.min(...xs) - maxFt, Math.min(...ys) - maxFt, Math.max(...xs) + maxFt, Math.max(...ys) + maxFt];
+  const subjKey = JSON.stringify(parcel.geometry.coordinates[0]?.[0]);
+  const others = [];
+  for (const n of neighbors) {
+    if (n === parcel || !n.geometry || JSON.stringify(n.geometry.coordinates[0]?.[0]) === subjKey) continue;
+    const rs = rings(n.geometry).map((r) => r.map(P.fwd));
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const r of rs) for (const [x, y] of r) { if (x < x0) x0 = x; if (y < y0) y0 = y; if (x > x1) x1 = x; if (y > y1) y1 = y; }
+    if (x1 < reach[0] || x0 > reach[2] || y1 < reach[1] || y0 > reach[3]) continue;
+    others.push({ rs, bbox: [x0, y0, x1, y1] });
+  }
+  const segs = others.flatMap((o) => o.rs.flatMap((r) => r.slice(1).map((p, i) => [r[i], p])));
 
   // Orientation of the outer ring decides which side is "outward".
   const outer = subj[0];
@@ -90,7 +101,7 @@ export function measureFrontages(parcel, neighbors, { step = 10, cornerTrim = 15
     const n = ccw ? [t[1], -t[0]] : [-t[1], t[0]]; // outward normal
     // A frontage edge has no parcel immediately outside it.
     const mid = [(a[0] + b[0]) / 2 + n[0] * probeFt, (a[1] + b[1]) / 2 + n[1] * probeFt];
-    const outsideIsParcel = others.some((rs) => pointInRings(mid, rs));
+    const outsideIsParcel = others.some((o) => mid[0] >= o.bbox[0] && mid[0] <= o.bbox[2] && mid[1] >= o.bbox[1] && mid[1] <= o.bbox[3] && pointInRings(mid, o.rs));
     frontEdges.push({ a, b, len, t, n, street: !outsideIsParcel });
   }
 
@@ -121,6 +132,21 @@ export function measureFrontages(parcel, neighbors, { step = 10, cornerTrim = 15
 
   return real.map((g) => {
     const lengthFt = g.edges.reduce((s, e) => s + e.len, 0);
+    // Segments that could be hit: at least partly in front of this frontage (0..maxFt along n)
+    // and within its extent along the street (plus a margin).
+    const t = [-g.n[1], g.n[0]];
+    const a0 = g.edges[0].a;
+    const extent = g.edges.flatMap((e) => [e.a, e.b]).map((p) => (p[0] - a0[0]) * t[0] + (p[1] - a0[1]) * t[1]);
+    const lo = Math.min(...extent) - 20;
+    const hi = Math.max(...extent) + 20;
+    const out0 = Math.min(...g.edges.flatMap((e) => [e.a, e.b]).map((p) => (p[0] - a0[0]) * g.n[0] + (p[1] - a0[1]) * g.n[1])) - 5;
+    const strip = segs.filter(([p, q]) => {
+      const ap = (p[0] - a0[0]) * t[0] + (p[1] - a0[1]) * t[1];
+      const aq = (q[0] - a0[0]) * t[0] + (q[1] - a0[1]) * t[1];
+      const np = (p[0] - a0[0]) * g.n[0] + (p[1] - a0[1]) * g.n[1];
+      const nq = (q[0] - a0[0]) * g.n[0] + (q[1] - a0[1]) * g.n[1];
+      return Math.max(ap, aq) >= lo && Math.min(ap, aq) <= hi && Math.max(np, nq) >= out0 && Math.min(np, nq) <= out0 + maxFt + 10;
+    });
     const samples = [];
     let along = 0;
     for (const e of g.edges) {
@@ -129,7 +155,7 @@ export function measureFrontages(parcel, neighbors, { step = 10, cornerTrim = 15
         if (pos < cornerTrim || pos > lengthFt - cornerTrim) continue;
         const o = [e.a[0] + e.t[0] * s, e.a[1] + e.t[1] * s];
         let best = Infinity;
-        for (const [p, q] of segs) {
+        for (const [p, q] of strip) {
           const d = rayHit(o, e.n, p, q);
           if (d >= minFt && d < best) best = d; // < minFt: grazing a neighbour that touches the corner
         }

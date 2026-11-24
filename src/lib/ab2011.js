@@ -93,7 +93,7 @@ export async function ab2011ForParcel(data, ctx) {
 
   // Parcels around the site, for frontage measurement and neighbour uses.
   const [x0, y0, x1, y1] = turf.bbox(parcel);
-  const pad = 0.0012; // ~400 ft
+  const pad = 0.00075; // ~270 ft: corridors are at most 150 ft wide; rays stop at 250 ft
   const around = await soft('Neighbouring parcels', parcelsInBBox(county, [x0 - pad, y0 - pad, x1 + pad, y1 + pad], { maxFeatures: 3000 }));
   const neighbours = around?.features || [];
   const frontages = neighbours.length ? measureFrontages(parcel, neighbours) : [];
@@ -103,9 +103,10 @@ export async function ab2011ForParcel(data, ctx) {
   }));
 
   const interior = turf.pointOnFeature(parcel).geometry.coordinates;
-  const [ua, cityUa, nearFreeway] = await Promise.all([
-    soft('Census urban areas', urbanArea(sources, interior)),
-    city ? soft('Census urban areas', cityInUrbanArea(sources, city.name)) : null,
+  const ua = await soft('Census urban areas', urbanArea(sources, interior));
+  const [cityUa, nearFreeway] = await Promise.all([
+    // If the parcel itself is in an urban area, its city's boundaries necessarily include part of one.
+    city ? (ua ? Promise.resolve(ua) : soft('Census urban areas', cityInUrbanArea(sources, city.name))) : null,
     soft('Caltrans road class', (async () => {
       const rows = await queryIntersecting(sources.caltrans.functionalClass.url, toEsriGeometry(parcel.geometry), {
         where: 'F_System IN (1, 2)', outFields: ['RouteID', 'F_System'], distanceFeet: AB2011.freewayBufferFt,
@@ -127,7 +128,7 @@ export async function ab2011ForParcel(data, ctx) {
     (() => {
       if (city) {
         return cityUa
-          ? C('urbanized', '§ 65912.111(b)(1); § 65912.121(b)(1)', 'City boundaries include some portion of an urbanized area', 'meets', `${city.name} overlaps the ${cityUa} (U.S. Census Bureau 2020 Urban Areas). The statute says “urbanized area”; since 2020 the Census Bureau designates “Urban Areas”.`)
+          ? C('urbanized', '§ 65912.111(b)(1); § 65912.121(b)(1)', 'City boundaries include some portion of an urbanized area', 'meets', `${ua ? `The parcel is in the ${ua}, so ${city.name}'s boundaries include part of it` : `${city.name} overlaps the ${cityUa}`} (U.S. Census Bureau 2020 Urban Areas). The statute says “urbanized area”; since 2020 the Census Bureau designates “Urban Areas”.`)
           : C('urbanized', '§ 65912.111(b)(1); § 65912.121(b)(1)', 'City boundaries include some portion of an urbanized area', cityUa === false ? 'fails' : 'not-evaluated', cityUa === false ? `${city.name} does not overlap any 2020 Census Urban Area.` : 'Census urban-area check unavailable.');
       }
       return C('urbanized', '§ 65912.111(b)(2); § 65912.121(b)(2)', 'Unincorporated parcel wholly within an urbanized area', ua ? 'confirm' : 'fails',

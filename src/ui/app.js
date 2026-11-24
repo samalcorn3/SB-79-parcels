@@ -1,8 +1,8 @@
 // App wiring: map, search, click-to-lookup, live layers.
 /* global L */
-import { reportForAddress, reportForPoint, suggest } from '../lib/lookup.js';
+import { reportForAddress, reportForPoint, suggest, ab2011ForReport } from '../lib/lookup.js';
 import { instrumentInForce } from '../lib/policy.js';
-import { renderReport, renderLoading, renderError, renderNotOk } from './report.js';
+import { renderReport, renderLoading, renderError, renderNotOk, ab2011Card } from './report.js';
 import {
   ZoneStore, classifyParcels, zoneLayer, stopsLayer, parcelLayer,
   loadParcelsInView, loadExclusionsInView, parcelsToCSV,
@@ -248,13 +248,22 @@ async function run(promise, label) {
     }
     reportEl.innerHTML = renderReport(r, { standardsDoc: data.standards });
     showParcel(r.parcel.geometry);
-    showFrontages(r.ab2011?.frontages || []);
+    showFrontages([]);
+    // AB 2011 measures the street and checks Caltrans/Census; fill it in when ready.
+    const token = ++lookupToken;
+    ab2011ForReport(data, r).then((ab) => {
+      if (token !== lookupToken) return;
+      const slot = document.getElementById('ab2011-slot');
+      if (slot) slot.outerHTML = ab2011Card({ ab2011: ab });
+      showFrontages(ab?.frontages || []);
+    });
   } catch (e) {
     reportEl.innerHTML = renderError(`A live source did not respond: ${e.message}${e.url ? ` (${new URL(e.url).host})` : ''}. Try again in a moment.`);
   }
 }
 
 let frontageGroup = null;
+let lookupToken = 0;
 /** AB 2011: measured street frontages — green where the right-of-way is 70–150 ft. */
 function showFrontages(frontages) {
   if (frontageGroup) map.removeLayer(frontageGroup);

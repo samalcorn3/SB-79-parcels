@@ -54,8 +54,8 @@
   },
   "census": {
     "urbanAreas": {
-      "publisher": "U.S. Census Bureau — TIGERweb, 2020 Urban Areas (corrected)",
-      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/88",
+      "publisher": "U.S. Census Bureau — TIGERweb Urban service, 2020 Urban Areas (corrected)",
+      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Urban/MapServer/6",
       "fields": [
         "NAME",
         "GEOID"

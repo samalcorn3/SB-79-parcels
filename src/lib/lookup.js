@@ -258,8 +258,6 @@ export async function reportForPoint(data, [lon, lat], { geocoded } = {}) {
   const std = computeStandards(standards, zones);
   const lotSqFt = Math.round(turf.area(parcel) * SQFT_PER_SQM);
   const zoning = await localZoning(county.config, parcel, city?.name, interior);
-  const ab2011 = await ab2011ForParcel(data, { parcel, county: county.config, city, fire, zones, zoning, lotSqFt })
-    .catch((e) => ({ error: e.message }));
 
   return {
     ok: true,
@@ -286,7 +284,7 @@ export async function reportForPoint(data, [lon, lat], { geocoded } = {}) {
     instrumentSummary: summarizeInstruments(regime),
     standards: std && { ...std, lot: projectRequirements(standards, std, lotSqFt) },
     zoning,
-    ab2011,
+    ab2011Context: { parcel, countyId: county.config.id, city, fire, zones, zoning, lotSqFt },
     provisions: standards.provisions,
     registryReviewed: registry.lastReviewed,
     errors,
@@ -311,4 +309,12 @@ export async function reportForAddress(data, text, { magicKey, location } = {}) 
   }
   const report = await reportForPoint(data, [best.lon, best.lat], { geocoded: { ...best, query: text } });
   return { ...report, candidates };
+}
+
+/** AB 2011 for a finished report. Kept separate so the SB 79 report can render first. */
+export async function ab2011ForReport(data, report) {
+  const c = report.ab2011Context;
+  if (!c) return null;
+  const county = data.sources.counties.find((x) => x.id === c.countyId);
+  return ab2011ForParcel(data, { ...c, county }).catch((e) => ({ error: e.message }));
 }
