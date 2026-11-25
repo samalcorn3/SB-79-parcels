@@ -1,0 +1,59 @@
+{
+  "id": "fullerton",
+  "name": "City of Fullerton",
+  "jurisdictions": [
+    "Fullerton"
+  ],
+  "publisher": "City of Fullerton — Zoning (city GIS server)",
+  "url": "https://gis.cityoffullerton.com/arcgis/rest/services/CommDev2/MapServer/5",
+  "fields": {
+    "code": "ZONE_FULL",
+    "description": "ZONE_DSC"
+  },
+  "updatedField": "UPDATE_",
+  "codeName": "Fullerton Municipal Code, Title 15 (Zoning)",
+  "rules": [
+    {
+      "match": "SPD$",
+      "class": "planned",
+      "cite": "Fullerton specific plan districts"
+    },
+    {
+      "match": "^PR",
+      "class": "planned",
+      "cite": "Fullerton Municipal Code Title 15 (PRD planned residential development)"
+    },
+    {
+      "match": "^RD$",
+      "class": "transportation"
+    },
+    {
+      "match": "^CG",
+      "class": "unknown",
+      "why": "C-G commercial greenbelt: check whether retail or office uses are permitted by right."
+    },
+    {
+      "match": "^PL$",
+      "class": "public"
+    },
+    {
+      "match": "^OP",
+      "class": "office"
+    },
+    {
+      "match": "^MG",
+      "class": "industrial",
+      "cite": "Fullerton Municipal Code Title 15 (M-G manufacturing)"
+    },
+    {
+      "match": "^OG$",
+      "class": "industrial",
+      "cite": "Fullerton Municipal Code Title 15 (O-G oil and gas)"
+    },
+    {
+      "match": "^(OCFCD|ROAD)$",
+      "class": "transportation"
+    }
+  ],
+  "generic": true
+}

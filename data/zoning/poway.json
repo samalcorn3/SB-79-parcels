@@ -1,0 +1,28 @@
+{
+  "id": "poway",
+  "name": "City of Poway",
+  "jurisdictions": [
+    "Poway"
+  ],
+  "publisher": "City of Poway — Zoning",
+  "url": "https://powaygis.poway.org/powaygis/rest/services/Public/PowHUB_Planning_Survey_Street_Transportation_Layers/MapServer/4",
+  "fields": {
+    "code": "ZoningCode",
+    "description": "ZoningDescription"
+  },
+  "rules": [
+    {
+      "match": "^CB$",
+      "class": "commercial",
+      "cite": "Poway Municipal Code Title 17 (community business)"
+    },
+    {
+      "match": "^HC$",
+      "class": "public",
+      "cite": "Poway Municipal Code Title 17 (hospital campus)"
+    }
+  ],
+  "generic": true,
+  "updatedField": "last_edited_date",
+  "codeName": "Poway Municipal Code, Title 17"
+}

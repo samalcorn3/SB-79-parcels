@@ -1,0 +1,85 @@
+{
+  "id": "oceanside",
+  "name": "City of Oceanside",
+  "jurisdictions": [
+    "Oceanside"
+  ],
+  "publisher": "City of Oceanside Planning — Zoning (with the city's zone categories)",
+  "url": "https://gis.oceansideca.org/gis/rest/services/WebService/Planning_Hub/FeatureServer/11",
+  "fields": {
+    "code": "Zone_Code",
+    "category": "Category",
+    "description": "Zone_Descr"
+  },
+  "standards": [
+    {
+      "label": "Maximum height",
+      "field": "Height"
+    },
+    {
+      "label": "Minimum lot size",
+      "field": "Min_Lot_Si"
+    },
+    {
+      "label": "Density",
+      "field": "Density"
+    }
+  ],
+  "codeName": "Oceanside Zoning Ordinance",
+  "codeUrl": "https://library.municode.com/ca/oceanside/codes/zoning_ordinance",
+  "rules": [
+    {
+      "match": "^(PD|MP-|SP-|PBD|PRD)",
+      "class": "planned",
+      "cite": "Oceanside planned development, master plan, and specific plan districts"
+    },
+    {
+      "on": "category",
+      "match": "^Commercial$",
+      "class": "commercial",
+      "cite": "Oceanside Zoning Ordinance Art. 11 (commercial districts) and Downtown District"
+    },
+    {
+      "on": "category",
+      "match": "^Mixed Use$",
+      "class": "mixed-residential",
+      "cite": "Oceanside Downtown District mixed-use subdistricts"
+    },
+    {
+      "on": "category",
+      "match": "^Industrial$",
+      "class": "industrial",
+      "cite": "Oceanside Zoning Ordinance Art. 13 (industrial districts)"
+    },
+    {
+      "on": "category",
+      "match": "^Residential$",
+      "class": "residential",
+      "cite": "Oceanside Zoning Ordinance Art. 10 (residential districts)"
+    },
+    {
+      "on": "category",
+      "match": "^Civic$",
+      "class": "public",
+      "cite": "Oceanside Zoning Ordinance (public and semi-public)"
+    },
+    {
+      "on": "category",
+      "match": "^Open Space$",
+      "class": "open-space",
+      "cite": "Oceanside Zoning Ordinance (open space)"
+    },
+    {
+      "on": "category",
+      "match": "^Agriculture$",
+      "class": "agriculture",
+      "cite": "Oceanside Zoning Ordinance (agriculture)"
+    },
+    {
+      "on": "category",
+      "match": "^Harbor$",
+      "class": "planned",
+      "cite": "Oceanside Harbor district"
+    }
+  ]
+}

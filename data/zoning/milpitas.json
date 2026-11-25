@@ -1,0 +1,41 @@
+{
+  "id": "milpitas",
+  "name": "City of Milpitas",
+  "jurisdictions": [
+    "Milpitas"
+  ],
+  "publisher": "City of Milpitas GIS — Zoning by Parcel",
+  "url": "https://services8.arcgis.com/OPmRdssd8jj0bT5H/arcgis/rest/services/Zoning%20By%20Parcel/FeatureServer/0",
+  "fields": {
+    "code": "ZoningDescription",
+    "category": "ZONE_CODE1"
+  },
+  "codeName": "Milpitas Municipal Code, Title XI, Chapter 10 (Zoning)",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^POS$",
+      "class": "open-space"
+    },
+    {
+      "match": "^HS$",
+      "class": "commercial",
+      "cite": "Milpitas Zoning Code (HS highway services district)"
+    },
+    {
+      "match": "^CO$",
+      "class": "office",
+      "cite": "Milpitas Zoning Code (CO administrative and professional office district)"
+    },
+    {
+      "match": "^Outside City Limits$",
+      "class": "unknown",
+      "why": "The city's layer marks this area as outside Milpitas."
+    },
+    {
+      "on": "category",
+      "match": "^Transportaion|^Transportation",
+      "class": "transportation"
+    }
+  ]
+}

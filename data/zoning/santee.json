@@ -1,0 +1,30 @@
+{
+  "id": "santee",
+  "name": "City of Santee",
+  "jurisdictions": [
+    "Santee"
+  ],
+  "publisher": "City of Santee — Zoning",
+  "url": "https://services8.arcgis.com/J9lw6cHYdxcsRYgI/arcgis/rest/services/City_of_Santee_Zoning/FeatureServer/0",
+  "fields": {
+    "code": "txtvalue"
+  },
+  "codeName": "Santee Municipal Code, Title 13 (Zoning)",
+  "rules": [
+    {
+      "match": "^TC$",
+      "class": "planned",
+      "cite": "Santee Town Center Specific Plan"
+    },
+    {
+      "match": "^P/OS$",
+      "class": "open-space"
+    },
+    {
+      "match": "^(HL|R\\d+)$",
+      "class": "residential",
+      "cite": "Santee zoning (residential zones)"
+    }
+  ],
+  "generic": true
+}

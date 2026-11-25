@@ -1,0 +1,40 @@
+{
+  "id": "seal-beach",
+  "name": "City of Seal Beach",
+  "jurisdictions": [
+    "Seal Beach"
+  ],
+  "publisher": "City of Seal Beach — Zoning",
+  "url": "https://services5.arcgis.com/DgI3mEyvGBsZnibj/arcgis/rest/services/Zoning_Public/FeatureServer/0",
+  "fields": {
+    "code": "ZONING_08",
+    "description": "Description"
+  },
+  "codeName": "Seal Beach Municipal Code, Title 11 (Zoning)",
+  "rules": [
+    {
+      "match": "^(MSSP|SPR)",
+      "class": "planned",
+      "cite": "Seal Beach specific plans (Main Street, DWP, Hellman Ranch)"
+    },
+    {
+      "match": "^(LC|MC)/",
+      "class": "mixed-residential",
+      "cite": "Seal Beach zoning (commercial/residential mixed zones)"
+    },
+    {
+      "match": "^MIL$",
+      "class": "unknown",
+      "why": "Military land (Naval Weapons Station)."
+    },
+    {
+      "match": "^OE$",
+      "class": "industrial"
+    },
+    {
+      "match": "^BEA$",
+      "class": "open-space"
+    }
+  ],
+  "generic": true
+}

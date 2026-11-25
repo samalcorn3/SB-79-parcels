@@ -6,12 +6,16 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "test": "node scripts/check-syntax.mjs && node --test tests/*.test.mjs",
+    "test": "node scripts/check-syntax.mjs && node scripts/zoning-index.mjs --check && node --test tests/*.test.mjs",
     "check:sources": "node scripts/check-sources.mjs",
     "check:hcd": "node scripts/check-hcd.mjs",
     "check:statute": "python3 scripts/statute.py",
     "lookup": "node scripts/lookup.mjs",
-    "serve": "python3 -m http.server 8080"
+    "serve": "python3 -m http.server 8080",
+    "check:zoning": "node scripts/check-zoning.mjs",
+    "zoning:index": "node scripts/zoning-index.mjs",
+    "zoning:classify": "node scripts/zoning-classify.mjs",
+    "zoning:coverage": "node scripts/zoning-coverage.mjs docs/ZONING-COVERAGE.md"
   },
   "devDependencies": {
     "@turf/turf": "7.2.0",

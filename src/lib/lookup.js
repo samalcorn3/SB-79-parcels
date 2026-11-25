@@ -9,6 +9,9 @@ import { computeStandards, projectRequirements } from './standards.js';
 import { findJurisdiction, determineRegime, summarizeInstruments } from './policy.js';
 import { parcelsAtPoint } from './parcels.js';
 import { fireForParcel, fireCriterionStatus } from './fire.js';
+import { ab2011ForParcel } from './ab2011.js';
+import { zoningForParcel } from './zoning.js';
+import { siteExclusionsForParcel, exclusionsFor } from './exclusions.js';
 
 const SQFT_PER_SQM = 10.7639;
 const FEET_PER_MILE = 5280;
@@ -195,20 +198,14 @@ async function coverageFor(jurisdiction, interiorPoint, fire) {
   return out;
 }
 
-async function localZoning(county, parcel, cityName, interiorPoint) {
-  if (parcel.properties.zoning) {
-    return { code: parcel.properties.zoning, description: parcel.properties.zoningDescription, source: parcel.properties.publisher };
-  }
-  const z = county.zoning;
-  if (!z) return null;
-  const applies = z.appliesTo === 'unincorporated' ? !cityName : z.appliesTo?.toLowerCase() === cityName?.toLowerCase();
-  if (!applies) return null;
+/** Local zoning with its AB 2011 classification (src/lib/zoning.js); never throws. */
+async function localZoning(data, countyId, parcel, cityName) {
   try {
-    const rows = await queryIntersecting(z.url, toEsriGeometry(interiorPoint), { outFields: Object.values(z.fields) });
-    if (!rows[0]) return null;
-    return { code: getField(rows[0], z.fields.code), description: z.fields.description ? getField(rows[0], z.fields.description) : null, source: z.publisher };
-  } catch {
-    return null;
+    const z = await zoningForParcel(data, { countyId, cityName, parcel });
+    if (!z.zones?.length) return z.status === 'not-evaluated' ? { ...z, code: null } : z;
+    return { ...z, code: z.zones.map((x) => x.code).join(' / '), description: z.zones.length === 1 ? z.zones[0].description || z.zones[0].category || null : null };
+  } catch (e) {
+    return { status: 'not-evaluated', reason: `Zoning layer did not respond (${e.message}).`, code: null };
   }
 }
 
@@ -256,7 +253,7 @@ export async function reportForPoint(data, [lon, lat], { geocoded } = {}) {
     : determineRegime({ zones, county: county.config, jurisdiction, cityName: city?.name || null, coverage });
   const std = computeStandards(standards, zones);
   const lotSqFt = Math.round(turf.area(parcel) * SQFT_PER_SQM);
-  const zoning = await localZoning(county.config, parcel, city?.name, interior);
+  const zoning = await localZoning(data, county.config.id, parcel, city?.name);
 
   return {
     ok: true,
@@ -283,6 +280,7 @@ export async function reportForPoint(data, [lon, lat], { geocoded } = {}) {
     instrumentSummary: summarizeInstruments(regime),
     standards: std && { ...std, lot: projectRequirements(standards, std, lotSqFt) },
     zoning,
+    ab2011Context: { parcel, countyId: county.config.id, city, fire, zones, zoning, lotSqFt },
     provisions: standards.provisions,
     registryReviewed: registry.lastReviewed,
     errors,
@@ -307,4 +305,20 @@ export async function reportForAddress(data, text, { magicKey, location } = {}) 
   }
   const report = await reportForPoint(data, [best.lon, best.lat], { geocoded: { ...best, query: text } });
   return { ...report, candidates };
+}
+
+/** § 65913.4(a)(6) site exclusions for a finished report (shared by SB 79's streamlined path and AB 2011). */
+export async function exclusionsForReport(data, report) {
+  const c = report.ab2011Context;
+  if (!c) return null;
+  return siteExclusionsForParcel(data, { parcel: c.parcel, fire: c.fire }).catch((e) => ({ error: e.message }));
+}
+
+/** AB 2011 for a finished report. Kept separate so the SB 79 report can render first. */
+export async function ab2011ForReport(data, report, exclusions) {
+  const c = report.ab2011Context;
+  if (!c) return null;
+  const county = data.sources.counties.find((x) => x.id === c.countyId);
+  const ex = await (exclusions ?? exclusionsForReport(data, report));
+  return ab2011ForParcel(data, { ...c, county, exclusions: ex && !ex.error ? exclusionsFor('ab2011', ex) : null }).catch((e) => ({ error: e.message }));
 }

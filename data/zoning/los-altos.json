@@ -1,0 +1,54 @@
+{
+  "id": "los-altos",
+  "name": "City of Los Altos",
+  "jurisdictions": [
+    "Los Altos"
+  ],
+  "publisher": "City of Los Altos — Zoning Districts",
+  "url": "https://map.losaltosca.gov/arcgis/rest/services/Public/PublicGISLayers/MapServer/60",
+  "fields": {
+    "code": "ZONING",
+    "link": "Muni_Code_URL"
+  },
+  "codeName": "Los Altos Municipal Code, Title 14 (Zoning)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "\\n|/",
+      "class": "unknown",
+      "why": "The city's layer lists more than one district for this area; check the zoning map."
+    },
+    {
+      "match": "^OUT$",
+      "class": "unknown",
+      "why": "Outside the city in the city's layer."
+    },
+    {
+      "match": "^(CD|CN|CRS|CT)$",
+      "class": "commercial",
+      "cite": "Los Altos Municipal Code Title 14, Chs. 14.40–14.50 (commercial districts)"
+    },
+    {
+      "match": "^OA$",
+      "class": "office",
+      "cite": "Los Altos Municipal Code Title 14, Ch. 14.34 (OA office-administrative)"
+    },
+    {
+      "match": "^(PC|PUD)$",
+      "class": "planned"
+    },
+    {
+      "match": "^PCF$",
+      "class": "public"
+    },
+    {
+      "match": "^ROW$",
+      "class": "transportation"
+    },
+    {
+      "match": "^R",
+      "class": "residential",
+      "cite": "Los Altos Municipal Code Title 14 (residential districts)"
+    }
+  ]
+}

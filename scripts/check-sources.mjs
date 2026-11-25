@@ -4,8 +4,9 @@
 // returns rows. Prints a Markdown report (also written to $GITHUB_STEP_SUMMARY
 // when run in Actions). Exits 1 if any source is broken.
 import { appendFile, writeFile } from 'node:fs/promises';
-import { loadData } from './load-data.mjs';
+import { loadData, loadZoningSources } from './load-data.mjs';
 import { getJSON } from '../src/lib/arcgis.js';
+import { latestFarmlandLayer } from '../src/lib/exclusions.js';
 
 const { sources, registry } = await loadData();
 const rows = [];
@@ -56,7 +57,23 @@ async function checkSocrata(name, cfg, fields = []) {
 
 const tasks = [];
 for (const [k, b] of Object.entries(sources.boundaries)) tasks.push(checkArcgis(`CDT ${k}`, b.url, Object.values(b.fields)));
+tasks.push(checkArcgis('Caltrans functional class', sources.caltrans.functionalClass.url, sources.caltrans.functionalClass.fields));
+tasks.push(checkArcgis('Census 2020 urban areas', sources.census.urbanAreas.url, sources.census.urbanAreas.fields));
 for (const k of ['vhfhsz', 'sra']) tasks.push(checkArcgis(`State Fire Marshal ${k}`, sources.fireHazard[k].url, sources.fireHazard[k].fields, sources.fireHazard[k].where));
+{
+  // § 65913.4(a)(6) site exclusions
+  const x = sources.siteExclusions;
+  for (const [k, l] of Object.entries(x)) {
+    if (l?.url) tasks.push(checkArcgis(`Site exclusions: ${k}`, l.url, l.fields));
+  }
+  x.hazardous.layers.forEach((l) => tasks.push(checkArcgis(`Site exclusions: DTSC ${l.label}`, l.url, l.fields)));
+  tasks.push(latestFarmlandLayer(x.farmland)
+    .then((f) => checkArcgis(`Site exclusions: farmland (${f.year} survey)`, f.url, x.farmland.fields, x.farmland.where))
+    .catch((e) => rows.push({ name: 'Site exclusions: farmland', url: x.farmland.folder, ok: false, detail: e.message, edited: '—', ms: 0 })));
+}
+for (const z of await loadZoningSources()) {
+  if (z.url) tasks.push(checkArcgis(`Zoning: ${z.name}`, z.url, Object.values(z.fields)));
+}
 for (const m of sources.mpos) {
   m.zoneLayers.forEach((l, i) => tasks.push(checkArcgis(`${m.id} zones[${i}]`, l.url, [...(l.outFields || []), ...specFields(l.tier), ...specFields(l.band)])));
   tasks.push(checkArcgis(`${m.id} stops`, m.stops.url, [...specFields(m.stops.name), ...specFields(m.stops.tier)]));
@@ -68,7 +85,7 @@ for (const c of sources.counties) {
     const fields = Object.values(src.fields).flat();
     tasks.push(src.type === 'socrata' ? checkSocrata(`${c.id} ${label}`, src, fields) : checkArcgis(`${c.id} ${label}`, src.url, fields, src.where));
   }
-  if (c.zoning) tasks.push(checkArcgis(`${c.id} zoning`, c.zoning.url, Object.values(c.zoning.fields)));
+
 }
 for (const [name, j] of Object.entries(registry.jurisdictions)) {
   for (const inst of j.instruments) {

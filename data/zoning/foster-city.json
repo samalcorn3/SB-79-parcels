@@ -1,0 +1,55 @@
+{
+  "id": "foster-city",
+  "name": "City of Foster City",
+  "jurisdictions": [
+    "Foster City"
+  ],
+  "publisher": "City of Foster City — Zoning and land use (by parcel)",
+  "url": "https://utility.arcgis.com/usrsvcs/servers/75362edec4704d3884121c98db49e58f/rest/services/Hosted/Zoning_and_Land_Use/FeatureServer/0",
+  "fields": {
+    "code": "zoningclass",
+    "description": "zoningdescription",
+    "link": "zoning_link_1"
+  },
+  "codeName": "Foster City Municipal Code, Title 17 (Zoning)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^C-M/",
+      "class": "mixed-residential",
+      "cite": "Foster City Municipal Code Title 17 (C-M commercial mix)"
+    },
+    {
+      "match": "^(C-1|C-2|C-A)\\b",
+      "class": "commercial",
+      "cite": "Foster City Municipal Code Title 17 (commercial districts)"
+    },
+    {
+      "match": "^C-O$",
+      "class": "office"
+    },
+    {
+      "match": "^M-1",
+      "class": "industrial"
+    },
+    {
+      "match": "^OSC",
+      "class": "open-space"
+    },
+    {
+      "match": "^P-F",
+      "class": "public"
+    },
+    {
+      "match": "^R-",
+      "class": "residential",
+      "cite": "Foster City Municipal Code Title 17 (residential districts)"
+    }
+  ],
+  "flags": [
+    {
+      "match": "/PD",
+      "note": "Planned development combining district (/PD): a use permit and development plan set the uses (Foster City Municipal Code Title 17)."
+    }
+  ]
+}

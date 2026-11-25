@@ -1,0 +1,56 @@
+{
+  "id": "la-county",
+  "name": "Unincorporated Los Angeles County",
+  "unincorporatedOf": "los-angeles",
+  "publisher": "LA County Department of Regional Planning — zoning (unincorporated areas)",
+  "url": "https://arcgis.gis.lacounty.gov/arcgis/rest/services/DRP/ZNET_Public/MapServer/4",
+  "fields": {
+    "code": "ZONE",
+    "description": "Z_DESC"
+  },
+  "codeUrl": "https://library.municode.com/ca/los_angeles_county/codes/code_of_ordinances?nodeId=TIT22PLZO",
+  "codeName": "Los Angeles County Code, Title 22",
+  "rules": [
+    {
+      "match": "^(C-1|C-2|C-3|C-H|C-M|C-R|CPD|C-MJ)",
+      "class": "commercial",
+      "cite": "LACC Ch. 22.20, Table 22.20.030-B (commercial zones)"
+    },
+    {
+      "match": "^(MXD|MU)",
+      "class": "mixed-commercial",
+      "cite": "LACC Ch. 22.26 (mixed use zones)"
+    },
+    {
+      "match": "^(M-1|M-1.5|M-2|M-3|M-4|MPD)",
+      "class": "industrial",
+      "cite": "LACC Ch. 22.22 (industrial zones)"
+    },
+    {
+      "match": "^P-R",
+      "class": "parking",
+      "cite": "LACC Ch. 22.24 (P-R restricted parking zone)"
+    },
+    {
+      "match": "^(R-|RPD)",
+      "class": "residential",
+      "cite": "LACC Ch. 22.18 (residential zones)"
+    },
+    {
+      "match": "^(A-|R-R)",
+      "class": "agriculture",
+      "cite": "LACC Ch. 22.16 (agricultural zones)"
+    },
+    {
+      "match": "^(O-S|W)",
+      "class": "open-space",
+      "cite": "LACC Ch. 22.24 (open space and watershed zones)"
+    },
+    {
+      "match": "^SP",
+      "class": "planned",
+      "cite": "LACC Ch. 22.46 (specific plans)"
+    }
+  ],
+  "updatedField": "Date_Updated"
+}

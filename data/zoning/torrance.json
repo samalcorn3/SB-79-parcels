@@ -1,0 +1,102 @@
+{
+  "id": "torrance",
+  "name": "City of Torrance",
+  "jurisdictions": [
+    "Torrance"
+  ],
+  "publisher": "City of Torrance GIS — Zoning",
+  "url": "https://services1.arcgis.com/38fAqAZVRCrVtPUU/arcgis/rest/services/Zoning/FeatureServer/20",
+  "fields": {
+    "code": "ZONING"
+  },
+  "codeName": "Torrance Municipal Code, Division 9, Chapter 1",
+  "codeUrl": "https://www.codepublishing.com/CA/Torrance/html/Torrance09/Torrance0901.html",
+  "caveat": "Torrance’s layer has known gaps: it has no H-DA1 district and shows Del Amo Fashion Center as R3, where city filings place it in the Hawthorne Boulevard Corridor Specific Plan. Results here are therefore never decided outright; confirm the zoning with the city.",
+  "statusCap": "confirm",
+  "generic": false,
+  "rules": [
+    {
+      "match": "[/(,]",
+      "class": "unknown",
+      "why": "The city's layer lists more than one district for this area (for example R1(C5) or C2/R3); check the Official Land Use Plan map (§ 91.3.2) for the parcel's district."
+    },
+    {
+      "match": "^H-",
+      "class": "planned",
+      "cite": "Torrance Municipal Code § 91.3.2; Art. 45 (Hawthorne Boulevard Corridor Specific Plan Zone)"
+    },
+    {
+      "match": "^PD\\b",
+      "class": "planned",
+      "cite": "Torrance Municipal Code Art. 42 (P-D planned development district)"
+    },
+    {
+      "match": "^P-?1(-PP)?$",
+      "class": "parking",
+      "cite": "Torrance Municipal Code § 91.35.1 (P-1: off-street parking by conditional use permit)"
+    },
+    {
+      "match": "^C-?[1-4](-PP)?$",
+      "class": "commercial",
+      "cite": "Torrance Municipal Code Arts. 20–23 (C-1 retail, C-2 general, C-3 solely commercial, C-4 shopping center)"
+    },
+    {
+      "match": "^C-?5(-PP)?$",
+      "class": "commercial",
+      "cite": "Torrance Municipal Code § 91.24.1 (C-5 permits the uses of the C-2 zone)"
+    },
+    {
+      "match": "^CR(-PP)?$",
+      "class": "commercial",
+      "cite": "Torrance Municipal Code § 91.25.1 (C-R restricted commercial: retail goods, services and offices)"
+    },
+    {
+      "match": "^DT$",
+      "class": "commercial",
+      "cite": "Torrance Municipal Code § 91.40.020 (Downtown Torrance District: retail and professional offices permitted)"
+    },
+    {
+      "match": "^LP(-PP)?$",
+      "class": "office",
+      "cite": "Torrance Municipal Code § 91.12.2 (L-P limited professional office district)"
+    },
+    {
+      "match": "^RP(-PP)?$",
+      "class": "office",
+      "cite": "Torrance Municipal Code § 91.10.1 (R-P residential professional: professional offices permitted)"
+    },
+    {
+      "match": "^HMD$",
+      "class": "office",
+      "why": "Professional offices offering medical and dental services are a permitted use (§ 91.38.1(c)); confirm that the project's office or parking component fits the district.",
+      "status": "confirm",
+      "cite": "Torrance Municipal Code § 91.38.1 (H-M-D hospital-medical-dental district)"
+    },
+    {
+      "match": "^(M1|M2|ML)(-PP)?$",
+      "class": "industrial",
+      "cite": "Torrance Municipal Code Arts. 30–32 (M-1, M-2, M-L manufacturing districts)"
+    },
+    {
+      "match": "^PU$",
+      "class": "public",
+      "cite": "Torrance Municipal Code Art. 37 (P-U public use district)"
+    },
+    {
+      "match": "^A1$",
+      "class": "agriculture",
+      "cite": "Torrance Municipal Code Art. 15 (A-1 light agricultural district)"
+    },
+    {
+      "match": "^(R1|R2|R3|R4|R5|RR3|R33|RTH|R-MF|RD)(-PP)?$",
+      "class": "residential",
+      "cite": "Torrance Municipal Code Arts. 4–13, 39, 48 (residential districts)"
+    }
+  ],
+  "flags": [
+    {
+      "match": "-PP$",
+      "note": "-PP: a precise plan of development must be approved before building (Torrance Municipal Code, Division 9)."
+    }
+  ]
+}

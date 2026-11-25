@@ -1,0 +1,36 @@
+{
+  "id": "lake-forest",
+  "name": "City of Lake Forest",
+  "jurisdictions": [
+    "Lake Forest"
+  ],
+  "publisher": "City of Lake Forest — Zoning",
+  "url": "https://services.arcgis.com/ZNy8hnJqYHIKCiV1/arcgis/rest/services/Zoning2022/FeatureServer/0",
+  "fields": {
+    "code": "Zoning_ID",
+    "description": "Zoning"
+  },
+  "codeName": "Lake Forest zoning code",
+  "rules": [
+    {
+      "match": "^(CAN|CP|CH|EH/BT|GC|ESS|UA)$",
+      "class": "unknown",
+      "why": "Planned-community district: check the planned community text for permitted uses."
+    },
+    {
+      "match": "^(MUO|MU)",
+      "class": "mixed-residential"
+    },
+    {
+      "match": "^(HT|BP)$",
+      "class": "industrial"
+    }
+  ],
+  "flags": [
+    {
+      "match": ".",
+      "note": "Much of Lake Forest is zoned under planned community texts (Baker Ranch, Foothill Ranch, Portola Hills and others), which set the permitted uses."
+    }
+  ],
+  "generic": true
+}

@@ -1,0 +1,63 @@
+{
+  "id": "san-bruno",
+  "name": "City of San Bruno",
+  "jurisdictions": [
+    "San Bruno"
+  ],
+  "publisher": "City of San Bruno Planning — Zoning",
+  "url": "https://services2.arcgis.com/iLsFVn6d1pmqKEfA/arcgis/rest/services/Zoning/FeatureServer/1",
+  "fields": {
+    "code": "Zoning",
+    "link": "DocumentURL"
+  },
+  "updatedField": "RevDate",
+  "codeName": "San Bruno Municipal Code, Title 12 (Land Use and Development)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^P-D$",
+      "class": "planned"
+    },
+    {
+      "match": "^TOD",
+      "class": "mixed-residential",
+      "cite": "San Bruno Transit Corridors Plan districts"
+    },
+    {
+      "match": "^(BNC|C-N|C-B-D)$",
+      "class": "commercial",
+      "cite": "San Bruno zoning (commercial districts)"
+    },
+    {
+      "match": "^BRO$",
+      "class": "office",
+      "cite": "San Bruno zoning (BRO office)"
+    },
+    {
+      "match": "^MXR$",
+      "class": "mixed-residential"
+    },
+    {
+      "match": "^O$",
+      "class": "open-space"
+    },
+    {
+      "match": "^U$",
+      "class": "unknown",
+      "why": "Unclassified in the city's layer."
+    },
+    {
+      "match": "^A-R$",
+      "class": "residential"
+    },
+    {
+      "match": "^M-1$",
+      "class": "industrial"
+    },
+    {
+      "match": "^R-\\d$",
+      "class": "residential",
+      "cite": "San Bruno zoning (residential districts)"
+    }
+  ]
+}

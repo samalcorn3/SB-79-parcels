@@ -1,0 +1,28 @@
+{
+  "id": "el-cajon",
+  "name": "City of El Cajon",
+  "jurisdictions": [
+    "El Cajon"
+  ],
+  "publisher": "City of El Cajon Planning — Zoning",
+  "url": "https://services2.arcgis.com/sNwJsChyrhgtFVFc/arcgis/rest/services/TempPlanningMap/FeatureServer/12",
+  "fields": {
+    "code": "Zone",
+    "description": "Zone_Description",
+    "link": "URLMuniCode"
+  },
+  "codeName": "El Cajon Municipal Code, Title 17 (Zoning)",
+  "codeUrl": "https://ecode360.com/44375421",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^ST-HWY$",
+      "class": "transportation"
+    },
+    {
+      "match": "^PRD",
+      "class": "residential",
+      "cite": "El Cajon Municipal Code Title 17 (planned residential development zones)"
+    }
+  ]
+}

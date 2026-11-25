@@ -1,0 +1,28 @@
+{
+  "id": "san-leandro",
+  "name": "City of San Leandro",
+  "jurisdictions": [
+    "San Leandro"
+  ],
+  "publisher": "City of San Leandro — Zoning",
+  "url": "https://services.arcgis.com/nFaSPZoTjS78xXjw/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZONING",
+    "description": "ZONINGDESC",
+    "link": "ZONING_LINKS"
+  },
+  "codeName": "San Leandro Zoning Code",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^B-TOD$",
+      "class": "planned",
+      "cite": "Bay Fair TOD Specific Plan"
+    },
+    {
+      "match": "^(DA-|NA-)",
+      "class": "planned",
+      "cite": "Downtown and North Area districts"
+    }
+  ]
+}

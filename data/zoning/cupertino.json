@@ -1,0 +1,52 @@
+{
+  "id": "cupertino",
+  "name": "City of Cupertino",
+  "jurisdictions": [
+    "Cupertino"
+  ],
+  "publisher": "City of Cupertino GIS — Zoning",
+  "url": "https://gis.cupertino.org/cupgis/rest/services/Public/Zoning/MapServer/10",
+  "fields": {
+    "code": "LABEL",
+    "category": "TYPE",
+    "description": "ZoningDescription"
+  },
+  "standards": [
+    {
+      "label": "Front setback",
+      "field": "FrontSetback"
+    }
+  ],
+  "updatedField": "last_edited_date",
+  "codeName": "Cupertino Municipal Code, Title 19 (Zoning)",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^P\\b|^P\\(",
+      "class": "planned",
+      "cite": "Cupertino Municipal Code Title 19 (P planned development zones; uses listed in parentheses)"
+    },
+    {
+      "match": "^Pre",
+      "class": "unknown",
+      "why": "Prezoned unincorporated land: the zoning takes effect on annexation."
+    },
+    {
+      "match": "^PR$",
+      "class": "open-space",
+      "cite": "Cupertino Municipal Code Title 19 (PR park and recreation zone)"
+    },
+    {
+      "on": "category",
+      "match": "^OA$|^OP$",
+      "class": "office",
+      "cite": "Cupertino Municipal Code Title 19 (administrative and professional office zones)"
+    },
+    {
+      "on": "category",
+      "match": "^(BA|BQ)$",
+      "class": "public",
+      "cite": "Cupertino Municipal Code Title 19 (public and quasi-public building zones)"
+    }
+  ]
+}

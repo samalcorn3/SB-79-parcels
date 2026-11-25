@@ -1,0 +1,34 @@
+{
+  "id": "woodside",
+  "name": "Town of Woodside",
+  "jurisdictions": [
+    "Woodside"
+  ],
+  "publisher": "Town of Woodside — Zoning (by parcel)",
+  "url": "https://services6.arcgis.com/M1GG3LQ6319RZTDe/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZONING"
+  },
+  "codeName": "Woodside Municipal Code, Title 15 (Land Usage)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^CC$",
+      "class": "commercial",
+      "cite": "Woodside zoning (CC community commercial)"
+    },
+    {
+      "match": "^(MFOZ|MFRZ|Multi-Family)$",
+      "class": "residential"
+    },
+    {
+      "match": "^OS",
+      "class": "open-space"
+    },
+    {
+      "match": "^(R-1|RR|SCP|SR)",
+      "class": "residential",
+      "cite": "Woodside zoning (residential districts)"
+    }
+  ]
+}

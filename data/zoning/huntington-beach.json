@@ -1,0 +1,59 @@
+{
+  "id": "huntington-beach",
+  "name": "City of Huntington Beach",
+  "jurisdictions": [
+    "Huntington Beach"
+  ],
+  "publisher": "City of Huntington Beach GIS — Zoning",
+  "url": "https://services2.arcgis.com/KaS5yngHhCOBHXdC/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "Base",
+    "category": "ZoneType"
+  },
+  "codeName": "Huntington Beach Zoning and Subdivision Ordinance",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^\\(Q\\)",
+      "class": "unknown",
+      "why": "Qualified (Q) classification: conditions in the zoning ordinance can limit permitted uses."
+    },
+    {
+      "match": "^SP",
+      "class": "planned",
+      "cite": "Huntington Beach specific plans"
+    },
+    {
+      "match": "^(CC|CG|CV)\\b",
+      "class": "commercial",
+      "cite": "Huntington Beach Zoning and Subdivision Ordinance Ch. 211 (commercial districts)"
+    },
+    {
+      "match": "^CO\\b",
+      "class": "office",
+      "cite": "Huntington Beach Zoning and Subdivision Ordinance Ch. 211 (CO office commercial)"
+    },
+    {
+      "match": "^(IG|IL|\\d+-IL)",
+      "class": "industrial",
+      "cite": "Huntington Beach Zoning and Subdivision Ordinance Ch. 212 (industrial districts)"
+    },
+    {
+      "match": "^OS",
+      "class": "open-space"
+    },
+    {
+      "match": "^PS",
+      "class": "public"
+    },
+    {
+      "match": "^CHANNEL",
+      "class": "transportation"
+    },
+    {
+      "match": "^R",
+      "class": "residential",
+      "cite": "Huntington Beach Zoning and Subdivision Ordinance Ch. 210 (residential districts)"
+    }
+  ]
+}

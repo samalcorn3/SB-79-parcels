@@ -1,0 +1,57 @@
+{
+  "id": "east-palo-alto",
+  "name": "City of East Palo Alto",
+  "jurisdictions": [
+    "East Palo Alto"
+  ],
+  "publisher": "City of East Palo Alto — Zoning (by parcel)",
+  "url": "https://services8.arcgis.com/Qac9ExiTge3RH5x7/arcgis/rest/services/Final_Zoning/FeatureServer/0",
+  "fields": {
+    "code": "New_Zone"
+  },
+  "codeName": "East Palo Alto Development Code",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^(4 Corners|Bay Road Central|Urban Residential|Waterfront Office|Industrial Transition)$",
+      "class": "planned",
+      "cite": "East Palo Alto Ravenswood/Four Corners Specific Plan districts"
+    },
+    {
+      "match": "^Industrial Flex Overlay$",
+      "class": "unknown",
+      "why": "Overlay without a base zone in the city's layer."
+    },
+    {
+      "match": "^MU",
+      "class": "mixed-residential",
+      "cite": "East Palo Alto Development Code (mixed-use zones)"
+    },
+    {
+      "match": "^C-O$",
+      "class": "office"
+    },
+    {
+      "match": "^(C-G|C-N)$",
+      "class": "commercial",
+      "cite": "East Palo Alto Development Code (commercial zones)"
+    },
+    {
+      "match": "^PUD$",
+      "class": "planned"
+    },
+    {
+      "match": "^(PR|REC)$",
+      "class": "open-space"
+    },
+    {
+      "match": "^PI$",
+      "class": "public"
+    },
+    {
+      "match": "^R",
+      "class": "residential",
+      "cite": "East Palo Alto Development Code (residential zones)"
+    }
+  ]
+}

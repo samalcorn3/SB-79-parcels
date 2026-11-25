@@ -1,0 +1,50 @@
+{
+  "id": "solana-beach",
+  "name": "City of Solana Beach",
+  "jurisdictions": [
+    "Solana Beach"
+  ],
+  "publisher": "City of Solana Beach — Zoning",
+  "url": "https://services1.arcgis.com/66rlqhJHNZTkrmk1/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZONING"
+  },
+  "codeName": "Solana Beach Municipal Code, Title 17 (Zoning)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "/SP$",
+      "class": "planned"
+    },
+    {
+      "match": "^(C|LC|SC)$",
+      "class": "commercial",
+      "cite": "Solana Beach zoning (general, limited and special commercial)"
+    },
+    {
+      "match": "^OP$",
+      "class": "office"
+    },
+    {
+      "match": "^LI$",
+      "class": "industrial"
+    },
+    {
+      "match": "^PI$",
+      "class": "public"
+    },
+    {
+      "match": "^OSR",
+      "class": "open-space"
+    },
+    {
+      "match": "^ROW$",
+      "class": "transportation"
+    },
+    {
+      "match": "^(ER|HR|LMR|LR|MHR|MR)",
+      "class": "residential",
+      "cite": "Solana Beach zoning (residential zones)"
+    }
+  ]
+}

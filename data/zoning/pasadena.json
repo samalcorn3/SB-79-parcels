@@ -1,0 +1,55 @@
+{
+  "id": "pasadena",
+  "name": "City of Pasadena",
+  "publisher": "City of Pasadena Planning — Zoning",
+  "url": "https://services2.arcgis.com/zNjnZafDYCAJAbN0/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZONE_CODE"
+  },
+  "rules": [
+    {
+      "match": "^(CD|EC|ECSP|EPSP|FGSP|LA|LP|SFO|WGSP)-",
+      "class": "planned",
+      "cite": "Pasadena specific plans (Central District, East Colorado, East Pasadena, Fair Oaks/Orange Grove, Lincoln Avenue, Lamanda Park, South Fair Oaks, West Gateway)"
+    },
+    {
+      "match": "^CO$",
+      "class": "office",
+      "cite": "Pasadena Zoning Code § 17.24.030, Table 2-5 (CO office commercial)"
+    },
+    {
+      "match": "^(CG|CL|CL-2)$",
+      "class": "commercial",
+      "cite": "Pasadena Zoning Code § 17.24.030, Table 2-5 (commercial districts)"
+    },
+    {
+      "match": "^IG$",
+      "class": "industrial",
+      "cite": "Pasadena Zoning Code Ch. 17.26 (industrial district)"
+    },
+    {
+      "match": "^(RM|RS)-",
+      "class": "residential",
+      "cite": "Pasadena Zoning Code Ch. 17.22 (residential districts)"
+    },
+    {
+      "match": "^PD",
+      "class": "planned",
+      "cite": "Pasadena Zoning Code Ch. 17.26 (planned development)"
+    },
+    {
+      "match": "^PS",
+      "class": "public",
+      "cite": "Pasadena Zoning Code Ch. 17.26 (public and semi-public)"
+    },
+    {
+      "match": "^OS$",
+      "class": "open-space"
+    }
+  ],
+  "generic": false,
+  "jurisdictions": [
+    "Pasadena"
+  ],
+  "codeName": "Pasadena Municipal Code, Title 17"
+}

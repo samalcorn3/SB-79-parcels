@@ -1,0 +1,67 @@
+{
+  "id": "sd-county",
+  "name": "Unincorporated San Diego County",
+  "unincorporatedOf": "san-diego",
+  "publisher": "County of San Diego Planning & Development Services — Current Zoning",
+  "url": "https://gis-public.sandiegocounty.gov/arcgis/rest/services/PDS/PDS_Layers/MapServer/3",
+  "fields": {
+    "code": "USEREG"
+  },
+  "standards": [
+    {
+      "label": "Density designator",
+      "field": "DENSITY"
+    },
+    {
+      "label": "Maximum floor area designator",
+      "field": "MAXFLR"
+    },
+    {
+      "label": "Height designator",
+      "field": "HEIGHT"
+    },
+    {
+      "label": "Lot coverage designator",
+      "field": "COVERAGE"
+    },
+    {
+      "label": "Setback designator",
+      "field": "SETBACK"
+    }
+  ],
+  "codeName": "San Diego County Zoning Ordinance",
+  "codeUrl": "https://www.sandiegocounty.gov/content/sdc/pds/zoning/ordinance.html",
+  "note": "San Diego County lists development limits as letter designators (density, floor area, height, coverage, setback) defined in the Zoning Ordinance, Part Four (§§ 4000–4900).",
+  "rules": [
+    {
+      "match": "^C3[0-8]$|^C4[0-6]$|^CL-",
+      "class": "commercial",
+      "cite": "County Zoning Ordinance §§ 2300–2468 (C30–C46 commercial use regulations)"
+    },
+    {
+      "match": "^M5",
+      "class": "industrial",
+      "cite": "County Zoning Ordinance §§ 2500–2588 (M50–M58 industrial use regulations)"
+    },
+    {
+      "match": "^(RS|RU|RV|RM|RR|RC|RMH|RMV|RRO|RRx|RMCD)",
+      "class": "residential",
+      "cite": "County Zoning Ordinance §§ 2100–2188 (residential use regulations)"
+    },
+    {
+      "match": "^A7",
+      "class": "agriculture",
+      "cite": "County Zoning Ordinance §§ 2700–2728 (A70, A72)"
+    },
+    {
+      "match": "^S8[0-8]$|^S9",
+      "class": "open-space",
+      "cite": "County Zoning Ordinance §§ 2800–2948 (special purpose use regulations)"
+    },
+    {
+      "match": "^(FBV|ALV|ALCD)",
+      "class": "planned",
+      "cite": "Form-based village and community plan districts"
+    }
+  ]
+}

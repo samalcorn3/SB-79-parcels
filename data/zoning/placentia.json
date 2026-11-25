@@ -1,0 +1,43 @@
+{
+  "id": "placentia",
+  "name": "City of Placentia",
+  "jurisdictions": [
+    "Placentia"
+  ],
+  "publisher": "City of Placentia — Zoning",
+  "url": "https://services1.arcgis.com/3CyDafKD7aN8Dr8M/arcgis/rest/services/Zoning/FeatureServer/1",
+  "fields": {
+    "code": "ZoningCode",
+    "description": "Zoning_Description",
+    "link": "ZoningInfo"
+  },
+  "codeName": "Placentia Municipal Code, Title 23 (Zoning)",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^(SP-|PUD|RPC|CCSP|TOD)",
+      "class": "planned",
+      "cite": "Placentia specific plans, planned unit developments and the TOD district"
+    },
+    {
+      "match": "^Old Town$",
+      "class": "mixed-residential",
+      "cite": "Placentia Old Town district"
+    },
+    {
+      "match": "&",
+      "class": "unknown",
+      "why": "The city's layer lists two districts for this parcel; check the zoning map."
+    },
+    {
+      "match": "^C-O$",
+      "class": "office",
+      "cite": "Placentia Municipal Code Ch. 23 (C-O commercial office)"
+    },
+    {
+      "match": "^T-C$",
+      "class": "unknown",
+      "why": "Check the zoning code for this district."
+    }
+  ]
+}

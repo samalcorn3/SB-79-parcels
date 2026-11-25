@@ -1,0 +1,34 @@
+{
+  "id": "santa-fe-springs",
+  "name": "City of Santa Fe Springs",
+  "jurisdictions": [
+    "Santa Fe Springs"
+  ],
+  "publisher": "City of Santa Fe Springs — Zoning 2025 (by parcel)",
+  "url": "https://services9.arcgis.com/7tuZpAe6m7XMEXtx/arcgis/rest/services/Zoning_Map/FeatureServer/0",
+  "fields": {
+    "code": "Zone22"
+  },
+  "codeName": "Santa Fe Springs Municipal Code, Chapter 155 (Zoning)",
+  "rules": [
+    {
+      "match": "/",
+      "class": "unknown",
+      "why": "The city's layer lists two districts for this parcel; check the zoning map."
+    },
+    {
+      "match": "^MU",
+      "class": "mixed-residential",
+      "cite": "Santa Fe Springs zoning code (mixed-use, downtown and TOD zones)"
+    },
+    {
+      "match": "^Creek$",
+      "class": "open-space"
+    },
+    {
+      "match": "^ML$",
+      "class": "industrial"
+    }
+  ],
+  "generic": true
+}

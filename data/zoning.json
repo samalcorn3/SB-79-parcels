@@ -1,0 +1,1029 @@
+{
+  "schemaVersion": 2,
+  "notes": [
+    "Zoning layers, queried live, and how each jurisdiction's zones answer AB 2011's first site test: is the site 'in a zone where office, retail, or parking are a principally permitted use' (Gov. Code §§ 65912.111(a), 65912.121(a))?",
+    "'Principally permitted use' = a use that may occupy more than one-third of the square footage on the site without a conditional use permit; parking uses count whether or not they need a CUP (§ 65912.101(u)).",
+    "Each source lists rules, tried in order: a regular expression on the zone code (or on the city's own zone category) and the class of zone it denotes. Classes carry the status; a rule may override it. Only a jurisdiction's own current zoning layer is used; where none is configured the test is reported as not evaluated.",
+    "Each jurisdiction's layer and rules live in data/zoning/<id>.json, loaded only when a parcel there is looked up. The index below says which file serves which city or unincorporated county; regenerate it with `npm run zoning:index` after adding or renaming a file."
+  ],
+  "classes": {
+    "commercial": {
+      "status": "meets",
+      "label": "Commercial zone",
+      "why": "Retail and office uses are permitted by right in this jurisdiction's commercial zones."
+    },
+    "office": {
+      "status": "meets",
+      "label": "Office zone",
+      "why": "Office uses are permitted by right in this zone."
+    },
+    "parking": {
+      "status": "meets",
+      "label": "Parking zone",
+      "why": "Parking is the zone's purpose, and parking uses are principally permitted even where a conditional use permit is required (§ 65912.101(u))."
+    },
+    "mixed-commercial": {
+      "status": "meets",
+      "label": "Commercial or employment mixed-use zone",
+      "why": "Retail and office uses are permitted by right without a floor-area cap."
+    },
+    "mixed-residential": {
+      "status": "confirm",
+      "label": "Residential-led mixed-use zone",
+      "why": "Commercial uses are permitted, but often only on the ground floor or as a share of floor area; whether office or retail may exceed one-third of the square footage depends on the zone's standards."
+    },
+    "industrial": {
+      "status": "confirm",
+      "label": "Industrial zone",
+      "why": "Industrial zones often permit office or parking uses (parking counts even with a conditional use permit); check the zone's use table. Note AB 2011's separate industrial-use tests (§§ 65912.111(d), 65912.121(f))."
+    },
+    "residential": {
+      "status": "fails",
+      "label": "Residential zone",
+      "why": "Residential zones do not permit office or retail uses, and parking is allowed only as accessory to the homes. If this jurisdiction's code permits a parking use in this zone, even with a conditional use permit, the site would qualify (§ 65912.101(u))."
+    },
+    "public": {
+      "status": "confirm",
+      "label": "Public or institutional zone",
+      "why": "Public facility zones sometimes permit public parking or offices; check the zone's use table."
+    },
+    "planned": {
+      "status": "confirm",
+      "label": "Planned development or specific plan district",
+      "why": "Permitted uses are set by the district's own ordinance or plan, not the base zoning code."
+    },
+    "open-space": {
+      "status": "fails",
+      "label": "Open space or park zone",
+      "why": "Open space zones do not permit office, retail, or parking uses."
+    },
+    "agriculture": {
+      "status": "fails",
+      "label": "Agricultural zone",
+      "why": "Agricultural zones do not permit office or retail uses."
+    },
+    "transportation": {
+      "status": "fails",
+      "label": "Transportation or right-of-way zone",
+      "why": "Freeway, railroad, and right-of-way zones are not development sites."
+    },
+    "unknown": {
+      "status": "confirm",
+      "label": "Zone not classified",
+      "why": "This zone code is not in the site's rule table; check the jurisdiction's zoning code."
+    }
+  },
+  "genericRules": {
+    "note": "Used after a source's own rules when it sets \"generic\": true. They read the jurisdiction's own description of the zone (or, failing that, widely shared California zone-code prefixes) and cite it.",
+    "description": [
+      {
+        "match": "parking",
+        "class": "parking"
+      },
+      {
+        "match": "specific plan|planned (unit |community )?development|master plan|precise plan|planned community|form[- ]based",
+        "class": "planned"
+      },
+      {
+        "match": "(commercial|office)[- /]+residential|residential[- /]+(commercial|office)|mixed[- ]?use|multi[- ]use|mixed density",
+        "class": "mixed-residential"
+      },
+      {
+        "match": "office|professional",
+        "class": "office"
+      },
+      {
+        "match": "industr|manufactur|business park|technology park|research|warehous|light industrial",
+        "class": "industrial"
+      },
+      {
+        "match": "residential|single[- ]family|single[- ]unit|multiple[- ]family|multi[- ]family|duplex|townhouse|estate|mobile ?home|dwelling",
+        "class": "residential"
+      },
+      {
+        "match": "commercial|retail|shopping|neighborhood business|general business|downtown|town center|village center|business district",
+        "class": "commercial"
+      },
+      {
+        "match": "open space|park|recreation|conservation|preserve|golf|cemetery|resource",
+        "class": "open-space"
+      },
+      {
+        "match": "agricultur|farm|ranch",
+        "class": "agriculture"
+      },
+      {
+        "match": "public|institution|civic|school|government|quasi|community facilit",
+        "class": "public"
+      },
+      {
+        "match": "utilit|transportation|right[- ]of[- ]way|freeway|railroad",
+        "class": "transportation"
+      }
+    ],
+    "code": [
+      {
+        "match": "^(PD|PUD|SP|SPA)\\b",
+        "class": "planned"
+      },
+      {
+        "match": "^(MU|MX|M-X|CMU|RMU)\\b",
+        "class": "mixed-residential"
+      },
+      {
+        "match": "^(C|CC|CG|CN|CR|CS|C-\\d|C\\d|GC|NC|LC|CBD)\\b",
+        "class": "commercial"
+      },
+      {
+        "match": "^(CO|C-O|OP|BP|O-P|PO|BPO)\\b",
+        "class": "office"
+      },
+      {
+        "match": "^(M|M-\\d|M\\d|I|I-\\d|IL|IG|IP|LI|HI|ML)\\b",
+        "class": "industrial"
+      },
+      {
+        "match": "^(R|R-?\\d|RS|RM|RH|RD|RE|RR|RL|SF|MF|RMH|MHP)\\b",
+        "class": "residential"
+      },
+      {
+        "match": "^(OS|O-S|POS)\\b",
+        "class": "open-space"
+      },
+      {
+        "match": "^(A|AG|A-\\d|A\\d)\\b",
+        "class": "agriculture"
+      },
+      {
+        "match": "^(PF|P-F|PQP|PS|P/QP|PL|P/SP)\\b",
+        "class": "public"
+      }
+    ]
+  },
+  "index": [
+    {
+      "id": "agoura-hills",
+      "name": "City of Agoura Hills",
+      "jurisdictions": [
+        "Agoura Hills"
+      ]
+    },
+    {
+      "id": "alameda-city",
+      "name": "City of Alameda",
+      "jurisdictions": [
+        "Alameda"
+      ]
+    },
+    {
+      "id": "aliso-viejo",
+      "name": "City of Aliso Viejo",
+      "jurisdictions": [
+        "Aliso Viejo"
+      ]
+    },
+    {
+      "id": "anaheim",
+      "name": "City of Anaheim",
+      "jurisdictions": [
+        "Anaheim"
+      ]
+    },
+    {
+      "id": "arcadia",
+      "name": "City of Arcadia",
+      "jurisdictions": [
+        "Arcadia"
+      ]
+    },
+    {
+      "id": "artesia",
+      "name": "City of Artesia",
+      "jurisdictions": [
+        "Artesia"
+      ]
+    },
+    {
+      "id": "atherton",
+      "name": "Town of Atherton",
+      "jurisdictions": [
+        "Atherton"
+      ]
+    },
+    {
+      "id": "avalon",
+      "name": "City of Avalon",
+      "jurisdictions": [
+        "Avalon"
+      ]
+    },
+    {
+      "id": "azusa",
+      "name": "City of Azusa",
+      "jurisdictions": [
+        "Azusa"
+      ]
+    },
+    {
+      "id": "bell",
+      "name": "City of Bell",
+      "jurisdictions": [
+        "Bell"
+      ]
+    },
+    {
+      "id": "belmont",
+      "name": "City of Belmont",
+      "jurisdictions": [
+        "Belmont"
+      ]
+    },
+    {
+      "id": "berkeley",
+      "name": "City of Berkeley",
+      "jurisdictions": [
+        "Berkeley"
+      ]
+    },
+    {
+      "id": "beverly-hills",
+      "name": "City of Beverly Hills",
+      "jurisdictions": [
+        "Beverly Hills"
+      ]
+    },
+    {
+      "id": "brisbane",
+      "name": "City of Brisbane",
+      "jurisdictions": [
+        "Brisbane"
+      ]
+    },
+    {
+      "id": "buena-park",
+      "name": "City of Buena Park",
+      "jurisdictions": [
+        "Buena Park"
+      ]
+    },
+    {
+      "id": "burbank",
+      "name": "City of Burbank",
+      "jurisdictions": [
+        "Burbank"
+      ]
+    },
+    {
+      "id": "campbell",
+      "name": "City of Campbell",
+      "jurisdictions": [
+        "Campbell"
+      ]
+    },
+    {
+      "id": "carlsbad",
+      "name": "City of Carlsbad",
+      "jurisdictions": [
+        "Carlsbad"
+      ]
+    },
+    {
+      "id": "chula-vista",
+      "name": "City of Chula Vista",
+      "jurisdictions": [
+        "Chula Vista"
+      ]
+    },
+    {
+      "id": "citrus-heights",
+      "name": "City of Citrus Heights",
+      "jurisdictions": [
+        "Citrus Heights"
+      ]
+    },
+    {
+      "id": "coronado",
+      "name": "City of Coronado",
+      "jurisdictions": [
+        "Coronado"
+      ]
+    },
+    {
+      "id": "covina",
+      "name": "City of Covina",
+      "jurisdictions": [
+        "Covina"
+      ]
+    },
+    {
+      "id": "culver-city",
+      "name": "City of Culver City",
+      "jurisdictions": [
+        "Culver City"
+      ]
+    },
+    {
+      "id": "cupertino",
+      "name": "City of Cupertino",
+      "jurisdictions": [
+        "Cupertino"
+      ]
+    },
+    {
+      "id": "daly-city",
+      "name": "City of Daly City",
+      "jurisdictions": [
+        "Daly City"
+      ]
+    },
+    {
+      "id": "dana-point",
+      "name": "City of Dana Point",
+      "jurisdictions": [
+        "Dana Point"
+      ]
+    },
+    {
+      "id": "diamond-bar",
+      "name": "City of Diamond Bar",
+      "jurisdictions": [
+        "Diamond Bar"
+      ]
+    },
+    {
+      "id": "downey",
+      "name": "City of Downey",
+      "jurisdictions": [
+        "Downey"
+      ]
+    },
+    {
+      "id": "dublin",
+      "name": "City of Dublin",
+      "jurisdictions": [
+        "Dublin"
+      ]
+    },
+    {
+      "id": "east-palo-alto",
+      "name": "City of East Palo Alto",
+      "jurisdictions": [
+        "East Palo Alto"
+      ]
+    },
+    {
+      "id": "el-cajon",
+      "name": "City of El Cajon",
+      "jurisdictions": [
+        "El Cajon"
+      ]
+    },
+    {
+      "id": "el-segundo",
+      "name": "City of El Segundo",
+      "jurisdictions": [
+        "El Segundo"
+      ]
+    },
+    {
+      "id": "elk-grove",
+      "name": "City of Elk Grove",
+      "jurisdictions": [
+        "Elk Grove"
+      ]
+    },
+    {
+      "id": "emeryville",
+      "name": "City of Emeryville",
+      "jurisdictions": [
+        "Emeryville"
+      ]
+    },
+    {
+      "id": "encinitas",
+      "name": "City of Encinitas",
+      "jurisdictions": [
+        "Encinitas"
+      ]
+    },
+    {
+      "id": "escondido",
+      "name": "City of Escondido",
+      "jurisdictions": [
+        "Escondido"
+      ]
+    },
+    {
+      "id": "foster-city",
+      "name": "City of Foster City",
+      "jurisdictions": [
+        "Foster City"
+      ]
+    },
+    {
+      "id": "fremont",
+      "name": "City of Fremont",
+      "jurisdictions": [
+        "Fremont"
+      ]
+    },
+    {
+      "id": "fullerton",
+      "name": "City of Fullerton",
+      "jurisdictions": [
+        "Fullerton"
+      ]
+    },
+    {
+      "id": "gardena",
+      "name": "City of Gardena",
+      "jurisdictions": [
+        "Gardena"
+      ]
+    },
+    {
+      "id": "gilroy",
+      "name": "City of Gilroy",
+      "jurisdictions": [
+        "Gilroy"
+      ]
+    },
+    {
+      "id": "glendale",
+      "name": "City of Glendale",
+      "jurisdictions": [
+        "Glendale"
+      ]
+    },
+    {
+      "id": "glendora",
+      "name": "City of Glendora",
+      "jurisdictions": [
+        "Glendora"
+      ]
+    },
+    {
+      "id": "half-moon-bay",
+      "name": "City of Half Moon Bay",
+      "jurisdictions": [
+        "Half Moon Bay"
+      ]
+    },
+    {
+      "id": "hayward",
+      "name": "City of Hayward",
+      "jurisdictions": [
+        "Hayward"
+      ]
+    },
+    {
+      "id": "hermosa-beach",
+      "name": "City of Hermosa Beach",
+      "jurisdictions": [
+        "Hermosa Beach"
+      ]
+    },
+    {
+      "id": "huntington-beach",
+      "name": "City of Huntington Beach",
+      "jurisdictions": [
+        "Huntington Beach"
+      ]
+    },
+    {
+      "id": "industry",
+      "name": "City of Industry",
+      "jurisdictions": [
+        "Industry"
+      ]
+    },
+    {
+      "id": "inglewood",
+      "name": "City of Inglewood",
+      "jurisdictions": [
+        "Inglewood"
+      ]
+    },
+    {
+      "id": "irvine",
+      "name": "City of Irvine",
+      "jurisdictions": [
+        "Irvine"
+      ]
+    },
+    {
+      "id": "irwindale",
+      "name": "City of Irwindale",
+      "jurisdictions": [
+        "Irwindale"
+      ]
+    },
+    {
+      "id": "la-city",
+      "name": "City of Los Angeles",
+      "jurisdictions": [
+        "Los Angeles"
+      ]
+    },
+    {
+      "id": "la-county",
+      "name": "Unincorporated Los Angeles County",
+      "unincorporatedOf": "los-angeles"
+    },
+    {
+      "id": "la-mesa",
+      "name": "City of La Mesa",
+      "jurisdictions": [
+        "La Mesa"
+      ]
+    },
+    {
+      "id": "laguna-beach",
+      "name": "City of Laguna Beach",
+      "jurisdictions": [
+        "Laguna Beach"
+      ]
+    },
+    {
+      "id": "laguna-niguel",
+      "name": "City of Laguna Niguel",
+      "jurisdictions": [
+        "Laguna Niguel"
+      ]
+    },
+    {
+      "id": "lake-forest",
+      "name": "City of Lake Forest",
+      "jurisdictions": [
+        "Lake Forest"
+      ]
+    },
+    {
+      "id": "lakewood",
+      "name": "City of Lakewood",
+      "jurisdictions": [
+        "Lakewood"
+      ]
+    },
+    {
+      "id": "lancaster",
+      "name": "City of Lancaster",
+      "jurisdictions": [
+        "Lancaster"
+      ]
+    },
+    {
+      "id": "lb-city",
+      "name": "City of Long Beach",
+      "jurisdictions": [
+        "Long Beach"
+      ]
+    },
+    {
+      "id": "lemon-grove",
+      "name": "City of Lemon Grove",
+      "jurisdictions": [
+        "Lemon Grove"
+      ]
+    },
+    {
+      "id": "livermore",
+      "name": "City of Livermore",
+      "jurisdictions": [
+        "Livermore"
+      ]
+    },
+    {
+      "id": "los-altos",
+      "name": "City of Los Altos",
+      "jurisdictions": [
+        "Los Altos"
+      ]
+    },
+    {
+      "id": "los-gatos",
+      "name": "Town of Los Gatos",
+      "jurisdictions": [
+        "Los Gatos"
+      ]
+    },
+    {
+      "id": "lynwood",
+      "name": "City of Lynwood",
+      "jurisdictions": [
+        "Lynwood"
+      ]
+    },
+    {
+      "id": "malibu",
+      "name": "City of Malibu",
+      "jurisdictions": [
+        "Malibu"
+      ]
+    },
+    {
+      "id": "manhattan-beach",
+      "name": "City of Manhattan Beach",
+      "jurisdictions": [
+        "Manhattan Beach"
+      ]
+    },
+    {
+      "id": "menlo-park",
+      "name": "City of Menlo Park",
+      "jurisdictions": [
+        "Menlo Park"
+      ]
+    },
+    {
+      "id": "milpitas",
+      "name": "City of Milpitas",
+      "jurisdictions": [
+        "Milpitas"
+      ]
+    },
+    {
+      "id": "monrovia",
+      "name": "City of Monrovia",
+      "jurisdictions": [
+        "Monrovia"
+      ]
+    },
+    {
+      "id": "monterey-park",
+      "name": "City of Monterey Park",
+      "jurisdictions": [
+        "Monterey Park"
+      ]
+    },
+    {
+      "id": "mountain-view",
+      "name": "City of Mountain View",
+      "jurisdictions": [
+        "Mountain View"
+      ]
+    },
+    {
+      "id": "national-city",
+      "name": "City of National City",
+      "jurisdictions": [
+        "National City"
+      ]
+    },
+    {
+      "id": "newport-beach",
+      "name": "City of Newport Beach",
+      "jurisdictions": [
+        "Newport Beach"
+      ]
+    },
+    {
+      "id": "oak-city",
+      "name": "City of Oakland",
+      "jurisdictions": [
+        "Oakland"
+      ]
+    },
+    {
+      "id": "oceanside",
+      "name": "City of Oceanside",
+      "jurisdictions": [
+        "Oceanside"
+      ]
+    },
+    {
+      "id": "orange-county",
+      "name": "Unincorporated Orange County",
+      "unincorporatedOf": "orange"
+    },
+    {
+      "id": "orange",
+      "name": "City of Orange",
+      "jurisdictions": [
+        "Orange"
+      ]
+    },
+    {
+      "id": "palmdale",
+      "name": "City of Palmdale",
+      "jurisdictions": [
+        "Palmdale"
+      ]
+    },
+    {
+      "id": "palo-alto",
+      "name": "City of Palo Alto",
+      "jurisdictions": [
+        "Palo Alto"
+      ]
+    },
+    {
+      "id": "pasadena",
+      "name": "City of Pasadena",
+      "jurisdictions": [
+        "Pasadena"
+      ]
+    },
+    {
+      "id": "pico-rivera",
+      "name": "City of Pico Rivera",
+      "jurisdictions": [
+        "Pico Rivera"
+      ]
+    },
+    {
+      "id": "placentia",
+      "name": "City of Placentia",
+      "jurisdictions": [
+        "Placentia"
+      ]
+    },
+    {
+      "id": "pleasanton",
+      "name": "City of Pleasanton",
+      "jurisdictions": [
+        "Pleasanton"
+      ]
+    },
+    {
+      "id": "pomona",
+      "name": "City of Pomona",
+      "jurisdictions": [
+        "Pomona"
+      ]
+    },
+    {
+      "id": "portola-valley",
+      "name": "Town of Portola Valley",
+      "jurisdictions": [
+        "Portola Valley"
+      ]
+    },
+    {
+      "id": "poway",
+      "name": "City of Poway",
+      "jurisdictions": [
+        "Poway"
+      ]
+    },
+    {
+      "id": "rancho-cordova",
+      "name": "City of Rancho Cordova",
+      "jurisdictions": [
+        "Rancho Cordova"
+      ]
+    },
+    {
+      "id": "rancho-santa-margarita",
+      "name": "City of Rancho Santa Margarita",
+      "jurisdictions": [
+        "Rancho Santa Margarita"
+      ]
+    },
+    {
+      "id": "redondo-beach",
+      "name": "City of Redondo Beach",
+      "jurisdictions": [
+        "Redondo Beach"
+      ]
+    },
+    {
+      "id": "sac-city",
+      "name": "City of Sacramento",
+      "jurisdictions": [
+        "Sacramento"
+      ]
+    },
+    {
+      "id": "sacramento-county",
+      "name": "Unincorporated Sacramento County",
+      "unincorporatedOf": "sacramento"
+    },
+    {
+      "id": "san-bruno",
+      "name": "City of San Bruno",
+      "jurisdictions": [
+        "San Bruno"
+      ]
+    },
+    {
+      "id": "san-clemente",
+      "name": "City of San Clemente",
+      "jurisdictions": [
+        "San Clemente"
+      ]
+    },
+    {
+      "id": "san-fernando",
+      "name": "City of San Fernando",
+      "jurisdictions": [
+        "San Fernando"
+      ]
+    },
+    {
+      "id": "san-juan-capistrano",
+      "name": "City of San Juan Capistrano",
+      "jurisdictions": [
+        "San Juan Capistrano"
+      ]
+    },
+    {
+      "id": "san-leandro",
+      "name": "City of San Leandro",
+      "jurisdictions": [
+        "San Leandro"
+      ]
+    },
+    {
+      "id": "san-marcos",
+      "name": "City of San Marcos",
+      "jurisdictions": [
+        "San Marcos"
+      ]
+    },
+    {
+      "id": "san-mateo-city",
+      "name": "City of San Mateo",
+      "jurisdictions": [
+        "San Mateo"
+      ]
+    },
+    {
+      "id": "san-mateo-county",
+      "name": "Unincorporated San Mateo County",
+      "unincorporatedOf": "san-mateo"
+    },
+    {
+      "id": "santa-ana",
+      "name": "City of Santa Ana",
+      "jurisdictions": [
+        "Santa Ana"
+      ]
+    },
+    {
+      "id": "santa-clara-city",
+      "name": "City of Santa Clara",
+      "jurisdictions": [
+        "Santa Clara"
+      ]
+    },
+    {
+      "id": "santa-clara-county",
+      "name": "Unincorporated Santa Clara County",
+      "unincorporatedOf": "santa-clara"
+    },
+    {
+      "id": "santa-fe-springs",
+      "name": "City of Santa Fe Springs",
+      "jurisdictions": [
+        "Santa Fe Springs"
+      ]
+    },
+    {
+      "id": "santa-monica",
+      "name": "City of Santa Monica",
+      "jurisdictions": [
+        "Santa Monica"
+      ]
+    },
+    {
+      "id": "santee",
+      "name": "City of Santee",
+      "jurisdictions": [
+        "Santee"
+      ]
+    },
+    {
+      "id": "sd-city",
+      "name": "City of San Diego",
+      "jurisdictions": [
+        "San Diego"
+      ]
+    },
+    {
+      "id": "sd-county",
+      "name": "Unincorporated San Diego County",
+      "unincorporatedOf": "san-diego"
+    },
+    {
+      "id": "seal-beach",
+      "name": "City of Seal Beach",
+      "jurisdictions": [
+        "Seal Beach"
+      ]
+    },
+    {
+      "id": "sf",
+      "name": "City and County of San Francisco",
+      "jurisdictions": [
+        "San Francisco"
+      ]
+    },
+    {
+      "id": "signal-hill",
+      "name": "City of Signal Hill",
+      "jurisdictions": [
+        "Signal Hill"
+      ]
+    },
+    {
+      "id": "sj-city",
+      "name": "City of San José",
+      "jurisdictions": [
+        "San Jose",
+        "San José"
+      ]
+    },
+    {
+      "id": "solana-beach",
+      "name": "City of Solana Beach",
+      "jurisdictions": [
+        "Solana Beach"
+      ]
+    },
+    {
+      "id": "south-san-francisco",
+      "name": "City of South San Francisco",
+      "jurisdictions": [
+        "South San Francisco"
+      ]
+    },
+    {
+      "id": "sunnyvale",
+      "name": "City of Sunnyvale",
+      "jurisdictions": [
+        "Sunnyvale"
+      ]
+    },
+    {
+      "id": "temple-city",
+      "name": "City of Temple City",
+      "jurisdictions": [
+        "Temple City"
+      ]
+    },
+    {
+      "id": "torrance",
+      "name": "City of Torrance",
+      "jurisdictions": [
+        "Torrance"
+      ]
+    },
+    {
+      "id": "tustin",
+      "name": "City of Tustin",
+      "jurisdictions": [
+        "Tustin"
+      ]
+    },
+    {
+      "id": "union-city",
+      "name": "City of Union City",
+      "jurisdictions": [
+        "Union City"
+      ]
+    },
+    {
+      "id": "vista",
+      "name": "City of Vista",
+      "jurisdictions": [
+        "Vista"
+      ]
+    },
+    {
+      "id": "west-covina",
+      "name": "City of West Covina",
+      "jurisdictions": [
+        "West Covina"
+      ]
+    },
+    {
+      "id": "west-hollywood",
+      "name": "City of West Hollywood",
+      "jurisdictions": [
+        "West Hollywood"
+      ]
+    },
+    {
+      "id": "westlake-village",
+      "name": "City of Westlake Village",
+      "jurisdictions": [
+        "Westlake Village"
+      ]
+    },
+    {
+      "id": "whittier",
+      "name": "City of Whittier",
+      "jurisdictions": [
+        "Whittier"
+      ]
+    },
+    {
+      "id": "woodside",
+      "name": "Town of Woodside",
+      "jurisdictions": [
+        "Woodside"
+      ]
+    }
+  ]
+}

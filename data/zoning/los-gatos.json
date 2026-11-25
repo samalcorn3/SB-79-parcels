@@ -1,0 +1,64 @@
+{
+  "id": "los-gatos",
+  "name": "Town of Los Gatos",
+  "jurisdictions": [
+    "Los Gatos"
+  ],
+  "publisher": "Town of Los Gatos — Zoning",
+  "url": "https://services3.arcgis.com/JAU7IM34hqT9y9ew/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "ZoningDistrict",
+    "category": "ZoningClass"
+  },
+  "rules": [
+    {
+      "on": "category",
+      "match": "^PD$",
+      "class": "planned",
+      "cite": "Los Gatos planned development"
+    },
+    {
+      "on": "category",
+      "match": "^C-?[12](:HEOZ)?$",
+      "class": "commercial",
+      "cite": "Los Gatos Town Code Ch. 29 (commercial zones; HEOZ housing element overlay)"
+    },
+    {
+      "on": "category",
+      "match": "^(C1|C2|CH)$",
+      "class": "commercial",
+      "cite": "Los Gatos Town Code Ch. 29 (commercial zones)"
+    },
+    {
+      "on": "category",
+      "match": "^O$",
+      "class": "office",
+      "cite": "Los Gatos Town Code Ch. 29 (office zone)"
+    },
+    {
+      "on": "category",
+      "match": "^(CM|LM)$",
+      "class": "industrial",
+      "cite": "Los Gatos Town Code Ch. 29 (controlled manufacturing, light industrial)"
+    },
+    {
+      "on": "category",
+      "match": "^(R1|RM|RD|HR|RPD|R1D|RMH)$",
+      "class": "residential",
+      "cite": "Los Gatos Town Code Ch. 29 (residential zones)"
+    },
+    {
+      "on": "category",
+      "match": "^RC$",
+      "class": "open-space",
+      "cite": "Los Gatos Town Code Ch. 29 (resource conservation)"
+    },
+    {
+      "on": "category",
+      "match": "SP$",
+      "class": "planned"
+    }
+  ],
+  "generic": false,
+  "codeName": "Los Gatos Town Code, Ch. 29"
+}

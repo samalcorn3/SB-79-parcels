@@ -1,0 +1,52 @@
+{
+  "id": "pomona",
+  "name": "City of Pomona",
+  "jurisdictions": [
+    "Pomona"
+  ],
+  "publisher": "City of Pomona — Zoning Code adopted map (July 1, 2024)",
+  "url": "https://services.arcgis.com/uhcc7qx0gSnzEgBx/arcgis/rest/services/Zoning_Code_July_1st_2024/FeatureServer/0",
+  "fields": {
+    "code": "ZONE_STRG",
+    "description": "ZONE_BASE"
+  },
+  "rules": [
+    {
+      "match": "-SP\\]",
+      "class": "planned",
+      "cite": "Pomona specific plans"
+    },
+    {
+      "match": "-CX\\d\\]",
+      "class": "mixed-commercial",
+      "cite": "Pomona Zoning Code, commercial-mixed (CX) use districts"
+    },
+    {
+      "match": "-RX\\d\\]",
+      "class": "mixed-residential",
+      "cite": "Pomona Zoning Code, residential-mixed (RX) use districts"
+    },
+    {
+      "match": "-R\\d\\]",
+      "class": "residential",
+      "cite": "Pomona Zoning Code, residential (R) use districts"
+    },
+    {
+      "match": "-IX\\d\\]|-I\\d\\]",
+      "class": "industrial",
+      "cite": "Pomona Zoning Code, industrial use districts"
+    },
+    {
+      "match": "-P\\d\\]",
+      "class": "public",
+      "cite": "Pomona Zoning Code, public use districts"
+    },
+    {
+      "match": "-OS\\d\\]",
+      "class": "open-space",
+      "cite": "Pomona Zoning Code, open space use districts"
+    }
+  ],
+  "generic": false,
+  "codeName": "Pomona Zoning Code (2024)"
+}

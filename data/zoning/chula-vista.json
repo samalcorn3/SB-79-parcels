@@ -1,0 +1,57 @@
+{
+  "id": "chula-vista",
+  "name": "City of Chula Vista",
+  "jurisdictions": [
+    "Chula Vista"
+  ],
+  "publisher": "City of Chula Vista — Zoning District Boundaries (city GIS)",
+  "url": "https://services2.arcgis.com/2nV1ORz8qFa0iiF2/arcgis/rest/services/Chula_Vista_Zoning_District_Boundary_Data/FeatureServer/10",
+  "fields": {
+    "code": "ZONE",
+    "category": "ZoneCategory",
+    "description": "ZoneDesc"
+  },
+  "rules": [
+    {
+      "match": "^V-\\d",
+      "class": "planned",
+      "cite": "Chula Vista Village District Specific Plan"
+    },
+    {
+      "match": "^PC",
+      "class": "planned",
+      "cite": "Chula Vista planned community districts"
+    },
+    {
+      "on": "category",
+      "match": "^Commercial$",
+      "class": "commercial",
+      "cite": "Chula Vista Municipal Code Title 19 (commercial zones)"
+    },
+    {
+      "on": "category",
+      "match": "^Mixed Use$",
+      "class": "mixed-residential",
+      "cite": "Chula Vista mixed-use zones"
+    },
+    {
+      "on": "category",
+      "match": "^Industrial$",
+      "class": "industrial",
+      "cite": "Chula Vista Municipal Code Title 19 (industrial zones)"
+    },
+    {
+      "on": "category",
+      "match": "^Residential$",
+      "class": "residential",
+      "cite": "Chula Vista Municipal Code Title 19 (residential zones)"
+    },
+    {
+      "on": "category",
+      "match": "Open Space",
+      "class": "open-space"
+    }
+  ],
+  "generic": true,
+  "codeName": "Chula Vista Municipal Code, Title 19"
+}

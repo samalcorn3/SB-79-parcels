@@ -1,0 +1,32 @@
+{
+  "id": "agoura-hills",
+  "name": "City of Agoura Hills",
+  "jurisdictions": [
+    "Agoura Hills"
+  ],
+  "publisher": "City of Agoura Hills Planning — Zoning Districts (Open Data)",
+  "url": "https://services3.arcgis.com/q0ABydkxDjl7DvmN/arcgis/rest/services/Zoning_Districts/FeatureServer/0",
+  "fields": {
+    "code": "ZONING",
+    "description": "Zoning_Description"
+  },
+  "codeName": "Agoura Hills Municipal Code, Article IX (Zoning)",
+  "rules": [
+    {
+      "match": "^PD$",
+      "class": "planned",
+      "cite": "Agoura Hills Municipal Code Art. IX (PD planned development; Agoura Village and Ladyface Mountain specific plans)"
+    },
+    {
+      "match": "^CR$",
+      "class": "unknown",
+      "why": "Commercial recreation zone: check whether retail or office uses are permitted by right."
+    },
+    {
+      "match": "^U$",
+      "class": "unknown",
+      "why": "Unclassified in the city's layer."
+    }
+  ],
+  "generic": true
+}

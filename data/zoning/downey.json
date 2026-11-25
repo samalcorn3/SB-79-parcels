@@ -1,0 +1,38 @@
+{
+  "id": "downey",
+  "name": "City of Downey",
+  "jurisdictions": [
+    "Downey"
+  ],
+  "publisher": "City of Downey — General Plan and Zoning (published layer)",
+  "url": "https://services8.arcgis.com/6pr2WaSuWO79zliF/arcgis/rest/services/GP_Zoning_Published_L_WFL1/FeatureServer/6",
+  "fields": {
+    "code": "Zone_landType",
+    "description": "Zone",
+    "link": "CityCodeURL"
+  },
+  "codeName": "Downey Municipal Code, Art. IX",
+  "generic": true,
+  "rules": [
+    {
+      "match": "Specific Plan|Master Plan",
+      "class": "planned",
+      "cite": "Downey specific and master plans"
+    },
+    {
+      "match": "^Commercial Zones$",
+      "class": "commercial",
+      "cite": "Downey Municipal Code, Art. IX (commercial zones)"
+    },
+    {
+      "match": "^Manufacture Zones$",
+      "class": "industrial",
+      "cite": "Downey Municipal Code, Art. IX (manufacturing zones)"
+    },
+    {
+      "match": "^Residential Zones$",
+      "class": "residential",
+      "cite": "Downey Municipal Code, Art. IX (residential zones)"
+    }
+  ]
+}

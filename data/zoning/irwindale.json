@@ -1,0 +1,58 @@
+{
+  "id": "irwindale",
+  "name": "City of Irwindale",
+  "jurisdictions": [
+    "Irwindale"
+  ],
+  "publisher": "City of Irwindale — Zoning (May 2025 map)",
+  "url": "https://services9.arcgis.com/mJeEubBYq2hk7c9K/arcgis/rest/services/Zoning_Map___City_of_Irwindale_Test_10_19_2026_WFL1/FeatureServer/0",
+  "fields": {
+    "code": "ZN19_CITY"
+  },
+  "asOf": {
+    "date": "2019",
+    "basis": "the layer’s ZN19_CITY field, which records the city’s zoning as of 2019",
+    "override": true
+  },
+  "codeName": "Irwindale Municipal Code, Title 17 (Zoning)",
+  "caveat": "Irwindale’s own map republishes its 2019 zoning in the regional (SCAG) data format; rezonings since 2019 may not be reflected.",
+  "generic": false,
+  "rules": [
+    {
+      "match": "/RO-",
+      "class": "mixed-residential",
+      "cite": "Irwindale zoning with residential overlay"
+    },
+    {
+      "match": "^(C1|C2|C3)$",
+      "class": "commercial",
+      "cite": "Irwindale Municipal Code Title 17 (commercial zones)"
+    },
+    {
+      "match": "^(M1|M2)",
+      "class": "industrial"
+    },
+    {
+      "match": "^(GSP|P/SP)$",
+      "class": "planned"
+    },
+    {
+      "match": "^OS$",
+      "class": "open-space"
+    },
+    {
+      "match": "^Q$",
+      "class": "industrial",
+      "cite": "Irwindale zoning (quarry)"
+    },
+    {
+      "match": "^(R1|R2|R3|RII)$",
+      "class": "residential"
+    },
+    {
+      "match": "^(COH|PLO|P)$",
+      "class": "unknown",
+      "why": "Check the zoning code for this zone's permitted uses."
+    }
+  ]
+}

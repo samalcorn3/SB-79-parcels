@@ -1,0 +1,36 @@
+{
+  "id": "daly-city",
+  "name": "City of Daly City",
+  "jurisdictions": [
+    "Daly City"
+  ],
+  "publisher": "City of Daly City GIS — Zoning",
+  "url": "https://gis.dalycity.org/server/rest/services/Zoning/FeatureServer/1",
+  "fields": {
+    "code": "ZONECLASS",
+    "description": "ZONEDESC"
+  },
+  "updatedField": "LASTUPDATE",
+  "codeName": "Daly City Municipal Code, Title 17 (Zoning)",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^(PD|PRE-PD)",
+      "class": "planned",
+      "cite": "Daly City Municipal Code Title 17 (planned development districts)"
+    },
+    {
+      "match": "^(ID|U|U-RP)$",
+      "class": "unknown",
+      "why": "Interim or unzoned area in the city's layer; check with Daly City Planning."
+    },
+    {
+      "match": "^(BART|PG&E)$",
+      "class": "transportation"
+    },
+    {
+      "match": "^CEM$",
+      "class": "open-space"
+    }
+  ]
+}

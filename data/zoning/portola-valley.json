@@ -1,0 +1,44 @@
+{
+  "id": "portola-valley",
+  "name": "Town of Portola Valley",
+  "jurisdictions": [
+    "Portola Valley"
+  ],
+  "publisher": "Town of Portola Valley — Zoning (2025)",
+  "url": "https://services8.arcgis.com/LRqASGpv7gPaTEUL/arcgis/rest/services/Zoning2025/FeatureServer/8",
+  "fields": {
+    "code": "TYPE"
+  },
+  "updatedField": "RevDate",
+  "codeName": "Portola Valley Municipal Code, Title 18 (Zoning)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^C-C$",
+      "class": "commercial",
+      "cite": "Portola Valley zoning (C-C community commercial)"
+    },
+    {
+      "match": "^A-P$",
+      "class": "office",
+      "cite": "Portola Valley zoning (A-P administrative-professional)"
+    },
+    {
+      "match": "^MU$",
+      "class": "mixed-residential"
+    },
+    {
+      "match": "^O-?A",
+      "class": "open-space"
+    },
+    {
+      "match": "^PC",
+      "class": "planned"
+    },
+    {
+      "match": "^R",
+      "class": "residential",
+      "cite": "Portola Valley zoning (residential districts)"
+    }
+  ]
+}

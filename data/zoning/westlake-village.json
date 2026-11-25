@@ -1,0 +1,45 @@
+{
+  "id": "westlake-village",
+  "name": "City of Westlake Village",
+  "jurisdictions": [
+    "Westlake Village"
+  ],
+  "publisher": "City of Westlake Village — Zoning",
+  "url": "https://services5.arcgis.com/3PoWYg8BG9g9WsOS/arcgis/rest/services/zoning/FeatureServer/0",
+  "fields": {
+    "code": "Zoning",
+    "description": "FullName",
+    "link": "URL"
+  },
+  "codeName": "Westlake Village Municipal Code, Title 9 (Zoning)",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^(RPD|CPD|LBD)",
+      "class": "planned",
+      "cite": "Westlake Village planned development and La Baya district"
+    },
+    {
+      "match": "^AVO$",
+      "class": "unknown",
+      "why": "Arterial views overlay without a base zone in the city's layer."
+    },
+    {
+      "match": "^MU",
+      "class": "mixed-residential"
+    },
+    {
+      "match": "^CR$",
+      "class": "unknown",
+      "why": "Commercial recreation zone: check whether retail or office uses are permitted by right."
+    },
+    {
+      "match": "^O$",
+      "class": "office"
+    },
+    {
+      "match": "^BP$",
+      "class": "industrial"
+    }
+  ]
+}

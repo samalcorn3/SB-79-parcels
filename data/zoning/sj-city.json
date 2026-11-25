@@ -1,0 +1,79 @@
+{
+  "id": "sj-city",
+  "name": "City of San José",
+  "jurisdictions": [
+    "San Jose",
+    "San José"
+  ],
+  "publisher": "City of San José — Zoning Districts",
+  "url": "https://geo.sanjoseca.gov/server/rest/services/OPN/OPN_OpenDataService/MapServer/401",
+  "fields": {
+    "code": "ZONINGABBREV",
+    "description": "ZONING"
+  },
+  "standards": [
+    {
+      "label": "Planned development density",
+      "field": "PDDENSITY"
+    }
+  ],
+  "updatedField": "LASTUPDATE",
+  "codeName": "San José Municipal Code, Title 20",
+  "codeUrl": "https://library.municode.com/ca/san_jose/codes/code_of_ordinances?nodeId=TIT20ZO",
+  "rules": [
+    {
+      "match": "\\(PD\\)",
+      "class": "planned",
+      "cite": "SJMC Ch. 20.60 (planned development zoning: uses set by the PD permit)"
+    },
+    {
+      "match": "^(CG|CN|CP|CO)$",
+      "class": "commercial",
+      "cite": "SJMC § 20.40.100, Table 20-90 (commercial districts)"
+    },
+    {
+      "match": "^(DC|DC-NT1)$",
+      "class": "commercial",
+      "cite": "SJMC § 20.70.100, Table 20-140 (downtown districts)"
+    },
+    {
+      "match": "^(MUC|MS-C|MS-G|UV|UVC|CIC)$",
+      "class": "mixed-commercial",
+      "cite": "SJMC §§ 20.40.100, 20.55 (mixed-use commercial, main street, urban village districts)"
+    },
+    {
+      "match": "^(MUN|UR|TR)$",
+      "class": "mixed-residential",
+      "cite": "SJMC § 20.30.100 (residential mixed-use districts)"
+    },
+    {
+      "match": "^(IP|LI|HI|TEC)$",
+      "class": "industrial",
+      "cite": "SJMC § 20.50.100, Table 20-110 (industrial districts)"
+    },
+    {
+      "match": "^R-",
+      "class": "residential",
+      "cite": "SJMC § 20.30.100, Table 20-50 (residential districts)"
+    },
+    {
+      "match": "^PQP$",
+      "class": "public",
+      "cite": "SJMC Ch. 20.40 (public/quasi-public district)"
+    },
+    {
+      "match": "^OS$",
+      "class": "open-space",
+      "cite": "SJMC Ch. 20.20 (open space district)"
+    },
+    {
+      "match": "^A$",
+      "class": "agriculture",
+      "cite": "SJMC Ch. 20.20 (agriculture district)"
+    },
+    {
+      "match": "^WATER$",
+      "class": "transportation"
+    }
+  ]
+}

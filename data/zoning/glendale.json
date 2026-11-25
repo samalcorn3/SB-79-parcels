@@ -1,0 +1,61 @@
+{
+  "id": "glendale",
+  "name": "City of Glendale",
+  "jurisdictions": [
+    "Glendale"
+  ],
+  "publisher": "City of Glendale — Zoning",
+  "url": "https://gismap.glendaleca.gov/arcgis/rest/services/Common/Zoning/MapServer/2",
+  "fields": {
+    "code": "ZONE_DISTR",
+    "description": "ZONE_DESC"
+  },
+  "codeUrl": "https://library.municode.com/ca/glendale/codes/code_of_ordinances?nodeId=TIT30ZO",
+  "codeName": "Glendale Municipal Code, Title 30",
+  "rules": [
+    {
+      "match": "(^| )PS?$",
+      "class": "parking",
+      "cite": "GMC Ch. 30.17 (P and PS parking overlay zones)"
+    },
+    {
+      "match": "^(C1|C2|C3|CR|CA|CH|CE|MS)( |$)",
+      "class": "commercial",
+      "cite": "GMC Ch. 30.12, Table 30.12-A (commercial zones); Ch. 30.14 (MS medical services)"
+    },
+    {
+      "match": "^CPD",
+      "class": "planned",
+      "cite": "GMC Ch. 30.12 (commercial planned development)"
+    },
+    {
+      "match": "^DSP/",
+      "class": "planned",
+      "cite": "Downtown Specific Plan"
+    },
+    {
+      "match": "^(SFMU|TOD)",
+      "class": "mixed-residential",
+      "cite": "GMC Ch. 30.13 (mixed use and transit-oriented zones)"
+    },
+    {
+      "match": "^(IMU|IND)",
+      "class": "industrial",
+      "cite": "GMC Ch. 30.13 (IMU), Ch. 30.14 (IND)"
+    },
+    {
+      "match": "^(R|ROS)",
+      "class": "residential",
+      "cite": "GMC Ch. 30.11 (residential zones)"
+    },
+    {
+      "match": "^(SR|CEM)",
+      "class": "open-space",
+      "cite": "GMC Ch. 30.15 (special recreation; cemetery)"
+    },
+    {
+      "match": "^T$",
+      "class": "transportation"
+    }
+  ]
+}

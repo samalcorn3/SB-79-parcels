@@ -1,0 +1,21 @@
+{
+  "id": "berkeley",
+  "name": "City of Berkeley",
+  "jurisdictions": [
+    "Berkeley"
+  ],
+  "publisher": "UC Davis-hosted copy — Berkeley corridor zoning",
+  "url": "https://services8.arcgis.com/0IC8hha3hgQkmGoa/arcgis/rest/services/berkeley_corridor_zoning/FeatureServer/19",
+  "fields": {
+    "code": "ZONECLASS",
+    "description": "ZONEDESC"
+  },
+  "updatedField": "LASTUPDATE",
+  "codeName": "Berkeley Municipal Code, Title 23 (Zoning Ordinance)",
+  "thirdParty": {
+    "name": "a UC Davis ArcGIS Online account",
+    "note": "It copies the city’s zoning for a corridor study area only; parcels outside the corridors show no zone."
+  },
+  "rules": [],
+  "generic": true
+}

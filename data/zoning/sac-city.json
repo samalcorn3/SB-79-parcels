@@ -1,0 +1,55 @@
+{
+  "id": "sac-city",
+  "name": "City of Sacramento",
+  "jurisdictions": [
+    "Sacramento"
+  ],
+  "publisher": "City of Sacramento — Zoning",
+  "url": "https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "BASE_ZONE",
+    "description": "DESCRIPTION",
+    "planName": "SPDNAME",
+    "pudName": "PUDNAME",
+    "link": "URL"
+  },
+  "codeName": "Sacramento City Code, Title 17",
+  "codeUrl": "https://library.qcode.us/lib/sacramento_ca/pub/city_code/item/title_17",
+  "rules": [
+    {
+      "match": "^(C-[1-4]|SC|HC)$",
+      "class": "commercial",
+      "cite": "Sacramento City Code §§ 17.216.200–.500 (commercial zones), Table 17.216 use regulations"
+    },
+    {
+      "match": "^(OB|EC)$",
+      "class": "office",
+      "cite": "Sacramento City Code §§ 17.212.300 (OB), 17.220.200 (EC)"
+    },
+    {
+      "match": "^(RO|RMX|TC)$",
+      "class": "mixed-residential",
+      "cite": "Sacramento City Code §§ 17.208.700 (RO), 17.208.600 (RMX), 17.216.800 (TC)"
+    },
+    {
+      "match": "^(M-1|M-2|M-T|MIP|MRD)$",
+      "class": "industrial",
+      "cite": "Sacramento City Code Ch. 17.220 (industrial zones)"
+    },
+    {
+      "match": "^(R-|RE$)",
+      "class": "residential",
+      "cite": "Sacramento City Code Ch. 17.208 (residential zones)"
+    },
+    {
+      "match": "^H$",
+      "class": "public",
+      "cite": "Sacramento City Code § 17.212.200 (H, hospital zone)"
+    },
+    {
+      "match": "^(A|A-OS|F|ARP-F)$",
+      "class": "agriculture",
+      "cite": "Sacramento City Code Ch. 17.204 (agriculture and open space zones)"
+    }
+  ]
+}

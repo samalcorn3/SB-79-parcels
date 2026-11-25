@@ -1,0 +1,67 @@
+{
+  "id": "newport-beach",
+  "name": "City of Newport Beach",
+  "jurisdictions": [
+    "Newport Beach"
+  ],
+  "publisher": "City of Newport Beach GIS — Zoning (by lot)",
+  "url": "https://nbgis.newportbeachca.gov/arcgis/rest/services/PublicSiteGIS/MapServer/105",
+  "fields": {
+    "code": "ZONING_UPDATE",
+    "description": "ZONING_DESCRIPTION",
+    "link": "ZONING_CODE_LINK"
+  },
+  "standards": [
+    {
+      "label": "Height limit zone (feet)",
+      "field": "HEIGHT_ZONE"
+    },
+    {
+      "label": "Development limit",
+      "field": "ZONING_DEV_LIMIT"
+    },
+    {
+      "label": "Density or intensity",
+      "field": "DENSITY_INTENSITY"
+    },
+    {
+      "label": "Unit limit",
+      "field": "UNIT_LIMIT"
+    },
+    {
+      "label": "Floor area limit (sq ft)",
+      "field": "SQFT_LIMIT"
+    }
+  ],
+  "codeName": "Newport Beach Municipal Code, Title 20 (Planning and Zoning)",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^PR$",
+      "class": "open-space"
+    },
+    {
+      "match": "^(PC|SP-)",
+      "class": "planned",
+      "cite": "Newport Beach planned communities and specific plans (Title 20)"
+    },
+    {
+      "match": "^OM$",
+      "class": "office",
+      "cite": "Newport Beach Municipal Code Title 20 (OM office–medical)"
+    },
+    {
+      "match": "^CM$",
+      "class": "unknown",
+      "why": "Commercial recreational and marine zone: check whether retail or office uses are permitted by right."
+    },
+    {
+      "match": "^WATER$",
+      "class": "open-space"
+    },
+    {
+      "match": "^$",
+      "class": "transportation"
+    }
+  ]
+}

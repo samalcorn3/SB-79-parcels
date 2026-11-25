@@ -1,0 +1,59 @@
+{
+  "id": "culver-city",
+  "name": "City of Culver City",
+  "jurisdictions": [
+    "Culver City"
+  ],
+  "publisher": "City of Culver City — Zoning map effective Oct. 9, 2024 (by parcel)",
+  "url": "https://services2.arcgis.com/LNAhiRpezPbHTIUO/arcgis/rest/services/Final_Zoning_Map_100924/FeatureServer/0",
+  "fields": {
+    "code": "NewZonAbr",
+    "description": "NewZoning"
+  },
+  "codeName": "Culver City Municipal Code, Title 17 (Zoning Code)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^PD$",
+      "class": "planned",
+      "cite": "Culver City Municipal Code Title 17 (PD planned development)"
+    },
+    {
+      "match": "^MU-I$",
+      "class": "industrial",
+      "cite": "Culver City Municipal Code Title 17 (MU-I mixed use industrial)"
+    },
+    {
+      "match": "^(MU|MUC|FH-)",
+      "class": "mixed-residential",
+      "cite": "Culver City Municipal Code Title 17 (mixed-use zones adopted with the 2024 zoning update)"
+    },
+    {
+      "match": "^S$",
+      "class": "unknown",
+      "why": "Studio zone: check whether retail or office uses are permitted by right."
+    },
+    {
+      "match": "^E$",
+      "class": "open-space"
+    },
+    {
+      "match": "^I$",
+      "class": "public",
+      "cite": "Culver City Municipal Code Title 17 (I institutional)"
+    },
+    {
+      "match": "^T$",
+      "class": "transportation"
+    },
+    {
+      "match": "^(R1|R2|RLD|RMD|RHD)$",
+      "class": "residential",
+      "cite": "Culver City Municipal Code Title 17 (residential zones)"
+    },
+    {
+      "match": "^OS$",
+      "class": "open-space"
+    }
+  ]
+}

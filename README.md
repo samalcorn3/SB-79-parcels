@@ -17,6 +17,7 @@ A map and address lookup for every parcel in California's SB 79 urban transit co
 | City and county limits | **California Department of Technology** | Jurisdiction, and incorporated vs. unincorporated |
 | Local exclusion parcels | City-published layers (San Francisco, Los Angeles) | Whether an ordinance covers this exact parcel |
 | Fire hazard severity zones | **CAL FIRE — Office of the State Fire Marshal** (LRA 2025 maps; SRA v23.3) | VHFHSZ / State Responsibility Area status and the fire-zone exclusions cities adopt |
+| Site exclusions, § 65913.4(a)(6) | **Coastal Commission** (coastal zone, LCP certification); **Dept. of Conservation** (Important Farmland, newest survey found live; ag easements); **California Geological Survey** (Alquist-Priolo fault zones); **FEMA** (National Flood Hazard Layer); **USFWS** (National Wetlands Inventory; critical habitat); **DTSC** (EnviroStor, updated daily); **CDFW** (NCCP/HCP plan areas) | Whether the site clears the exclusions that apply to SB 79 streamlining and to AB 2011 |
 | Ordinances, TODAPs, HCD findings | [`data/jurisdictions.json`](data/jurisdictions.json), a curated registry citing HCD letters | Which instrument governs |
 
 ## Coverage
@@ -69,6 +70,41 @@ The site queries the State Fire Marshal's maps live for every parcel and reports
 
 **Streamlining.** § 65913.4(a)(6)(D) excludes sites in a VHFHSZ *or the State Responsibility Area*, but "does not apply to sites that have adopted fire hazard mitigation measures pursuant to existing building standards or state fire mitigation measures applicable to the development" (Pub. Resources Code §§ 4290–4291, Gov. Code § 51182, Building Code ch. 7A). The text is in [`data/statute/GOV-65913.4.txt`](data/statute/GOV-65913.4.txt).
 
+## Site exclusions — § 65913.4(a)(6)
+
+Each report checks the eleven site exclusions of Gov. Code § 65913.4(a)(6)(A)–(K), each against the map of the agency the statute names or the closest authoritative one ([`src/lib/exclusions.js`](src/lib/exclusions.js)).
+
+**Which laws apply them.**
+- **SB 79:** only if the project uses streamlined ministerial approval. § 65912.159(a)(3) requires such projects to "comply with all other requirements of Section 65913.4". A project reviewed through the city's ordinary process (§ 65912.159(b)) is not subject to them.
+- **AB 2011:** both paths, "exclusive of clause (iv) of subparagraph (A)" (§§ 65912.111(e), 65912.121(g)).
+
+| | Exclusion | Source | How it's decided |
+|---|---|---|---|
+| (A) | Coastal zone (appeal area, uncertified LCP, 5 ft sea-level rise, not zoned multifamily, near wetlands/prime ag) | Coastal Commission boundary and LCP segments | Outside the zone: ✓. Inside: clause (ii) is decided from the LCP's certification; the other clauses are flagged ? |
+| (B) | Prime farmland / farmland of statewide importance | DOC Farmland Mapping and Monitoring Program | ✓ / ✗ (? if partly covered) |
+| (C) | Wetlands | USFWS National Wetlands Inventory | ? if mapped; ○ if not, since the legal test is the USFWS definition, not the map |
+| (D) | Very high fire hazard zone or State Responsibility Area | State Fire Marshal | ✓, or ? because of the fire-mitigation exception |
+| (E) | Hazardous waste site (Cortese list, H&S Code § 25356) | DTSC EnviroStor | ? if a site is on the parcel; ○ otherwise, since the Water Board's GeoTracker part of the Cortese list has no public map service |
+| (F) | Earthquake fault zone | California Geological Survey (Alquist-Priolo) | ✓, or ? because of the seismic-code exception |
+| (G) | 100-year flood zone | FEMA National Flood Hazard Layer | ✓, or ? (Letter of Map Revision / NFIP criteria exception) |
+| (H) | Regulatory floodway | FEMA National Flood Hazard Layer | ✓, or ? (no-rise certification exception) |
+| (I) | Lands identified for conservation in an NCCP, HCP, or other plan | CDFW plan boundaries | ? inside a plan area (only its reserve lands are excluded); ○ otherwise |
+| (J) | Protected-species habitat | USFWS designated critical habitat | ? if mapped; ○ otherwise (the legal test is broader than critical habitat) |
+| (K) | Conservation easement | DOC agricultural conservation easements | ✗ / ? if mapped; ○ otherwise (easements are recorded with the county; check a title report) |
+
+Marks: ✓ not excluded, per the map the statute names · ○ nothing on the agency's map, but the map isn't conclusive · ? a mapped constraint that an exception or a site-specific fact decides · ✗ excluded. `tests/exclusions.test.mjs` checks each check against the text of its subparagraph and checks which laws apply them.
+
+## Keeping zoning current
+
+- **Live reads.** Each lookup queries the city's or county's zoning layer at that moment, with no copy kept here. When a city edits its layer, the next lookup reflects it. The report shows the date the agency last updated the layer.
+- **A layer that stops changing.** Some cities publish revised zoning as a *new* layer rather than editing the old one. Oakland publishes a new service per zoning ordinance; Pomona and Whittier name theirs by year. The site would keep reading the old layer until that city's file in `data/zoning/` is updated. [`scripts/check-zoning.mjs`](scripts/check-zoning.mjs) runs daily in the monitor workflow. It lists each publisher's other zoning layers and opens a `zoning-watch` issue when one changed after the layer in use. A layer reviewed and found not to supersede it is recorded under `reviewedAlternatives`, and flagged again only if it changes after that review.
+- **A layer that disappears or changes shape.** The daily source check (`check:sources`) opens a `source-health` issue if a zoning layer stops answering or loses a field the site reads.
+- **Updating one city.** Each jurisdiction's layer and rules are a single file, `data/zoning/<id>.json`. To follow a city that publishes a new layer, change its `url` (and `fields`, if they differ) there. To add a city, add a file and run `npm run zoning:index`, which rebuilds the index in `data/zoning.json`; `npm test` fails if the index is stale.
+- **Finding and checking a layer.** `scripts/zoning-discovery/` searches ArcGIS Online for a city's own zoning layers (by name, by the city's extent, and through the city's map apps) and profiles a layer's fields. `npm run zoning:classify -- <id>` classifies every zone in a configured layer under its rules, so gaps show up before a change is committed.
+- **On each parcel report.** A "Local zoning" card, shown above the SB 79 and AB 2011 tabs, gives the zone (code and the city's description); whether office, retail or parking is principally permitted; what the zoning allows, using the limits the city's layer publishes (Hermosa Beach, San Clemente, Newport Beach and others publish height, FAR, density or setbacks) or limits stated in the zone's own name (such as "20 du/ac"), with a link to the code section where the layer gives one; when the layer was last updated (flagged if before 2023); and how it was obtained (the city's own server or ArcGIS Online organisation, or a named third party).
+- **Loading.** The browser loads only the index (names and file ids) up front. A jurisdiction's file is fetched when a parcel there is looked up, so zoning for cities outside the lookup is never downloaded.
+- **What it can't see.** A council can adopt a rezoning before the city updates its GIS layer. In the gap, the report reflects the layer, not the ordinance. Recent zoning changes should be confirmed with the city.
+
 ## Which rules govern a parcel
 
 From [HCD's SB 79 page](https://www.hcd.ca.gov/planning-and-research/sb79-tod), "TOD Project Compliance":
@@ -98,7 +134,7 @@ Jurisdictions reported elsewhere to have instruments or HCD letters (Pasadena, B
 **Daily monitoring** ([`.github/workflows/monitor.yml`](.github/workflows/monitor.yml)) does three things:
 
 - `npm run check:sources` verifies every endpoint and every mapped field. If one breaks, it opens a `source-health` issue.
-- `python3 scripts/statute.py` re-reads §§ 65912.155–65912.162 from the leginfo export, along with the sections they cite (§ 65913.4, §§ 51178–51179, Pub. Res. Code § 4102). If any section was amended, it opens a `statute-watch` issue.
+- `python3 scripts/statute.py` re-reads §§ 65912.155–65912.162 and §§ 65912.100–65912.140 from the leginfo export, along with the sections they cite (§ 65913.4, §§ 51178–51179, § 65583.2, Pub. Res. Code § 4102). If any section was amended, it opens a `statute-watch` issue.
 - `npm run check:hcd` fingerprints HCD's SB 79 and letters pages, checks every registry link, and flags the registry once it is 30+ days old. Any of these opens an `hcd-watch` issue.
 
 To update the registry: edit `data/jurisdictions.json` and set `lastReviewed`. Run `npm test`, which validates the schema. Then run `npm run check:hcd -- --update` and commit both files.
@@ -119,6 +155,32 @@ npm run serve                  # then open http://localhost:8080
 
 The site is static: `index.html`, `assets/`, `src/`, and `data/`. [`.github/workflows/pages.yml`](.github/workflows/pages.yml) runs the tests and publishes to GitHub Pages on every push to `main`. One-time setup: **Settings → Pages → Source: GitHub Actions**.
 
+## AB 2011 (preview branch)
+
+Each parcel report also checks **AB 2011**, the Affordable Housing and High Road Jobs Act (Gov. Code §§ 65912.100–65912.140, as amended by AB 2243 and AB 893). It covers both paths: 100% affordable (§ 65912.111) and mixed-income (§ 65912.121). Each requirement is marked:
+
+The report shows SB 79 and AB 2011 on separate tabs.
+
+| Mark | Meaning |
+|---|---|
+| ✓ / ✗ | Decided from authoritative data |
+| ? | Depends on facts no public layer holds; confirm with the city |
+| ○ | Nothing on the agency's map, but the map isn't conclusive |
+| – | Not evaluated (the source didn't answer) |
+
+What it computes:
+- **Commercial corridor (§ 65912.101(c), § 65912.121(c)).** The right-of-way is measured property line to property line from the county assessor's parcels: perpendicular to each street frontage, sampled every 10 ft, ignoring samples near corners ([`src/lib/row.js`](src/lib/row.js)). Per HCD's draft AB 2011 guidelines (May 5, 2026), a site qualifies if any portion of the right-of-way fronting it is 70–150 ft wide. At least two adjacent samples must be in range, and the frontage must be at least 50 ft. Measured frontages are drawn on the map, green where they qualify.
+- **Not a freeway (§ 65912.101(g); Veh. Code § 332).** Uses Caltrans's Public Road Functional Classification. Class 1 (Interstate) is a freeway. Class 2 ("other freeway or expressway") is flagged to confirm, since expressways aren't freeways. Caltrans publishes no live layer of access control; its State Highway Network lines carry only route type.
+- **Urbanized area (§ 65912.121(b)).** Uses Census Bureau 2020 Urban Areas (TIGERweb).
+- **Zoning: office, retail, or parking principally permitted (§§ 65912.111(a), 65912.121(a); § 65912.101(u)).** From each city's own zoning layer, queried live, with rules in one file per jurisdiction, [`data/zoning/<id>.json`](data/zoning/), that map zone codes (or the city's own zone categories) to a class, cited to the zoning code. Covered so far: 119 of the 197 cities in the eight SB 79 counties, plus unincorporated Los Angeles, Orange, Sacramento, San Diego, San Mateo and Santa Clara counties ([docs/ZONING-COVERAGE.md](docs/ZONING-COVERAGE.md) lists every city). AB 2011 itself applies statewide; the site checks it only where it can load parcels, which today means these eight counties. The city's or county's own layer is preferred. Where the city's only layer was last updated before 2023, it is used but the report says so, because it may predate the 2023–24 housing-element rezonings. Where the city publishes no layer at all, a copy hosted by someone else (a planning consultant or a university account) is used as a last resort and labelled as third-party. Regional compilations (MTC/ABAG, SCAG) are not used. Where a city’s layer isn’t wired in yet, the test is shown as not evaluated. Each result shows the date the agency last updated its layer. Commercial, office, parking, and commercial mixed-use zones meet the test. Residential, open-space, and agricultural zones fail it. Residential mixed-use, industrial, public, and planned districts are flagged with the reason, as are Los Angeles [Q] conditions and split-zoned parcels.
+- **Neighbouring uses (§§ 65912.111(c)–(d), 65912.121(e)–(f)).** From the county assessor's use on each parcel record (Los Angeles and Sacramento counties, which publish readable use descriptions; [`src/lib/landuse.js`](src/lib/landuse.js)). The site's perimeter is walked every 5 ft and each stretch matched to the parcel touching it or straight across the street. The report gives the share adjoining urban uses (§ 65912.101(x)) and lists any industrial or utility use on or next to the site.
+- **Existing housing (§ 65912.121(h)(4)–(6)).** The assessor's use and unit count: one to four units fails; five or more is flagged for the tenancy rules; a mobilehome park fails.
+- **Site size (§ 65912.121(d)).**
+- **Site exclusions (§§ 65912.111(e), 65912.121(g)).** All of § 65913.4(a)(6) except clause (A)(iv), from the same checks as the Site exclusions card (see above).
+- **Density and height (§ 65912.123).** Shown from the measured corridor width and whether the parcel is within ½ mile of an SB 79 TOD stop. Every TOD stop is a major transit stop (§ 65912.156(p)).
+
+`tests/ab2011.test.mjs` checks every AB 2011 figure against the statute text.
+
 ## Previews, merging, and undoing
 
 - **The live site is always the `main` branch.** Nothing on another branch changes it.
@@ -134,7 +196,7 @@ The site is static: `index.html`, `assets/`, `src/`, and `data/`. [`.github/work
 - **SACOG's zone layer has no tier field.** All SACOG stops are treated as Tier 2, since SacRT is light rail per HCD's March 2026 advisory and the region has no heavy rail.
 - **SCAG commuter-rail zones** follow HCD's advisory method, which counts all services at a station. They are flagged in the report.
 - **Setbacks and lot coverage.** SB 79 sets no numeric values for these. Local objective standards apply as long as they don't physically preclude the SB 79 density and FAR. The report shows local zoning where a county or city publishes it (San Francisco, Sacramento County, City of San Diego, and unincorporated LA County).
-- **Partial registry.** Many entries are still `secondary`, and most cities have not published parcel-level exclusion layers. See [docs/METHODOLOGY.md](docs/METHODOLOGY.md).
+- **Partial registry.** Most cities have not published parcel-level exclusion layers. See [docs/METHODOLOGY.md](docs/METHODOLOGY.md).
 
 ## Layout
 

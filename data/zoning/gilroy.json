@@ -1,0 +1,42 @@
+{
+  "id": "gilroy",
+  "name": "City of Gilroy",
+  "jurisdictions": [
+    "Gilroy"
+  ],
+  "publisher": "Cal Poly student copy — Gilroy zoning",
+  "url": "https://services1.arcgis.com/0j6vZbECadDEXdAS/arcgis/rest/services/GilroyZoning/FeatureServer/0",
+  "fields": {
+    "code": "ZoningDist",
+    "link": "DocumentUR"
+  },
+  "updatedField": "RevDate",
+  "codeName": "Gilroy Zoning Ordinance",
+  "thirdParty": {
+    "name": "a Cal Poly student account",
+    "note": "It copies the city’s zoning districts as revised through 2019."
+  },
+  "rules": [
+    {
+      "match": "Special District$",
+      "class": "planned",
+      "cite": "Gilroy special districts (Glen Loma Ranch, Hecker Pass)"
+    },
+    {
+      "match": "^HC$",
+      "class": "commercial",
+      "cite": "Gilroy Zoning Ordinance (HC highway commercial)"
+    },
+    {
+      "match": "^CM$",
+      "class": "industrial",
+      "cite": "Gilroy Zoning Ordinance (CM commercial industrial)"
+    },
+    {
+      "match": "^ND$",
+      "class": "planned",
+      "cite": "Gilroy Zoning Ordinance (ND neighborhood district)"
+    }
+  ],
+  "generic": true
+}

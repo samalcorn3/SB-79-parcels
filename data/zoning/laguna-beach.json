@@ -1,0 +1,48 @@
+{
+  "id": "laguna-beach",
+  "name": "City of Laguna Beach",
+  "jurisdictions": [
+    "Laguna Beach"
+  ],
+  "publisher": "City of Laguna Beach — Zoning Map (by parcel)",
+  "url": "https://services9.arcgis.com/DPQ7yLDIWIyMUXzD/arcgis/rest/services/GIS_Map/FeatureServer/72",
+  "fields": {
+    "code": "ZONING1"
+  },
+  "codeName": "Laguna Beach Municipal Code, Title 25 (Zoning)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^CBD",
+      "class": "commercial",
+      "cite": "Laguna Beach Municipal Code Title 25 (central business district zones)"
+    },
+    {
+      "match": "^(C1|CN|VC|CH-M)$",
+      "class": "commercial",
+      "cite": "Laguna Beach Municipal Code Title 25 (commercial zones)"
+    },
+    {
+      "match": "^M1[AB]$",
+      "class": "industrial"
+    },
+    {
+      "match": "^(OSC|OSCR|OSP|REC)$",
+      "class": "open-space"
+    },
+    {
+      "match": "^(PL|I)$",
+      "class": "public"
+    },
+    {
+      "match": "^(R1|R2|R3|RD|RHP|AR|MH)$",
+      "class": "residential",
+      "cite": "Laguna Beach Municipal Code Title 25 (residential zones)"
+    },
+    {
+      "match": "^(SLV|STP|TAB|TBZ|LAG|LBP|CA)$",
+      "class": "unknown",
+      "why": "Specific plan or special district: check the zoning code for permitted uses."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "vista",
+  "name": "City of Vista",
+  "jurisdictions": [
+    "Vista"
+  ],
+  "publisher": "City of Vista GIS — Zoning",
+  "url": "https://gis.vista.gov/arcgis/rest/services/CityGIS/Land_Use/MapServer/40",
+  "fields": {
+    "code": "ZoningCode",
+    "description": "ZoningDesc"
+  },
+  "codeName": "Vista Municipal Code, Title 18 (Zoning)",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^SPI$",
+      "class": "planned",
+      "cite": "Vista specific plan implementation zones"
+    },
+    {
+      "match": "^O-P$",
+      "class": "office",
+      "cite": "Vista Municipal Code Title 18 (O-P office professional zone)"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "dublin",
+  "name": "City of Dublin",
+  "jurisdictions": [
+    "Dublin"
+  ],
+  "publisher": "City of Dublin GIS — Zoning",
+  "url": "https://gis111.dublin.ca.gov/arcgis/rest/services/Planning/ZoningAttachments/MapServer/0",
+  "fields": {
+    "code": "zone_code"
+  },
+  "codeName": "Dublin Municipal Code, Title 8 (Zoning Ordinance)",
+  "codeUrl": "https://ecode360.com/DU4414",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^(DCZD|DDZD)$",
+      "class": "planned",
+      "cite": "Dublin Crossing and Downtown Dublin zoning districts (specific plans)"
+    },
+    {
+      "match": "^PD$",
+      "class": "planned",
+      "cite": "Dublin Zoning Ordinance (PD planned development)"
+    },
+    {
+      "match": "^C-O$",
+      "class": "office",
+      "cite": "Dublin Zoning Ordinance (C-O commercial office)"
+    },
+    {
+      "match": "^M-P$",
+      "class": "industrial",
+      "cite": "Dublin Zoning Ordinance (M-P industrial park)"
+    }
+  ]
+}

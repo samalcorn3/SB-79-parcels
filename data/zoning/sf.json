@@ -1,0 +1,48 @@
+{
+  "id": "sf",
+  "name": "City and County of San Francisco",
+  "jurisdictions": [
+    "San Francisco"
+  ],
+  "fromParcel": true,
+  "publisher": "San Francisco Planning — zoning district on the assessor parcel record",
+  "codeUrl": "https://codelibrary.amlegal.com/codes/san_francisco/latest/sf_planning/0-0-0-17636",
+  "codeName": "San Francisco Planning Code",
+  "rules": [
+    {
+      "match": "^(NC-[123S]|NCT(-[123])?|NCD|C-2|C-3-[GORS]|C-3-O\\(SD\\)|CCB|CVR|CRNC|RCD)$",
+      "class": "commercial",
+      "cite": "SF Planning Code Art. 7 (Neighborhood Commercial), Art. 2 (C districts) and Art. 8 (Chinatown)"
+    },
+    {
+      "match": "^(MUO|MUG|MUR|UMU|CMUO|SALI|BR-MU|MR-MU|P70-MU|PPS-MU|S-MU)$",
+      "class": "mixed-commercial",
+      "cite": "SF Planning Code Art. 8 (Eastern Neighborhoods mixed use) and special use districts"
+    },
+    {
+      "match": "^(RC-[34]|RED-MX)$",
+      "class": "mixed-residential",
+      "cite": "SF Planning Code §§ 209.3, 847"
+    },
+    {
+      "match": "^(PDR-|M-[12]$)",
+      "class": "industrial",
+      "cite": "SF Planning Code §§ 210.3 (PDR), 210.4 (M districts)"
+    },
+    {
+      "match": "^(RH|RM|RTO|RED$|RH DTR|SB-DTR|TB DTR)",
+      "class": "residential",
+      "cite": "SF Planning Code §§ 209.1–209.4"
+    },
+    {
+      "match": "^P$",
+      "class": "public",
+      "cite": "SF Planning Code § 211 (P district)"
+    },
+    {
+      "match": "^(PM-|HP-RA|MB-|TI-|YBI-|Job Corps)",
+      "class": "planned",
+      "cite": "SF Planning Code redevelopment and special area plans (Parkmerced, Hunters Point, Mission Bay, Treasure Island)"
+    }
+  ]
+}

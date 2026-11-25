@@ -1,0 +1,49 @@
+{
+  "id": "union-city",
+  "name": "City of Union City",
+  "jurisdictions": [
+    "Union City"
+  ],
+  "publisher": "City of Union City Planning — Zoning (2024 update)",
+  "url": "https://services7.arcgis.com/T3LbxamSmhpjBppB/arcgis/rest/services/ZoningUpdate_2024_view/FeatureServer/0",
+  "fields": {
+    "code": "CODE",
+    "description": "NAME"
+  },
+  "codeName": "Union City Municipal Code, Title 18 (Zoning)",
+  "rules": [
+    {
+      "match": "^511$",
+      "class": "planned",
+      "cite": "Union City 511 Area District"
+    },
+    {
+      "match": "^CPA$",
+      "class": "office"
+    },
+    {
+      "match": "^(CMUE|SEE)$",
+      "class": "mixed-commercial",
+      "cite": "Union City zoning (employment mixed-use districts)"
+    },
+    {
+      "match": "^CMU$",
+      "class": "mixed-commercial",
+      "cite": "Union City zoning (corridor mixed-use commercial)"
+    },
+    {
+      "match": "^CUL$",
+      "class": "commercial",
+      "cite": "Union City zoning (Union Landing commercial)"
+    },
+    {
+      "match": "^MS$",
+      "class": "industrial"
+    },
+    {
+      "match": "^MG$",
+      "class": "industrial"
+    }
+  ],
+  "generic": true
+}

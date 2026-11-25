@@ -1,0 +1,56 @@
+{
+  "id": "elk-grove",
+  "name": "City of Elk Grove",
+  "jurisdictions": [
+    "Elk Grove"
+  ],
+  "publisher": "City of Elk Grove — Zoning",
+  "url": "https://webmaps.elkgrove.gov/arcgis/rest/services/OPEN_DATA_PORTAL/Zoning/MapServer/0",
+  "fields": {
+    "code": "ZONE"
+  },
+  "codeUrl": "https://www.codepublishing.com/CA/ElkGrove/#!/ElkGrove23/ElkGrove23.html",
+  "codeName": "Elk Grove Municipal Code, Title 23",
+  "rules": [
+    {
+      "match": "^(AC|GC|LC)$",
+      "class": "commercial",
+      "cite": "EGMC § 23.27.030, Table 23.27-1 (commercial zones)"
+    },
+    {
+      "match": "^(BP|O)$",
+      "class": "office",
+      "cite": "EGMC § 23.27.030 (business park and office zones)"
+    },
+    {
+      "match": "^(MP|LI|LI/FX|HI)$",
+      "class": "industrial",
+      "cite": "EGMC § 23.27.030 (industrial zones)"
+    },
+    {
+      "match": "^RD-",
+      "class": "residential",
+      "cite": "EGMC § 23.27.030 (residential zones)"
+    },
+    {
+      "match": "^(AG|AR)-",
+      "class": "agriculture",
+      "cite": "EGMC § 23.27.030 (agricultural-residential zones)"
+    },
+    {
+      "match": "^PR$",
+      "class": "open-space",
+      "cite": "EGMC (parks and open space)"
+    },
+    {
+      "match": "^PS$",
+      "class": "public",
+      "cite": "EGMC (public services)"
+    },
+    {
+      "match": "SPA|^SPALEA$",
+      "class": "planned",
+      "cite": "Special planning areas"
+    }
+  ]
+}

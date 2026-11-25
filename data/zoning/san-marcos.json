@@ -1,0 +1,29 @@
+{
+  "id": "san-marcos",
+  "name": "City of San Marcos",
+  "jurisdictions": [
+    "San Marcos"
+  ],
+  "publisher": "City of San Marcos — Zoning",
+  "url": "https://services1.arcgis.com/e7Mp0AHrN8K5Kx6X/arcgis/rest/services/Zoning/FeatureServer/16",
+  "fields": {
+    "code": "ZoneCode",
+    "description": "Zone",
+    "planName": "spadistrictname"
+  },
+  "standards": [
+    {
+      "label": "Density or intensity",
+      "field": "Density_Intensity"
+    }
+  ],
+  "codeName": "San Marcos Municipal Code, Title 20",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^L-I",
+      "class": "industrial",
+      "cite": "San Marcos Municipal Code Title 20 (light industrial)"
+    }
+  ]
+}

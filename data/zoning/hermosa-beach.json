@@ -1,0 +1,94 @@
+{
+  "id": "hermosa-beach",
+  "name": "City of Hermosa Beach",
+  "jurisdictions": [
+    "Hermosa Beach"
+  ],
+  "publisher": "City of Hermosa Beach GIS — Land use and zoning (by parcel)",
+  "url": "https://services2.arcgis.com/pZpm6pZToD6HSf7k/arcgis/rest/services/Land_Use/FeatureServer/4",
+  "fields": {
+    "code": "ZONING",
+    "description": "ZONINGDesc",
+    "link": "ZMCLink"
+  },
+  "standards": [
+    {
+      "label": "Permitted uses",
+      "field": "ZPermittedUses"
+    },
+    {
+      "label": "Lot area per unit",
+      "field": "ZLotAreaPerUnit"
+    },
+    {
+      "label": "Maximum lot coverage",
+      "field": "ZLotCoverage"
+    },
+    {
+      "label": "Maximum height",
+      "field": "ZBldgHeight"
+    },
+    {
+      "label": "Open space",
+      "field": "ZOpenSpace"
+    },
+    {
+      "label": "Front setback",
+      "field": "ZFrontSetback"
+    },
+    {
+      "label": "Side setback",
+      "field": "ZSideSetback"
+    },
+    {
+      "label": "Rear setback",
+      "field": "ZRearSetback"
+    }
+  ],
+  "codeName": "Hermosa Beach Municipal Code, Title 17 (Zoning)",
+  "generic": false,
+  "rules": [
+    {
+      "match": "^SPA-",
+      "class": "planned",
+      "cite": "Hermosa Beach specific plan areas"
+    },
+    {
+      "match": "^(RPD|R-3PD)$",
+      "class": "planned",
+      "cite": "Hermosa Beach planned development"
+    },
+    {
+      "match": "^C-[123]$",
+      "class": "commercial",
+      "cite": "Hermosa Beach Municipal Code Title 17 (C-1, C-2, C-3 commercial zones)"
+    },
+    {
+      "match": "^R-P$",
+      "class": "office",
+      "cite": "Hermosa Beach Municipal Code Title 17 (R-P residential professional)"
+    },
+    {
+      "match": "^M-1$",
+      "class": "industrial"
+    },
+    {
+      "match": "^OS",
+      "class": "open-space"
+    },
+    {
+      "match": "^PF$",
+      "class": "public"
+    },
+    {
+      "match": "^(R-|MHP)",
+      "class": "residential",
+      "cite": "Hermosa Beach Municipal Code Title 17 (residential zones)"
+    },
+    {
+      "match": "^Unclassified$",
+      "class": "unknown",
+      "why": "Unclassified in the city's layer."
+    }
+  ]
+}

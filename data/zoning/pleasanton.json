@@ -1,0 +1,32 @@
+{
+  "id": "pleasanton",
+  "name": "City of Pleasanton",
+  "jurisdictions": [
+    "Pleasanton"
+  ],
+  "publisher": "City of Pleasanton GIS — Zoning",
+  "url": "https://services1.arcgis.com/vQBE9cyhukJHVTrT/arcgis/rest/services/Zoning_vwPublic/FeatureServer/0",
+  "fields": {
+    "code": "DATA",
+    "description": "DATA_TYPE"
+  },
+  "codeName": "Pleasanton Municipal Code, Title 18 (Zoning)",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^(PUD|HPD)",
+      "class": "planned",
+      "cite": "Pleasanton Municipal Code Title 18 (planned unit development and hillside planned development districts)"
+    },
+    {
+      "match": "^S$",
+      "class": "unknown",
+      "why": "Study district: the city has not yet set permanent zoning here."
+    },
+    {
+      "match": "^U$",
+      "class": "unknown",
+      "why": "The city's layer marks this area as unincorporated."
+    }
+  ]
+}

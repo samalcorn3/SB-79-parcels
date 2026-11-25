@@ -1,0 +1,50 @@
+{
+  "id": "dana-point",
+  "name": "City of Dana Point",
+  "jurisdictions": [
+    "Dana Point"
+  ],
+  "publisher": "City of Dana Point — Zoning",
+  "url": "https://services7.arcgis.com/mRLEu9cKL0xMY05m/arcgis/rest/services/DP_Zoning/FeatureServer/0",
+  "fields": {
+    "code": "CODE",
+    "description": "ZONE",
+    "link": "ZONELINK"
+  },
+  "codeName": "Dana Point Zoning Code",
+  "generic": true,
+  "rules": [
+    {
+      "match": "^(DPHPC|DPSP|SPO ZONE)$",
+      "class": "planned",
+      "cite": "Dana Point specific plan and harbor planned community"
+    },
+    {
+      "match": "^(V-|TC)",
+      "class": "mixed-residential",
+      "cite": "Dana Point Town Center and Doheny Village districts"
+    },
+    {
+      "match": "^C C/",
+      "class": "commercial",
+      "cite": "Dana Point Zoning Code (community commercial)"
+    },
+    {
+      "match": "^P/A$",
+      "class": "office"
+    },
+    {
+      "match": "^P/R$",
+      "class": "mixed-residential"
+    },
+    {
+      "match": "^COUNTY$",
+      "class": "unknown",
+      "why": "County land in the city's layer."
+    },
+    {
+      "match": "^ROW$",
+      "class": "transportation"
+    }
+  ]
+}

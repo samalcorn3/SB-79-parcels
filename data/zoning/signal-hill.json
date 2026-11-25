@@ -1,0 +1,41 @@
+{
+  "id": "signal-hill",
+  "name": "City of Signal Hill",
+  "jurisdictions": [
+    "Signal Hill"
+  ],
+  "publisher": "City of Signal Hill — Zoning Districts (2023)",
+  "url": "https://services9.arcgis.com/LUBoZWfQwvBnZCmP/arcgis/rest/services/Zoning_2023/FeatureServer/55",
+  "fields": {
+    "code": "code",
+    "description": "name"
+  },
+  "codeName": "Signal Hill Municipal Code, Title 20 (Zoning)",
+  "rules": [
+    {
+      "match": "^(SP|PD)-",
+      "class": "planned",
+      "cite": "Signal Hill specific plans and planned development"
+    },
+    {
+      "match": "^CR$",
+      "class": "mixed-residential",
+      "cite": "Signal Hill Municipal Code Title 20 (CR commercial residential)"
+    },
+    {
+      "match": "^CI$",
+      "class": "industrial",
+      "cite": "Signal Hill Municipal Code Title 20 (CI commercial industrial)"
+    },
+    {
+      "match": "^CTC$",
+      "class": "commercial",
+      "cite": "Signal Hill Municipal Code Title 20 (CTC commercial town center)"
+    },
+    {
+      "match": "^PI$",
+      "class": "public"
+    }
+  ],
+  "generic": true
+}

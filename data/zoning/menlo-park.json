@@ -1,0 +1,65 @@
+{
+  "id": "menlo-park",
+  "name": "City of Menlo Park",
+  "jurisdictions": [
+    "Menlo Park"
+  ],
+  "publisher": "City of Menlo Park — Zoning (ArcGIS Online)",
+  "url": "https://services7.arcgis.com/uRrQ0O3z2aaiIWYU/arcgis/rest/services/Menlo_Park_Zoning/FeatureServer/0",
+  "fields": {
+    "code": "Zoning"
+  },
+  "updatedField": "RevDate",
+  "codeName": "Menlo Park Municipal Code, Title 16 (Zoning)",
+  "rules": [
+    {
+      "match": "^(SP-ECR|SP)",
+      "class": "planned",
+      "cite": "El Camino Real/Downtown Specific Plan"
+    },
+    {
+      "match": "^C[124][A-Z]?(\\(X\\))?$",
+      "class": "commercial",
+      "cite": "Menlo Park Municipal Code Title 16 (C-1, C-2, C-4 commercial districts and sub-districts)"
+    },
+    {
+      "match": "^(C-1|C-2|C-4)",
+      "class": "commercial",
+      "cite": "Menlo Park Municipal Code Title 16 (commercial districts)"
+    },
+    {
+      "match": "^C-3",
+      "class": "commercial"
+    },
+    {
+      "match": "^(O|LS)\\b",
+      "class": "office"
+    },
+    {
+      "match": "^(M-2|M-3|LI)",
+      "class": "industrial"
+    },
+    {
+      "match": "^(R-MU|C-MU)",
+      "class": "mixed-residential"
+    },
+    {
+      "match": "^(P-F|PF)",
+      "class": "public"
+    },
+    {
+      "match": "^OSC",
+      "class": "open-space"
+    },
+    {
+      "match": "^(FP|P)$",
+      "class": "open-space"
+    },
+    {
+      "match": "^R",
+      "class": "residential",
+      "cite": "Menlo Park Municipal Code Title 16 (residential districts)"
+    }
+  ],
+  "generic": true
+}

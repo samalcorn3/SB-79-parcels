@@ -1,0 +1,65 @@
+{
+  "id": "burbank",
+  "name": "City of Burbank",
+  "jurisdictions": [
+    "Burbank"
+  ],
+  "publisher": "City of Burbank — Zoning (Public Landbase)",
+  "url": "https://services1.arcgis.com/CijXhfQhHrc77J4u/arcgis/rest/services/Public_Landbase/FeatureServer/26",
+  "fields": {
+    "code": "zn_zone",
+    "description": "name_alf",
+    "category": "zone_type"
+  },
+  "codeName": "Burbank Municipal Code, Title 10, Chapter 1 (Zoning)",
+  "rules": [
+    {
+      "match": "^PD",
+      "class": "planned",
+      "cite": "Burbank Municipal Code Title 10, Ch. 1 (PD planned development)"
+    },
+    {
+      "match": "^MPC-",
+      "class": "commercial",
+      "cite": "Burbank Municipal Code Title 10, Ch. 1 (Magnolia Park commercial zones)"
+    },
+    {
+      "match": "^(BCC|MDC)-1$|^MPC-1$",
+      "class": "office",
+      "cite": "Burbank Municipal Code Title 10, Ch. 1 (commercial retail-professional zones)"
+    },
+    {
+      "match": "^(AD|NSFC|RC)$",
+      "class": "commercial",
+      "cite": "Burbank Municipal Code Title 10, Ch. 1 (auto dealership, North San Fernando and Rancho commercial zones)"
+    },
+    {
+      "match": "^GO$",
+      "class": "office",
+      "cite": "Burbank Municipal Code Title 10, Ch. 1 (GO garden office)"
+    },
+    {
+      "match": "^RBP$",
+      "class": "industrial",
+      "cite": "Burbank Municipal Code Title 10, Ch. 1 (RBP Rancho business park)"
+    },
+    {
+      "match": "^AP$",
+      "class": "transportation"
+    },
+    {
+      "match": "^RR$",
+      "class": "transportation"
+    },
+    {
+      "match": "^CEM$",
+      "class": "open-space"
+    },
+    {
+      "match": "^CR$",
+      "class": "unknown",
+      "why": "Commercial-recreational zone: check whether retail or office uses are permitted by right."
+    }
+  ],
+  "generic": true
+}

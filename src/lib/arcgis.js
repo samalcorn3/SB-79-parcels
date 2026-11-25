@@ -84,7 +84,7 @@ export function envelope([minX, minY, maxX, maxY]) {
  * Features intersecting a geometry. Returns attribute objects (no geometry)
  * unless returnGeometry is set, in which case GeoJSON features are returned.
  */
-export async function queryIntersecting(layerUrl, geo, { outFields = ['*'], where = '1=1', returnGeometry = false, distanceFeet, extra = {} } = {}) {
+export async function queryIntersecting(layerUrl, geo, { outFields = ['*'], where = '1=1', returnGeometry = false, distanceFeet, extra = {}, request } = {}) {
   const params = {
     where,
     geometry: geo.geometry,
@@ -101,11 +101,11 @@ export async function queryIntersecting(layerUrl, geo, { outFields = ['*'], wher
   }
   if (returnGeometry) {
     Object.assign(params, { outSR: 4326, f: 'geojson', geometryPrecision: 7 });
-    const json = await getJSON(`${layerUrl}/query`, params);
+    const json = await getJSON(`${layerUrl}/query`, params, request);
     return json.features || [];
   }
   params.f = 'json';
-  const json = await getJSON(`${layerUrl}/query`, params);
+  const json = await getJSON(`${layerUrl}/query`, params, request);
   return (json.features || []).map((f) => f.attributes);
 }
 

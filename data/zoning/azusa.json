@@ -1,0 +1,40 @@
+{
+  "id": "azusa",
+  "name": "City of Azusa",
+  "jurisdictions": [
+    "Azusa"
+  ],
+  "publisher": "City of Azusa GIS — Zoning (by parcel)",
+  "url": "https://services5.arcgis.com/LRbjc1oq5r1BMKyz/arcgis/rest/services/Zoning_FS/FeatureServer/0",
+  "fields": {
+    "code": "Zoning",
+    "description": "Zoning_Des"
+  },
+  "codeName": "Azusa Development Code (Municipal Code, Chapter 88)",
+  "rules": [
+    {
+      "match": "^C(AH|AZ|FB|SA|SG)$",
+      "class": "mixed-residential",
+      "cite": "Azusa Development Code (corridor districts)"
+    },
+    {
+      "match": "^(DD|DED|GLD)$",
+      "class": "mixed-residential",
+      "cite": "Azusa Development Code (downtown and Gold Line districts)"
+    },
+    {
+      "match": "^NC$",
+      "class": "commercial",
+      "cite": "Azusa Development Code (neighborhood center)"
+    },
+    {
+      "match": "^DWL?$",
+      "class": "industrial"
+    },
+    {
+      "match": "^CD$",
+      "class": "public"
+    }
+  ],
+  "generic": true
+}

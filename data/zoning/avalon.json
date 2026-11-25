@@ -1,0 +1,22 @@
+{
+  "id": "avalon",
+  "name": "City of Avalon",
+  "jurisdictions": [
+    "Avalon"
+  ],
+  "publisher": "City of Avalon — Zoning",
+  "url": "https://services6.arcgis.com/AmaMX17fQiEwdFuX/arcgis/rest/services/Zoning_public_68997345e782477da19a259a200a7d7d/FeatureServer/0",
+  "fields": {
+    "code": "ZONECLASS",
+    "description": "ZONEDESC"
+  },
+  "rules": [
+    {
+      "match": "^RR$",
+      "class": "unknown"
+    }
+  ],
+  "generic": true,
+  "updatedField": "LASTUPDATE",
+  "codeName": "Avalon Municipal Code, Title 9 (zoning)"
+}

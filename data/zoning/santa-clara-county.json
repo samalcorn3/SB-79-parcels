@@ -1,0 +1,45 @@
+{
+  "id": "santa-clara-county",
+  "name": "Unincorporated Santa Clara County",
+  "unincorporatedOf": "santa-clara",
+  "publisher": "County of Santa Clara Planning — Unincorporated Zoning Districts",
+  "url": "https://services2.arcgis.com/tcv2cMrq63AgvbHF/arcgis/rest/services/Zoning/FeatureServer/0",
+  "fields": {
+    "code": "BaseZone",
+    "description": "Zoning"
+  },
+  "codeUrl": "https://plandev.santaclaracounty.gov/regulations-and-ordinances/zoning-ordinance",
+  "codeName": "Santa Clara County Zoning Ordinance",
+  "rules": [
+    {
+      "match": "^(CG|CN)$",
+      "class": "commercial",
+      "cite": "County Zoning Ordinance Ch. 2.30 (commercial districts)"
+    },
+    {
+      "match": "^ML$",
+      "class": "industrial",
+      "cite": "County Zoning Ordinance Ch. 2.40 (industrial)"
+    },
+    {
+      "match": "^(R|RR|RHS|RS|MH)",
+      "class": "residential",
+      "cite": "County Zoning Ordinance Ch. 2.20 (residential districts)"
+    },
+    {
+      "match": "^(A|A1|AR|HS|OA)$",
+      "class": "agriculture",
+      "cite": "County Zoning Ordinance Ch. 2.10 (rural base districts)"
+    },
+    {
+      "match": "^OSF$",
+      "class": "open-space",
+      "cite": "County Zoning Ordinance Ch. 2.10 (open space and field research)"
+    },
+    {
+      "match": "^SCA$",
+      "class": "planned",
+      "cite": "Stanford Community Plan area"
+    }
+  ]
+}

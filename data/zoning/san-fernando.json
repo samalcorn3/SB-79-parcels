@@ -1,0 +1,29 @@
+{
+  "id": "san-fernando",
+  "name": "City of San Fernando",
+  "jurisdictions": [
+    "San Fernando"
+  ],
+  "publisher": "CSU Northridge student map — San Fernando zoning",
+  "url": "https://services6.arcgis.com/4XnW0LugjJEsZM3v/arcgis/rest/services/San_Fernando_Zoning_Map_Updated_WFL1/FeatureServer/6",
+  "fields": {
+    "code": "ZONING"
+  },
+  "codeName": "San Fernando Municipal Code, Chapter 106 (Zoning)",
+  "thirdParty": {
+    "name": "a CSU Northridge student account",
+    "note": "The layer is titled “Zoning Parcels 2013”, so it may reflect 2013 zoning."
+  },
+  "rules": [
+    {
+      "match": "^RPD",
+      "class": "residential"
+    },
+    {
+      "match": "^(FEATURE|N/A)$",
+      "class": "unknown",
+      "why": "No zoning designation in the layer."
+    }
+  ],
+  "generic": true
+}

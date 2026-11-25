@@ -1,0 +1,48 @@
+{
+  "id": "el-segundo",
+  "name": "City of El Segundo",
+  "jurisdictions": [
+    "El Segundo"
+  ],
+  "publisher": "City of El Segundo — Zoning (updated)",
+  "url": "https://services9.arcgis.com/NtAn3q92p40X6z9O/arcgis/rest/services/Zoning_Update/FeatureServer/0",
+  "fields": {
+    "code": "ZONE_CODE",
+    "description": "Zone_"
+  },
+  "updatedField": "EditDate",
+  "codeName": "El Segundo Municipal Code, Title 15 (Zoning)",
+  "rules": [
+    {
+      "match": "SP$|^DSP|^(ASP|CCSP|ESSCSP|PCCSP|SHE|SHW|TLSP)$",
+      "class": "planned",
+      "cite": "El Segundo specific plans (Downtown, Smoky Hollow, Aviation, Corporate Campus and others)"
+    },
+    {
+      "match": "^(C-3|CO)/MU$",
+      "class": "commercial",
+      "cite": "El Segundo Municipal Code Title 15 (commercial zones; the mixed-use overlay is optional)"
+    },
+    {
+      "match": "^P/MU$",
+      "class": "parking",
+      "cite": "El Segundo Municipal Code Title 15 (P parking zone)"
+    },
+    {
+      "match": "^MU-[NS]$",
+      "class": "mixed-residential",
+      "cite": "El Segundo Municipal Code Title 15 (urban mixed-use north and south)"
+    },
+    {
+      "match": "^P$",
+      "class": "parking",
+      "cite": "El Segundo Municipal Code Title 15 (P parking zone)"
+    },
+    {
+      "match": "^C-4$",
+      "class": "commercial",
+      "cite": "El Segundo Municipal Code Title 15 (C-4)"
+    }
+  ],
+  "generic": true
+}

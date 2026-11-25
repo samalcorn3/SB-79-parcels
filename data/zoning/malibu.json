@@ -1,0 +1,47 @@
+{
+  "id": "malibu",
+  "name": "City of Malibu",
+  "jurisdictions": [
+    "Malibu"
+  ],
+  "publisher": "City of Malibu — Zoning",
+  "url": "https://services3.arcgis.com/w2LtkSgyOOlg6OKZ/arcgis/rest/services/Zoning_Malibu/FeatureServer/0",
+  "fields": {
+    "code": "MALIBUZONE"
+  },
+  "rules": [
+    {
+      "match": "^(CC|CG|CN|CR|CV-[12])$",
+      "class": "commercial",
+      "cite": "Malibu Municipal Code Title 17 (commercial zones)"
+    },
+    {
+      "match": "^I$",
+      "class": "public",
+      "cite": "Malibu Municipal Code Title 17 (institutional zone)"
+    },
+    {
+      "match": "^(MF|MFBF|MH|RR\\d+|SFL|SFM|RD)$",
+      "class": "residential",
+      "cite": "Malibu Municipal Code Title 17 (residential zones)"
+    },
+    {
+      "match": "^POS$",
+      "class": "open-space"
+    },
+    {
+      "match": "^PRF$",
+      "class": "public"
+    },
+    {
+      "match": "^PD$",
+      "class": "planned"
+    },
+    {
+      "match": "^RVP$",
+      "class": "unknown"
+    }
+  ],
+  "generic": false,
+  "codeName": "Malibu Municipal Code, Title 17"
+}

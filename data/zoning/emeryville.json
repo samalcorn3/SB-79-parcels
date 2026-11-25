@@ -1,0 +1,21 @@
+{
+  "id": "emeryville",
+  "name": "City of Emeryville",
+  "jurisdictions": [
+    "Emeryville"
+  ],
+  "publisher": "City of Emeryville — Zoning",
+  "url": "https://services3.arcgis.com/ljOdqLVbHpS7dOJQ/arcgis/rest/services/Zoning_View/FeatureServer/0",
+  "fields": {
+    "code": "ZoningLabel",
+    "description": "ZoningDescription"
+  },
+  "rules": [
+    {
+      "match": "^(M|SM)$",
+      "class": "unknown"
+    }
+  ],
+  "generic": true,
+  "codeName": "Emeryville Planning Regulations, Title 9"
+}

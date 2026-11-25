@@ -1,0 +1,54 @@
+{
+  "id": "glendora",
+  "name": "City of Glendora",
+  "publisher": "City of Glendora — Zoning",
+  "url": "https://services2.arcgis.com/NQC8oBejgXkIxQpu/arcgis/rest/services/Zoning_Glendora/FeatureServer/0",
+  "fields": {
+    "code": "ZONING_1",
+    "description": "ZONING_N_1"
+  },
+  "rules": [
+    {
+      "match": "^(AHSP|RT66|SP-|CCAP)",
+      "class": "planned",
+      "cite": "Glendora specific and area plans (Alosta, Route 66, Civic Center)"
+    },
+    {
+      "match": "^(C-1|MS)$",
+      "class": "office",
+      "cite": "Glendora Municipal Code Title 21 (C-1 professional; MS medical services)"
+    },
+    {
+      "match": "^(C-2|C-3|CM)$",
+      "class": "commercial",
+      "cite": "Glendora Municipal Code Title 21 (commercial zones)"
+    },
+    {
+      "match": "^M-1",
+      "class": "industrial",
+      "cite": "Glendora Municipal Code Title 21 (manufacturing zones)"
+    },
+    {
+      "match": "^(E-\\d|R-[123]|GA|LGA|RHR)$",
+      "class": "residential",
+      "cite": "Glendora Municipal Code Title 21 (residential zones)"
+    },
+    {
+      "match": "^(OSN|B)$",
+      "class": "open-space"
+    },
+    {
+      "match": "^(PD|PR)$",
+      "class": "planned"
+    },
+    {
+      "match": "^(R-4|U)$",
+      "class": "transportation"
+    }
+  ],
+  "generic": false,
+  "jurisdictions": [
+    "Glendora"
+  ],
+  "codeName": "Glendora Municipal Code, Title 21"
+}

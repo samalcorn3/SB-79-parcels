@@ -1,0 +1,65 @@
+{
+  "id": "inglewood",
+  "name": "City of Inglewood",
+  "jurisdictions": [
+    "Inglewood"
+  ],
+  "publisher": "City of Inglewood — Zoning (interactive map)",
+  "url": "https://services.arcgis.com/YkFgoL8JnWkLrVRi/arcgis/rest/services/ZoningInteractiveMap/FeatureServer/1",
+  "fields": {
+    "code": "ZNGCODE",
+    "description": "ZONDESCRIP"
+  },
+  "codeName": "Inglewood Municipal Code, Chapter 12 (Planning and Zoning)",
+  "rules": [
+    {
+      "match": "^HPSP$",
+      "class": "planned",
+      "cite": "Hollywood Park Specific Plan"
+    },
+    {
+      "match": ",",
+      "class": "mixed-residential",
+      "cite": "Inglewood zoning with TOD mixed-use overlay"
+    },
+    {
+      "match": "^(A-C|C-2A)$",
+      "class": "commercial",
+      "cite": "Inglewood zoning (airport campus and airport commercial)"
+    },
+    {
+      "match": "^C-C$",
+      "class": "public",
+      "cite": "Inglewood zoning (civic center)"
+    },
+    {
+      "match": "^C-R$",
+      "class": "unknown",
+      "why": "Commercial recreation zone: check whether retail or office uses are permitted by right."
+    },
+    {
+      "match": "^H-C$",
+      "class": "commercial",
+      "cite": "Inglewood zoning (historic core)"
+    },
+    {
+      "match": "^P-1$",
+      "class": "parking",
+      "cite": "Inglewood zoning (P-1 parking)"
+    },
+    {
+      "match": "^R-M$",
+      "class": "unknown",
+      "why": "Residential-medical zone: check whether medical office uses are permitted by right."
+    },
+    {
+      "match": "^S-[12]$",
+      "class": "open-space"
+    },
+    {
+      "match": "^T-C$",
+      "class": "transportation"
+    }
+  ],
+  "generic": true
+}
